@@ -11,15 +11,13 @@ const debug = window.debug("hairfie:client");
 const mountNode = document.getElementById("root");
 const dehydratedState = window.App;
 
-function renderApp() {
+const app = require("./app");
 
-  const app = require("./app");
+debug("Rehydrating state...", dehydratedState);
 
-  debug("Rehydrating state...", dehydratedState);
-
-  app.rehydrate(dehydratedState, (err, context) => {
+app.rehydrate(dehydratedState, (err, context) => {
     if (err) {
-      throw err;
+        throw err;
     }
 
     debug("State has been rehydrated");
@@ -27,7 +25,6 @@ function renderApp() {
     const Application = app.getComponent();
 
     React.render(<Application context={context.getComponentContext()} />, mountNode, () => {
-      debug("Application has been mounted");
+        debug("Application has been mounted");
     });
-  });
-}
+});
