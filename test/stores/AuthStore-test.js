@@ -2,8 +2,8 @@
 
 import { expect } from 'chai';
 
-import App from '../../src/app';
 import Actions from '../../src/constants/Actions';
+import testStore from './testStore';
 
 describe('AuthStore', () => {
     const token = { id: 'a-token-id' };
@@ -13,38 +13,29 @@ describe('AuthStore', () => {
     const loginFailure = [Actions.LOGIN_FAILURE, { error }];
     const logout = [Actions.LOGOUT];
 
-    var context, AuthStore, emitChangeCalls;
+    var AuthStore, dispatch;
     beforeEach(() => {
-        context = App.createContext().getActionContext();
-        AuthStore = context.getStore('AuthStore');
-
-        // mock emit change
-        emitChangeCalls = 0;
-        AuthStore.emitChange = () => { emitChangeCalls++; };
+        var test = testStore('AuthStore');
+        AuthStore = test.store;
+        dispatch = test.dispatch;
     });
-
-    function executeAction(action) {
-        return context.executeAction(action[0], action[1])
-            .catch((error) => assert.fail(error));
-    }
 
     describe('getToken', () => {
         it('returns null after initialization', () => {
             expect(AuthStore.getToken()).to.be.null;
         });
         it('returns token after login success', () => {
-            executeAction(loginSuccess).then(() => {
-                expect(AuthStore.getToken()).to.be.equal(token);
-                expect(emitChangeCalls).to.be.equal(1);
-            });
+            dispatch(loginSuccess);
+
+            expect(AuthStore.getToken()).to.be.equal(token);
+            expect(AuthStore.emitChange.callCount).to.be.equal(1);
         });
         it('returns null after logout', () => {
-            executeAction(loginSuccess).then(() => {
-                executeAction(logout).then(() => {
-                    expect(AuthStore.getToken()).to.be.equal(null);
-                    expect(emitChangeCalls).to.be.equal(2);
-                });
-            });
+            dispatch(loginSuccess);
+            dispatch(logout);
+
+            expect(AuthStore.getToken()).to.be.equal(null);
+            expect(AuthStore.emitChange.callCount).to.be.equal(2);
         });
     });
     describe('isLoading', () => {
@@ -52,18 +43,17 @@ describe('AuthStore', () => {
             expect(AuthStore.isLoading()).to.be.equal(false);
         });
         it('returns true after login start', () => {
-            executeAction(loginStart).then(() => {
-                expect(AuthStore.isLoading()).to.be.equal(true);
-                expect(emitChangeCalls).to.be.equal(1);
-            });
+            dispatch(loginStart);
+
+            expect(AuthStore.isLoading()).to.be.equal(true);
+            expect(AuthStore.emitChange.callCount).to.be.equal(1);
         });
         it('returns false fater login success', () => {
-            executeAction(loginStart).then(() => {
-                executeAction(loginSuccess).then(() => {
-                    expect(AuthStore.isLoading()).to.be.equal(false);
-                    expect(emitChangeCalls).to.be.equal(2);
-                });
-            });
+            dispatch(loginStart);
+            dispatch(loginSuccess);
+
+            expect(AuthStore.isLoading()).to.be.equal(false);
+            expect(AuthStore.emitChange.callCount).to.be.equal(2);
         });
     });
 });
