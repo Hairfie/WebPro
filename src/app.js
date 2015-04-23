@@ -1,12 +1,13 @@
-import Fluxible from "fluxible";
-import routrPlugin from "fluxible-plugin-routr";
-import RouteActionCreators from "./actions/RouteActionCreators";
-import routes from "./routes";
+import Fluxible from 'fluxible';
+import routrPlugin from 'fluxible-plugin-routr';
+import RouteActionCreators from './actions/RouteActionCreators';
+import routes from './routes';
 
-import Application from "./Application";
+import Application from './Application';
 
-import RouteStore from "./stores/RouteStore";
-import HtmlHeadStore from "./stores/HtmlHeadStore";
+import RouteStore from './stores/RouteStore';
+import HtmlHeadStore from './stores/HtmlHeadStore';
+import AuthStore from './stores/AuthStore';
 
 const app = new Fluxible({
 
@@ -43,5 +44,6 @@ app.plug(routrPlugin({
 
 app.registerStore(RouteStore);
 app.registerStore(HtmlHeadStore);
+app.registerStore(AuthStore);
 
 export default app;
