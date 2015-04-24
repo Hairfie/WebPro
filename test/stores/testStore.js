@@ -14,7 +14,7 @@ function testStore(storeName) {
 
     return {
         store: context.getStore(storeName),
-        dispatch(action) { context.dispatch(action[0], action[1]); }
+        dispatch: context.dispatch.bind(context)
     };
 }
 

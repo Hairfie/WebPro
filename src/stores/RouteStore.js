@@ -1,84 +1,73 @@
 
 import { BaseStore } from 'fluxible/addons';
 import Actions from '../constants/Actions';
+import { isEqual } from 'lodash';
 
 export default class RouteStore extends BaseStore {
-
     static storeName = 'RouteStore'
 
     static handlers = {
-        [Actions.CHANGE_ROUTE_SUCCESS]: 'handleNavigate',
-        [Actions.CHANGE_ROUTE_START]: 'changeRoute',
-        [Actions.STATUS_404]: 'status404',
-        [Actions.STATUS_500]: 'status500'
+        [Actions.CHANGE_ROUTE_START]: 'onChangeRouteStart',
+        [Actions.CHANGE_ROUTE_SUCCESS]: 'onChangeRouteSuccess',
+        [Actions.CHANGE_ROUTE_FAILURE]: 'onChangeRouteFailure',
+        [Actions.ERROR_404]: 'onError404',
+        [Actions.ERROR_500]: 'onError500'
     }
 
     constructor(dispatcher) {
         super(dispatcher);
 
-        this.currentRoute = null;
-        this.currentPage = null;
         this.loading = false;
+        this.route = null;
+        this.page = null;
     }
 
-    changeRoute(route) {
-        if (this.currentRoute && this.currentRoute.url === route.url) {
-            // Do nothing if trying to change to the same route
-            return;
-        }
-
+    onChangeRouteStart(route) {
         this.loading = true;
-        this.currentRoute = route;
-        this.currentPage = route.name;
-
+        this.route = route;
+        this.page = route.name;
         this.emitChange();
     }
 
-    handleNavigate(route) {
-        if (route.url !== (this.currentRoute || {}).url) {
-            // Too late! This may happen when a route action has been finished
-            // to load, but the route did change again.
-            return;
+    onChangeRouteSuccess(route) {
+        if (!isEqual(route, this.route)) {
+            return; // was a previous route change
         }
 
         this.loading = false;
         this.emitChange();
     }
 
-    status404() {
-        this.currentPage = '404';
+    onChangeRouteFailure(route) {
+        if (!isEqual(route, this.route)) {
+            return; // was a previous route change
+        }
+
         this.loading = false;
         this.emitChange();
     }
 
-    status500({ error }) {
-        this.error = error;
-        this.currentPage = '500';
-        this.loading = false;
+    onError404() {
+        this.route = null;
+        this.page = null;
         this.emitChange();
     }
 
-    getCurrentRoute() {
-        return this.currentRoute;
-    }
-
-    getCurrentPage() {
-        return this.currentPage;
+    onError500() {
+        this.route = null;
+        this.page = 'error';
+        this.emitChange();
     }
 
     isLoading() {
         return this.loading;
     }
 
-    dehydrate() {
-        return {
-            currentPage: this.currentPage,
-            currentRoute: this.currentRoute
-        };
+    getCurrentRoute() {
+        return this.route;
     }
 
-    rehydrate({ currentPage, currentRoute }) {
-        this.currentPage = currentPage;
-        this.currentRoute = currentRoute;
+    getCurrentPage() {
+        return this.page;
     }
 }
