@@ -1,8 +1,12 @@
 import React from "react";
 import Layout from '../components/Layout';
 
-import { Input, FlatButton } from '../components/UIKit';
-import { connectToStores } from 'fluxible/addons';
+//import { Input, FlatButton } from '../components/UIKit';
+import { connectToStores } from "fluxible/addons";
+
+class Layout { render() { return <div {...this.props} />; } }
+class Input { render() { return <input {...this.props} />; } }
+class FlatButton { render() { return <button {...this.props} />; } }
 
 class LoginPage extends React.Component {
     render() {

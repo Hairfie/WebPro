@@ -22,6 +22,18 @@ export default class RouteStore extends BaseStore {
         this.page = null;
     }
 
+    dehydrate() {
+        return {
+            route: this.route,
+            page: this.page
+        }
+    }
+
+    rehydrate({ route, page }) {
+        this.route = route;
+        this.page = page;
+    }
+
     onChangeRouteStart(route) {
         this.loading = true;
         this.route = route;
