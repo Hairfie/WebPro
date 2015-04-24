@@ -19,7 +19,7 @@ export default class Client {
         var req = request[method](this.apiUrl+path);
         req.set('Accept', 'application/json');
         req.set('Accept-Language', 'fr');
-        req.set('Authorization', options && options.token && options.token.id);
+        req.set('Authorization', options && options.token && options.token.id || null);
         req.send(data);
 
         return new Promise((ok, ko) => {

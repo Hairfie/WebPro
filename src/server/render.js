@@ -63,7 +63,7 @@ function render(req, res, next) {
         req: req,
     });
 
-    context.executeAction(ServerActions.render, { url: req.url }, (err) => {
+    context.executeAction(ServerActions.render, { req: req }, (err) => {
 
         // If the action return an errors, execute another action to make
         // the RouteStore register the error and show the relative page.
@@ -77,7 +77,7 @@ function render(req, res, next) {
                     renderApp(req, res, context, next);
                 });
             } else if (err.status === 401) {
-                context.executeAction(RouteActions.show401, { err }, () => {
+                context.executeAction(RouteActions.show401, { err }, (err) => {
                     var url = context.getActionContext().getStore('RouteStore').getCurrentRoute().url;
                     res.redirect(302, url);
                 });

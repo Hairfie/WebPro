@@ -20,6 +20,7 @@ const PageActions = {
             .get(`/businesses/${route.params.businessId}`, { token })
             .then(business => context.dispatch(Actions.RECEIVE_BUSINESS, business));
     })
+
 };
 
 function authenticated(action) {

@@ -13,6 +13,22 @@ export default class BusinessStore extends BaseStore {
         [Actions.RECEIVE_USER_BUSINESSES]: 'onReceiveUserBusinesses'
     }
 
+    constructor(dispatcher) {
+        super(dispatcher);
+
+        this.businesses = {};
+    }
+
+    dehydrate() {
+        return {
+            businesses: this.businesses
+        }
+    }
+
+    rehydrate({ businesses }) {
+        this.businesses = businesses;
+    }
+
     onReceiveBusiness(business) {
         this.businesses[business.id] = business;
         this.emitChange();
