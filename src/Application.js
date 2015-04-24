@@ -9,12 +9,15 @@ import ErrorPage from "./pages/ErrorPage";
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
 const debug = require("debug")("hairfie");
 
 if (process.env.BROWSER) {
     require("./style/Application.scss");
 }
+
+injectTapEventPlugin();
 
 function pageHandler(page) {
     switch (page) {
