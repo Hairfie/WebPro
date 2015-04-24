@@ -1,13 +1,15 @@
-import RouteActions from "./pages/RouteActions";
+import PageActions from './actions/PageActions';
 
 export default {
     home: {
-        path: "/",
-        method: "get"
+        path: '/',
+        method: 'get',
+
     },
     login: {
         path: '/login',
-        method: "get"
+        method: 'get',
+        action: PageActions.login
     },
     dashboard: {
         path: '/dashboard',

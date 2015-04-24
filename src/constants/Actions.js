@@ -14,6 +14,10 @@ const Actions = keyMirror({
     LOGIN_FAILURE: null,
     LOGOUT: null,
 
+    RECEIVE_USER: null,
+
+    RECEIVE_USER_BUSINESSES: null,
+
     UPLOAD_START: null,
     UPLOAD_PROGRESS: null,
     UPLOAD_SUCCESS: null,

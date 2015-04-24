@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
-import {MenuItem, LeftNav} from '../UIKit.js';
-import {navigateAction} from 'flux-router-component';
+import { MenuItem, LeftNav } from '../UIKit.js';
+import { navigateAction } from 'flux-router-component';
 
 const menuItems = [
     { route: 'dashboard', text: 'Dashboard' },

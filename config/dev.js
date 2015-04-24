@@ -2,5 +2,5 @@
 // Do not require this directly. Use ./src/config instead.
 
 export default {
-    hairfieApiRoot: 'https://hairfie-api-staging.herokuapps.com/v1'
+    hairfieApiUrl: 'https://hairfie-api-staging.herokuapp.com/v1'
 }

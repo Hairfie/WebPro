@@ -50,4 +50,7 @@ export default class AuthStore extends BaseStore {
         return this.loading;
     }
 
+    getUserId() {
+        return this.token && this.token.userId;
+    }
 }

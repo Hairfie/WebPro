@@ -8,7 +8,7 @@ import app from "../app";
 import HtmlDocument from "./HtmlDocument";
 import renderAction from "./renderAction";
 
-import RouteActionCreators from "../actions/RouteActionCreators";
+import RouteActions from "../actions/RouteActions";
 
 let webpackStats;
 
@@ -73,13 +73,13 @@ function render(req, res, next) {
         if (err) {
             if (err.status === 404 || err.statusCode === 404) {
                 res.status(404);
-                context.executeAction(RouteActionCreators.show404, { err }, () => {
+                context.executeAction(RouteActions.show404, { err }, () => {
                     renderApp(req, res, context, next);
                 });
             }
             else {
                 res.status(500);
-                context.executeAction(RouteActionCreators.show500, { err }, () => {
+                context.executeAction(RouteActions.show500, { err }, () => {
                     console.log(err.stack || err);
                     renderApp(req, res, context, next);
                 });

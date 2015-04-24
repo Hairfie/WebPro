@@ -6,9 +6,8 @@ const UIKit = {
     AppBar: mui.AppBar,
     MenuItem: mui.MenuItem,
     LeftNav: mui.LeftNav,
-    Input: mui.Input,
     FlatButton: mui.FlatButton,
-    mui: mui
+    TextField: mui.TextField,
 };
 
 export default UIKit;
