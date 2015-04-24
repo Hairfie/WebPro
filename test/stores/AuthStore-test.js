@@ -1,69 +1,67 @@
 'use strict';
 
+import testStore from './testStore';
+
 import { expect } from 'chai';
 
-import App from '../../src/app';
-import Actions from '../../src/constants/Actions';
+import { LOGIN_START
+       , LOGIN_SUCCESS
+       , LOGIN_FAILURE
+       , LOGOUT
+       } from '../../src/constants/Actions';
 
 describe('AuthStore', () => {
     const token = { id: 'a-token-id' };
     const error = new Error('An error');
-    const loginStart = [Actions.LOGIN_START];
-    const loginSuccess = [Actions.LOGIN_SUCCESS, { token }];
-    const loginFailure = [Actions.LOGIN_FAILURE, { error }];
-    const logout = [Actions.LOGOUT];
 
-    var context, AuthStore, emitChangeCalls;
+    var AuthStore, dispatch;
     beforeEach(() => {
-        context = App.createContext().getActionContext();
-        AuthStore = context.getStore('AuthStore');
-
-        // mock emit change
-        emitChangeCalls = 0;
-        AuthStore.emitChange = () => { emitChangeCalls++; };
+        var test = testStore('AuthStore');
+        AuthStore = test.store;
+        dispatch = test.dispatch;
     });
 
-    function executeAction(action) {
-        return context.executeAction(action[0], action[1])
-            .catch((error) => assert.fail(error));
-    }
-
     describe('getToken', () => {
-        it('returns null after initialization', () => {
+        it('returns NULL after initialization', () => {
             expect(AuthStore.getToken()).to.be.null;
         });
         it('returns token after login success', () => {
-            executeAction(loginSuccess).then(() => {
-                expect(AuthStore.getToken()).to.be.equal(token);
-                expect(emitChangeCalls).to.be.equal(1);
-            });
+            dispatch(LOGIN_SUCCESS, { token });
+
+            expect(AuthStore.getToken()).to.be.equal(token);
+            expect(AuthStore.emitChange.callCount).to.be.equal(1);
         });
-        it('returns null after logout', () => {
-            executeAction(loginSuccess).then(() => {
-                executeAction(logout).then(() => {
-                    expect(AuthStore.getToken()).to.be.equal(null);
-                    expect(emitChangeCalls).to.be.equal(2);
-                });
-            });
+        it('returns NULL after logout', () => {
+            dispatch(LOGIN_SUCCESS, { token });
+            dispatch(LOGOUT);
+
+            expect(AuthStore.getToken()).to.be.equal(null);
+            expect(AuthStore.emitChange.callCount).to.be.equal(2);
         });
     });
     describe('isLoading', () => {
-        it('returns false after initialization', () => {
+        it('returns FALSE after initialization', () => {
             expect(AuthStore.isLoading()).to.be.equal(false);
         });
-        it('returns true after login start', () => {
-            executeAction(loginStart).then(() => {
-                expect(AuthStore.isLoading()).to.be.equal(true);
-                expect(emitChangeCalls).to.be.equal(1);
-            });
+        it('returns TRUE after login start', () => {
+            dispatch(LOGIN_START);
+
+            expect(AuthStore.isLoading()).to.be.equal(true);
+            expect(AuthStore.emitChange.callCount).to.be.equal(1);
         });
-        it('returns false fater login success', () => {
-            executeAction(loginStart).then(() => {
-                executeAction(loginSuccess).then(() => {
-                    expect(AuthStore.isLoading()).to.be.equal(false);
-                    expect(emitChangeCalls).to.be.equal(2);
-                });
-            });
+        it('returns FALSE after login success', () => {
+            dispatch(LOGIN_START);
+            dispatch(LOGIN_SUCCESS, { token });
+
+            expect(AuthStore.isLoading()).to.be.equal(false);
+            expect(AuthStore.emitChange.callCount).to.be.equal(2);
+        });
+        it('returns FALSE after login failure', () => {
+            dispatch(LOGIN_START);
+            dispatch(LOGIN_FAILURE, { error });
+
+            expect(AuthStore.isLoading()).to.be.equal(false);
+            expect(AuthStore.emitChange.callCount).to.be.equal(2);
         });
     });
 });

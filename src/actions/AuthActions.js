@@ -1,9 +1,9 @@
 'use strict';
 
 const AuthActions = {
-    login: (context, { email, password }) => {
+    login(context, { email, password }) {
         context.dispatch(Actions.LOGIN_START, { email });
-        context.service
+        return context.service
             .create('access-token', { email, password }, function (
             .then(token => {
                 context.dispatch(Actions.LOGIN_SUCCESS, { token });
