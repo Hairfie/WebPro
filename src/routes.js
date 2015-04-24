@@ -13,6 +13,12 @@ export default {
     },
     dashboard: {
         path: '/dashboard',
-        method: 'get'
+        method: 'get',
+        action: PageActions.dashboard
+    },
+    business: {
+        path: '/business/:businessId',
+        method: 'get',
+        action: PageActions.business
     }
 };

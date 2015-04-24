@@ -1,7 +1,6 @@
 import React, { PropTypes } from "react";
 import { isEqual } from "lodash";
 import { provideContext, connectToStores } from "fluxible/addons";
-
 import { RouterMixin } from "flux-router-component";
 
 import NotFoundPage from "./pages/NotFoundPage";
@@ -9,7 +8,7 @@ import ErrorPage from "./pages/ErrorPage";
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
-import injectTapEventPlugin from 'react-tap-event-plugin';
+import BusinessPage from './pages/BusinessPage';
 
 const debug = require("debug")("hairfie");
 
@@ -17,6 +16,8 @@ if (process.env.BROWSER) {
     require("./style/Application.scss");
 }
 
+// TODO: remove me as soon as react v1.0.0
+import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
 function pageHandler(page) {
@@ -27,6 +28,8 @@ function pageHandler(page) {
             return LoginPage;
         case 'dashboard':
             return DashboardPage;
+        case 'business':
+            return BusinessPage;
         case 'error':
             return ErrorPage;
         default:

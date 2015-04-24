@@ -21,6 +21,16 @@ export default class AuthStore extends BaseStore {
         this.loading = false;
     }
 
+    dehydrate() {
+        return {
+            token: this.token
+        };
+    }
+
+    rehydrate({ token }) {
+        this.token = token;
+    }
+
     onLoginStart() {
         this.loading = true;
         this.emitChange();
@@ -39,6 +49,7 @@ export default class AuthStore extends BaseStore {
 
     onLogout() {
         this.token = null;
+        this.afterLoginUrl = null;
         this.emitChange();
     }
 
@@ -52,5 +63,9 @@ export default class AuthStore extends BaseStore {
 
     getUserId() {
         return this.token && this.token.userId;
+    }
+
+    getAfterLoginUrl() {
+        return this.afterLoginUrl;
     }
 }

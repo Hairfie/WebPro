@@ -3,6 +3,7 @@
 import Actions from '../constants/Actions';
 import UserActions from './UserActions';
 import RouteActions from './RouteActions';
+import { writeCookie } from '../utils/CookieUtils';
 
 const AuthActions = {
     login(context, { email, password }) {
@@ -12,18 +13,24 @@ const AuthActions = {
             .post('/users/login', { email, password })
             .then(token => {
                 context.dispatch(Actions.LOGIN_SUCCESS, { token });
-
-                return Promise.all([
-                    context.executeAction(UserActions.loadUser, token),
-                    context.executeAction(UserActions.loadUserBusinesses, token)
-                ]);
+                return afterLogin(context, token);
             }, error => {
                 context.dispatch(Actions.LOGIN_FAILURE, { error });
-            })
-            .then(() => {
-                return context.executeAction(RouteActions.navigate, { route: 'dashboard' });
             });
     }
 };
+
+function afterLogin(context, token) {
+    writeCookie('accessTokenId', token.id, 7);
+
+    return Promise
+        .all([
+            context.executeAction(UserActions.loadUser, token),
+            context.executeAction(UserActions.loadUserBusinesses, token)
+        ])
+        .then(() => {
+            return context.executeAction(RouteActions.navigate, { route: 'dashboard' });
+        });
+}
 
 export default AuthActions;

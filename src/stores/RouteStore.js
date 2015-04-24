@@ -34,10 +34,10 @@ export default class RouteStore extends BaseStore {
         this.page = page;
     }
 
-    onChangeRouteStart(route) {
+    onChangeRouteStart({ name, url, params, query }) {
         this.loading = true;
-        this.route = route;
-        this.page = route.name;
+        this.route = { name, url, params, query };
+        this.page = name;
         this.emitChange();
     }
 

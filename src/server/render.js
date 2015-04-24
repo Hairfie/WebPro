@@ -1,33 +1,33 @@
 // Express middleware to render the app server-side and expose its state
 // to the client
 
-import React from "react";
-import serialize from "serialize-javascript";
+import React from 'react';
+import serialize from 'serialize-javascript';
 
-import app from "../app";
-import HtmlDocument from "./HtmlDocument";
-import renderAction from "./renderAction";
+import app from '../app';
+import HtmlDocument from './HtmlDocument';
 
-import RouteActions from "../actions/RouteActions";
+import ServerActions from '../actions/ServerActions';
+import RouteActions from '../actions/RouteActions';
 
 let webpackStats;
 
-if (process.env.NODE_ENV === "production") {
-    webpackStats = require("./webpack-stats.json");
+if (process.env.NODE_ENV === 'production') {
+    webpackStats = require('./webpack-stats.json');
 }
 
 function renderApp(req, res, context, next) {
 
-    if (process.env.NODE_ENV === "development") {
-        webpackStats = require("./webpack-stats.json");
+    if (process.env.NODE_ENV === 'development') {
+        webpackStats = require('./webpack-stats.json');
 
         // Do not cache webpack stats: the script file would change since
         // hot module replacement is enabled in the development env
-        delete require.cache[require.resolve("./webpack-stats.json")];
+        delete require.cache[require.resolve('./webpack-stats.json')];
     }
 
     // dehydrate the app and expose its state
-    const state = "window.App=" + serialize(app.dehydrate(context)) + ";";
+    const state = 'window.App=' + serialize(app.dehydrate(context)) + ';';
 
     const Application = app.getComponent();
 
@@ -63,7 +63,7 @@ function render(req, res, next) {
         req: req,
     });
 
-    context.executeAction(renderAction, { url: req.url, locale: req.locale }, (err) => {
+    context.executeAction(ServerActions.render, { url: req.url }, (err) => {
 
         // If the action return an errors, execute another action to make
         // the RouteStore register the error and show the relative page.
@@ -76,8 +76,12 @@ function render(req, res, next) {
                 context.executeAction(RouteActions.show404, { err }, () => {
                     renderApp(req, res, context, next);
                 });
-            }
-            else {
+            } else if (err.status === 401) {
+                context.executeAction(RouteActions.show401, { err }, () => {
+                    var url = context.getActionContext().getStore('RouteStore').getCurrentRoute().url;
+                    res.redirect(302, url);
+                });
+            } else {
                 res.status(500);
                 context.executeAction(RouteActions.show500, { err }, () => {
                     console.log(err.stack || err);

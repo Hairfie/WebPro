@@ -16,32 +16,25 @@ import UserBusinessStore from './stores/UserBusinessStore';
 import config from './config';
 
 const app = new Fluxible({
+    component: Application,
+    componentActionHandler(context, { err }) {
+        // This action handler is called for any action executed in the component's
+        // context. It's the right place to intercept action errors and display an
+        // error page.
 
-  component: Application,
+        if (err) {
+            const { status, statusCode } = err;
 
-  componentActionHandler(context, { err }, done) {
-
-    // This action handler is called for any action executed in the component's
-    // context. It's the right place to intercept action errors and display an
-    // error page.
-
-    if (err) {
-      const { status, statusCode } = err;
-
-      if (status && status === 404 || statusCode && statusCode === 404) {
-        context.executeAction(RouteActions.show404, { err }, done);
-      }
-      else {
-        console.log(err.stack || err);
-        context.executeAction(RouteActions.show500, { err }, done);
-      }
-
-      return;
+            if (status === 404 || statusCode === 404) {
+                return context.executeAction(RouteActions.show404, { err });
+            } else if (status === 401) {
+                return context.executeAction(RouteActions.show401, { err });
+            } else {
+                console.log(err.stack || err);
+                return context.executeAction(RouteActions.show500, { err });
+            }
+        }
     }
-
-    done();
-  }
-
 });
 
 app.plug(routrPlugin({

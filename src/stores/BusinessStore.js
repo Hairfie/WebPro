@@ -9,7 +9,13 @@ export default class BusinessStore extends BaseStore {
     static storeName = 'BusinessStore';
 
     static handlers = {
+        [Actions.RECEIVE_BUSINESS]: 'onReceiveBusiness',
         [Actions.RECEIVE_USER_BUSINESSES]: 'onReceiveUserBusinesses'
+    }
+
+    onReceiveBusiness(business) {
+        this.businesses[business.id] = business;
+        this.emitChange();
     }
 
     onReceiveUserBusinesses({ businesses }) {
