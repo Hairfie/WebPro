@@ -42,7 +42,7 @@ export default class RouteStore extends BaseStore {
     }
 
     onChangeRouteSuccess(route) {
-        if (!isEqual(route, this.route)) {
+        if (!isEqual(route && route.url, this.route && this.route.url)) {
             return; // was a previous route change
         }
 
@@ -62,12 +62,14 @@ export default class RouteStore extends BaseStore {
     onError404() {
         this.route = null;
         this.page = null;
+        this.loading = false;
         this.emitChange();
     }
 
     onError500() {
         this.route = null;
         this.page = 'error';
+        this.loading = false;
         this.emitChange();
     }
 

@@ -36,6 +36,7 @@ export default class BusinessStore extends BaseStore {
 
     onReceiveUserBusinesses({ businesses }) {
         this.businesses = _.merge({}, this.businesses, _.indexBy(businesses, 'id'));
+        this.emitChange();
     }
 
     getById(id) {

@@ -15,7 +15,7 @@ class Layout extends React.Component {
             <AppCanvas>
                 <AppBar
                     className="mui-dark-theme"
-                    title="Backoffice"
+                    title="Espace Coiffeur"
                     onMenuIconButtonTouchTap={this._onMenuIconButtonTouchTap.bind(this)}
                     zDepth={0} />
 

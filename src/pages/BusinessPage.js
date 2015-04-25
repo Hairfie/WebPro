@@ -11,6 +11,15 @@ class BusinessPage extends React.Component {
     return (
         <Layout>
             <h1>{this.props.business.name}</h1>
+            <nav>
+                <ul>
+                    <li>
+                        <Link route="business_pictures" params={{businessId: this.props.businessId}}>
+                            Photos
+                        </Link>
+                    </li>
+                </ul>
+            </nav>
         </Layout>
     );
   }

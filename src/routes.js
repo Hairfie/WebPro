@@ -17,7 +17,12 @@ export default {
         action: PageActions.dashboard
     },
     business: {
-        path: '/business/:businessId',
+        path: '/businesses/:businessId',
+        method: 'get',
+        action: PageActions.business
+    },
+    business_pictures: {
+        path: '/businesses/:businessId/pictures',
         method: 'get',
         action: PageActions.business
     }

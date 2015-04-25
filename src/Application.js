@@ -9,6 +9,7 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import BusinessPage from './pages/BusinessPage';
+import BusinessPicturesPage from './pages/BusinessPicturesPage';
 
 const debug = require("debug")("hairfie");
 
@@ -30,6 +31,8 @@ function pageHandler(page) {
             return DashboardPage;
         case 'business':
             return BusinessPage;
+        case 'business_pictures':
+            return BusinessPicturesPage;
         case 'error':
             return ErrorPage;
         default:
@@ -52,7 +55,10 @@ let Application = React.createClass({
         }
     },
     render() {
-        const { page, route } = this.props;
+        const { loading, page, route } = this.props;
+
+        if (loading) return <div>Chargement en cours...</div>;
+
         const Handler = pageHandler(page);
 
         return <Handler {...(route || {}).params} />;
@@ -60,6 +66,7 @@ let Application = React.createClass({
 });
 
 Application = connectToStores(Application, ['RouteStore', 'HtmlHeadStore'], (stores) => ({
+    loading: stores.RouteStore.isLoading(),
     page: stores.RouteStore.getCurrentPage(),
     route: stores.RouteStore.getCurrentRoute()
 }));
