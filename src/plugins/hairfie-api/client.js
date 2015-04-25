@@ -49,7 +49,6 @@ export default class Client {
     _end(req) {
         return new Promise((resolve, reject) => {
             req.end((err, res) => {
-                console.log(err, res);
                 if (res.ok) resolve(res.body);
                 else reject(err);
             });

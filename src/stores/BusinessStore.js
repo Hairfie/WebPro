@@ -10,13 +10,16 @@ export default class BusinessStore extends BaseStore {
 
     static handlers = {
         [Actions.RECEIVE_BUSINESS]: 'onReceiveBusiness',
-        [Actions.RECEIVE_USER_BUSINESSES]: 'onReceiveUserBusinesses'
+        [Actions.RECEIVE_USER_BUSINESSES]: 'onReceiveUserBusinesses',
+        [Actions.UPLOAD_BUSINESS_PICTURE_START]: 'onUploadBusinessPictureStart',
+        [Actions.UPLOAD_BUSINESS_PICTURE_END]: 'onUploadBusinessPictureEnd',
     }
 
     constructor(dispatcher) {
         super(dispatcher);
 
         this.businesses = {};
+        this.pictureUploads = [];
     }
 
     dehydrate() {
@@ -39,6 +42,16 @@ export default class BusinessStore extends BaseStore {
         this.emitChange();
     }
 
+    onUploadBusinessPictureStart({ businessId, uploadId }) {
+        this.pictureUploads.push({ businessId, uploadId });
+        this.emitChange();
+    }
+
+    onUploadBusinessPictureEnd({ uploadId }) {
+        this.pictureUploads = _.reject(this.pictureUploads, { uploadId });
+        this.emitChange();
+    }
+
     getById(id) {
         return this.businesses[id];
     }
@@ -47,4 +60,8 @@ export default class BusinessStore extends BaseStore {
         return _.map(ids, this.getById, this);
     }
 
+    getPictureUploadIds(businessId) {
+        console.log(businessId, this.pictureUploads);
+        return _.pluck(_.filter(this.pictureUploads, { businessId }), 'uploadId');
+    }
 }

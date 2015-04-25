@@ -21,11 +21,8 @@ const Actions = keyMirror({
 
     RECEIVE_BUSINESS: null,
 
-    UPLOAD_START: null,
-    UPLOAD_PROGRESS: null,
-    UPLOAD_SUCCESS: null,
-    UPLOAD_FAILURE: null
-
+    UPLOAD_BUSINESS_PICTURE_START: null,
+    UPLOAD_BUSINESS_PICTURE_END: null
 });
 
 export default Actions;
