@@ -1,6 +1,6 @@
 'use strict';
 
-import { BaseStore } from 'fluxible/addons';
+import BaseStore from './BaseStore';
 import Actions from '../constants/Actions';
 import _ from 'lodash';
 
@@ -15,21 +15,13 @@ export default class BusinessStore extends BaseStore {
         [Actions.UPLOAD_BUSINESS_PICTURE_END]: 'onUploadBusinessPictureEnd',
     }
 
+    static isomorphicProps = ['businesses'];
+
     constructor(dispatcher) {
         super(dispatcher);
 
         this.businesses = {};
         this.pictureUploads = [];
-    }
-
-    dehydrate() {
-        return {
-            businesses: this.businesses
-        }
-    }
-
-    rehydrate({ businesses }) {
-        this.businesses = businesses;
     }
 
     onReceiveBusiness(business) {

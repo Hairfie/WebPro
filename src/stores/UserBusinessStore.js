@@ -1,6 +1,6 @@
 'use strict';
 
-import { BaseStore } from 'fluxible/addons';
+import BaseStore from './BaseStore';
 import Actions from '../constants/Actions';
 
 export default class UserBusinessStore extends BaseStore {
@@ -11,20 +11,12 @@ export default class UserBusinessStore extends BaseStore {
         [Actions.RECEIVE_USER_BUSINESSES]: 'onReceiveUserBusinesses'
     }
 
+    static isomorphicProps = ['ids'];
+
     constructor(dispatcher) {
         super(dispatcher);
 
         this.ids = {};
-    }
-
-    dehydrate() {
-        return {
-            ids: this.ids
-        };
-    }
-
-    rehydrate({ ids }) {
-        this.ids = ids;
     }
 
     onReceiveUserBusinesses({ userId, businesses }) {

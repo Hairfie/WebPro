@@ -1,6 +1,6 @@
 'use strict';
 
-import { BaseStore } from 'fluxible/addons';
+import BaseStore from './BaseStore';
 import Actions from '../constants/Actions';
 
 export default class AuthStore extends BaseStore {
@@ -14,21 +14,13 @@ export default class AuthStore extends BaseStore {
         [Actions.LOGOUT]: 'onLogout'
     }
 
+    static isomorphicProps = ['token'];
+
     constructor(dispatcher) {
         super(dispatcher);
 
         this.token = null;
         this.loading = false;
-    }
-
-    dehydrate() {
-        return {
-            token: this.token
-        };
-    }
-
-    rehydrate({ token }) {
-        this.token = token;
     }
 
     onLoginStart() {

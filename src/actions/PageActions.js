@@ -15,10 +15,16 @@ const PageActions = {
 
     dashboard: authenticated(),
 
-    business: authenticated((context, route, token) => {
+    business: authenticated((context, { params: { businessId } }, token) => {
         return context.hairfieApi
-            .get(`/businesses/${route.params.businessId}`, { token })
+            .get(`/businesses/${businessId}`, { token })
             .then(business => context.dispatch(Actions.RECEIVE_BUSINESS, business));
+    }),
+
+    businessMembers: authenticated((context, { params: { businessId } }, token) => {
+        return context.hairfieApi
+            .get(`/businessMembers?filter[where][businessId]=${businessId}`, { token })
+            .then(members => context.dispatch(Actions.RECEIVE_BUSINESS_MEMBERS, { businessId, members }));
     })
 
 };

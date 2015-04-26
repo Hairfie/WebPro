@@ -10,6 +10,7 @@ import RouteStore from './stores/RouteStore';
 import HtmlHeadStore from './stores/HtmlHeadStore';
 import AuthStore from './stores/AuthStore';
 import BusinessStore from './stores/BusinessStore';
+import BusinessMemberStore from './stores/BusinessMemberStore';
 import UserStore from './stores/UserStore';
 import UserBusinessStore from './stores/UserBusinessStore';
 
@@ -49,6 +50,7 @@ app.registerStore(RouteStore);
 app.registerStore(HtmlHeadStore);
 app.registerStore(AuthStore);
 app.registerStore(BusinessStore);
+app.registerStore(BusinessMemberStore);
 app.registerStore(UserStore);
 app.registerStore(UserBusinessStore);
 

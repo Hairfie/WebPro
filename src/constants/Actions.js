@@ -21,6 +21,9 @@ const Actions = keyMirror({
 
     RECEIVE_BUSINESS: null,
 
+    RECEIVE_BUSINESS_MEMBER: null,
+    RECEIVE_BUSINESS_MEMBERS: null,
+
     UPLOAD_BUSINESS_PICTURE_START: null,
     UPLOAD_BUSINESS_PICTURE_END: null
 });

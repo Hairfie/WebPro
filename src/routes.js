@@ -25,5 +25,10 @@ export default {
         path: '/businesses/:businessId/pictures',
         method: 'get',
         action: PageActions.business
+    },
+    business_members: {
+        path: '/businesses/:businessId/members',
+        method: 'get',
+        action: PageActions.businessMembers
     }
 };

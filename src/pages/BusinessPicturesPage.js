@@ -44,30 +44,6 @@ class BusinessPicturesPage extends React.Component {
     static contextTypes = {
         executeAction: React.PropTypes.func.isRequired
     }
-    componentDidMount() {
-        this.resetFileInput();
-    }
-    resetFileInput() {
-        const fileInput = document.createElement('input');
-        fileInput.type = 'file';
-        fileInput.style.display = 'none';
-        fileInput.accept = 'image/jpeg';
-        fileInput.multiple = true;
-
-        if (this.fileInput) {
-            this.fileInput = this.fileInput.parentNode.replaceChild(fileInput, this.fileInput);
-        } else {
-            this.fileInput = React.findDOMNode(this.refs.layout).appendChild(fileInput);
-        }
-
-        this.fileInput.addEventListener('change', this.upload);
-    }
-    componentWillUnmount() {
-        if (this.fileInput) {
-            this.fileInput.parentNode.removeChild(this.fileInput);
-            this.fileInput = null;
-        }
-    }
     render() {
         const { business, business: { pictures }, uploadIds } = this.props;
 
@@ -77,14 +53,13 @@ class BusinessPicturesPage extends React.Component {
                 {_.map(pictures, picture => <Picture key={picture.id} {...{business, picture}} />)}
                 {_.map(uploadIds, id => <Uploading key={id} />)}
                 <FlatButton label="Ajouter une photo" onClick={this.addPicture} />
+                <input ref="file" type="file" style={{ display: 'none' }} accept="image/jpeg" multiple={true} onChange={this.upload} />
             </Layout>
         );
     }
     addPicture = (e) => {
         e.preventDefault();
-        if (this.fileInput) {
-            this.fileInput.click();
-        }
+        React.findDOMNode(this.refs.file).click();
     }
     upload = (e) => {
         e.preventDefault();
@@ -92,7 +67,6 @@ class BusinessPicturesPage extends React.Component {
         Array.prototype.map.call(e.target.files, file => {
             this.context.executeAction(BusinessActions.addPicture, { businessId: business.id, file })
         });
-        this.resetFileInput();
     }
 }
 

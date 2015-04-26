@@ -1,5 +1,6 @@
+'use strict';
 
-import { BaseStore } from 'fluxible/addons';
+import BaseStore from './BaseStore';
 import Actions from '../constants/Actions';
 import { isEqual } from 'lodash';
 
@@ -14,24 +15,14 @@ export default class RouteStore extends BaseStore {
         [Actions.ERROR_500]: 'onError500'
     }
 
+    static isomorphicProps = ['route', 'page'];
+
     constructor(dispatcher) {
         super(dispatcher);
 
         this.loading = false;
         this.route = null;
         this.page = null;
-    }
-
-    dehydrate() {
-        return {
-            route: this.route,
-            page: this.page
-        }
-    }
-
-    rehydrate({ route, page }) {
-        this.route = route;
-        this.page = page;
     }
 
     onChangeRouteStart({ name, url, params, query }) {
