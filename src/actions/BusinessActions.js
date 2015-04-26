@@ -25,6 +25,14 @@ const BusinessActions = {
                 },
                 error    => console.log(error)
             );
+    },
+    removePicture(context, { business, picture: { id } }) {
+        const token = context.getStore('AuthStore').getToken();
+        const pictures = _.reject(business.pictures, { id });
+
+        return context.hairfieApi
+            .put(`/businesses/${business.id}`, { pictures }, { token })
+            .then(business => context.dispatch(Actions.RECEIVE_BUSINESS, business));
     }
 };
 
