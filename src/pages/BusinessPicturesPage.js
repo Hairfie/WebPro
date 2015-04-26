@@ -25,7 +25,10 @@ class Picture extends React.Component {
     }
     remove = () => {
         const { business, picture } = this.props;
-        this.context.executeAction(BusinessActions.removePicture, { business, picture });
+        this.context.executeAction(BusinessActions.removePicture, {
+            businessId: business.id,
+            pictureId: picture.id
+        });
     }
 }
 
@@ -49,6 +52,7 @@ class BusinessPicturesPage extends React.Component {
         fileInput.type = 'file';
         fileInput.style.display = 'none';
         fileInput.accept = 'image/jpeg';
+        fileInput.multiple = true;
 
         if (this.fileInput) {
             this.fileInput = this.fileInput.parentNode.replaceChild(fileInput, this.fileInput);
@@ -83,10 +87,11 @@ class BusinessPicturesPage extends React.Component {
         }
     }
     upload = (e) => {
-        console.log(e);
         e.preventDefault();
         const { business } = this.props;
-        Array.prototype.map.call(e.target.files, file => this.context.executeAction(BusinessActions.addPicture, { business, file }));
+        Array.prototype.map.call(e.target.files, file => {
+            this.context.executeAction(BusinessActions.addPicture, { businessId: business.id, file })
+        });
         this.resetFileInput();
     }
 }

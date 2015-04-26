@@ -5,18 +5,19 @@ import _ from 'lodash';
 import Uuid from 'uuid';
 
 const BusinessActions = {
-    addPicture(context, { business, file }) {
+    addPicture(context, { businessId, file }) {
         const token = context.getStore('AuthStore').getToken();
         const uploadId = Uuid.v4();
 
-        context.dispatch(Actions.UPLOAD_BUSINESS_PICTURE_START, { businessId: business.id, uploadId });
+        context.dispatch(Actions.UPLOAD_BUSINESS_PICTURE_START, { businessId, uploadId });
 
         return context.hairfieApi
             .upload('businesses', file, { token })
             .then(image => {
-                var pictures = _.clone(business.pictures || []);
+                const business = context.getStore('BusinessStore').getById(businessId); // refresh business
+                const pictures = _.clone(business.pictures || []);
                 pictures.push(image);
-                return context.hairfieApi.put(`/businesses/${business.id}`, { pictures }, { token });
+                return context.hairfieApi.put(`/businesses/${businessId}`, { pictures }, { token });
             })
             .then(
                 business => {
@@ -26,12 +27,13 @@ const BusinessActions = {
                 error    => console.log(error)
             );
     },
-    removePicture(context, { business, picture: { id } }) {
+    removePicture(context, { businessId, pictureId }) {
         const token = context.getStore('AuthStore').getToken();
-        const pictures = _.reject(business.pictures, { id });
+        const business = context.getStore('BusinessStore').getById(businessId);
+        const pictures = _.reject(business.pictures, { id: pictureId });
 
         return context.hairfieApi
-            .put(`/businesses/${business.id}`, { pictures }, { token })
+            .put(`/businesses/${businessId}`, { pictures }, { token })
             .then(business => context.dispatch(Actions.RECEIVE_BUSINESS, business));
     }
 };

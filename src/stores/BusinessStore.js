@@ -61,7 +61,6 @@ export default class BusinessStore extends BaseStore {
     }
 
     getPictureUploadIds(businessId) {
-        console.log(businessId, this.pictureUploads);
         return _.pluck(_.filter(this.pictureUploads, { businessId }), 'uploadId');
     }
 }
