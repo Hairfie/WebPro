@@ -23,8 +23,9 @@ class Layout extends React.Component {
                 </AppBar>
 
                 <AppLeftNav ref="leftNav" />
-
-                {children}
+                <div className="full-width-section">
+                    {children}
+                </div>
             </AppCanvas>
         );
     }
