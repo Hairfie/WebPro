@@ -13,6 +13,7 @@ export default class BusinessStore extends BaseStore {
         [Actions.RECEIVE_USER_BUSINESSES]: 'onReceiveUserBusinesses',
         [Actions.UPLOAD_BUSINESS_PICTURE_START]: 'onUploadBusinessPictureStart',
         [Actions.UPLOAD_BUSINESS_PICTURE_END]: 'onUploadBusinessPictureEnd',
+        [Actions.UPDATE_BUSINESS_INFOS_END]: 'onUpdateBusinessInfosEnd',
     }
 
     static isomorphicProps = ['businesses'];
@@ -41,6 +42,11 @@ export default class BusinessStore extends BaseStore {
 
     onUploadBusinessPictureEnd({ uploadId }) {
         this.pictureUploads = _.reject(this.pictureUploads, { uploadId });
+        this.emitChange();
+    }
+
+    onUpdateBusinessInfosEnd(business) {
+        this.businesses[business.id] = business;
         this.emitChange();
     }
 

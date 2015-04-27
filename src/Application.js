@@ -13,6 +13,8 @@ import BusinessPicturesPage from './pages/BusinessPicturesPage';
 import BusinessMembersPage from './pages/BusinessMembersPage';
 import BusinessMemberPage from './pages/BusinessMemberPage';
 
+import Layout from './components/Layout';
+
 const debug = require("debug")("hairfie");
 
 if (process.env.BROWSER) {
@@ -64,7 +66,11 @@ let Application = React.createClass({
     render() {
         const { loading, page, route } = this.props;
 
-        if (loading) return <div>Chargement en cours...</div>;
+        if (loading) return (
+            <Layout>
+                <div>Chargement en cours...</div>
+            </Layout>
+        );
 
         const Handler = pageHandler(page);
 
