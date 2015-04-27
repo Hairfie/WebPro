@@ -1,7 +1,6 @@
 import React, { PropTypes } from "react";
 import { isEqual } from "lodash";
 import { provideContext, connectToStores } from "fluxible/addons";
-
 import { RouterMixin } from "flux-router-component";
 
 import NotFoundPage from "./pages/NotFoundPage";
@@ -9,7 +8,10 @@ import ErrorPage from "./pages/ErrorPage";
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
-import injectTapEventPlugin from 'react-tap-event-plugin';
+import BusinessPage from './pages/BusinessPage';
+import BusinessPicturesPage from './pages/BusinessPicturesPage';
+import BusinessMembersPage from './pages/BusinessMembersPage';
+import BusinessMemberPage from './pages/BusinessMemberPage';
 
 const debug = require("debug")("hairfie");
 
@@ -17,6 +19,8 @@ if (process.env.BROWSER) {
     require("./style/Application.scss");
 }
 
+// TODO: remove me as soon as react v1.0.0
+import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
 function pageHandler(page) {
@@ -27,6 +31,15 @@ function pageHandler(page) {
             return LoginPage;
         case 'dashboard':
             return DashboardPage;
+        case 'business':
+            return BusinessPage;
+        case 'business_pictures':
+            return BusinessPicturesPage;
+        case 'business_members':
+            return BusinessMembersPage;
+        case 'new_business_member':
+        case 'edit_business_member':
+            return BusinessMemberPage;
         case 'error':
             return ErrorPage;
         default:
@@ -49,7 +62,10 @@ let Application = React.createClass({
         }
     },
     render() {
-        const { page, route } = this.props;
+        const { loading, page, route } = this.props;
+
+        if (loading) return <div>Chargement en cours...</div>;
+
         const Handler = pageHandler(page);
 
         return <Handler {...(route || {}).params} />;
@@ -57,6 +73,7 @@ let Application = React.createClass({
 });
 
 Application = connectToStores(Application, ['RouteStore', 'HtmlHeadStore'], (stores) => ({
+    loading: stores.RouteStore.isLoading(),
     page: stores.RouteStore.getCurrentPage(),
     route: stores.RouteStore.getCurrentRoute()
 }));

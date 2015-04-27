@@ -1,6 +1,8 @@
 import React from "react";
 import Layout from '../components/Layout';
 
+import Link from '../components/Link';
+
 import { connectToStores } from 'fluxible/addons';
 
 class DashboardPage extends React.Component {
@@ -12,7 +14,9 @@ class DashboardPage extends React.Component {
             <ul>
                 {this.props.businesses.map(business => (
                     <li key={business.id}>
-                        {business.name}
+                        <Link route="business" params={{businessId: business.id}}>
+                            {business.name}
+                        </Link>
                     </li>
                 ))}
             </ul>

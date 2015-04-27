@@ -1,7 +1,6 @@
 import React from 'react';
 import {AppCanvas, AppBar} from './UIKit';
 import AppLeftNav from './layout/AppLeftNav';
-import { connectToStores } from "fluxible/addons";
 
 if (process.env.BROWSER) {
     require("../style/Layout.scss");
@@ -16,11 +15,9 @@ class Layout extends React.Component {
             <AppCanvas>
                 <AppBar
                     className="mui-dark-theme"
-                    title="Backoffice"
+                    title="Espace Coiffeur"
                     onMenuIconButtonTouchTap={this._onMenuIconButtonTouchTap.bind(this)}
-                    zDepth={0}>
-                    {this.renderUser()}
-                </AppBar>
+                    zDepth={0} />
 
                 <AppLeftNav ref="leftNav" />
                 <div className="full-width-section">
@@ -30,19 +27,9 @@ class Layout extends React.Component {
         );
     }
 
-    renderUser() {
-        if (!this.props.user) return;
-
-        return `Bonjour ${this.props.user.firstName} !`;
-    }
-
     _onMenuIconButtonTouchTap() {
         this.refs.leftNav.toggle();
     }
 }
-
-Layout = connectToStores(Layout, ['AuthStore', 'UserStore'], stores => ({
-    user: stores.UserStore.get(stores.AuthStore.getUserId())
-}));
 
 export default Layout;

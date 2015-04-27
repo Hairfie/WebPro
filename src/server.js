@@ -43,8 +43,7 @@ server.use(render);
 // Generic server errors (e.g. not caught by components)
 server.use((err, req, res, next) => {
   console.log("Error on request %s %s", req.method, req.url);
-  console.log(err);
-  console.log(err.stack);
+  console.log(err.stack || err);
   res.status(500).send("Something bad happened");
 });
 

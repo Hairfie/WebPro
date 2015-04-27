@@ -1,4 +1,6 @@
-import { BaseStore } from 'fluxible/addons';
+'use strict';
+
+import BaseStore from './BaseStore';
 import Actions from '../constants/Actions';
 
 const DEFAULT_TITLE = 'Hairfie Pro';
@@ -12,6 +14,8 @@ export default class HtmlHeadStore extends BaseStore {
         [Actions.STATUS_404]: 'on404Error',
         [Actions.STATUS_500]: 'on500Error'
     }
+
+    static isomorphicProps = ['title'];
 
     constructor(dispatcher) {
         super(dispatcher);
@@ -36,15 +40,5 @@ export default class HtmlHeadStore extends BaseStore {
     on404Error() {
         this.title = 'Page introuvable';
         this.emitChange();
-    }
-
-    dehydrate() {
-        return {
-            title: this.title
-        };
-    }
-
-    rehydrate({ title }) {
-        this.title = title;
     }
 }

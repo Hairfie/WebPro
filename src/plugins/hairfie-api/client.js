@@ -15,17 +15,42 @@ export default class Client {
         return this._send({ method: 'post', path, data, options });
     }
 
+    put(path, data, options) {
+        return this._send({ method: 'put', path, data, options });
+    }
+
+    upload(container, file, options) {
+        var req = request.post(this._makeUrl(`/containers/${container}/upload`));
+        this._configure(req, options || {});
+        req.attach('file', file, file.name);
+        return this._end(req).then(result => {
+            return result.file
+        });
+    }
+
     _send({ method, path, data, options }) {
-        var req = request[method](this.apiUrl+path);
+        var req = request[method](this._makeUrl(path));
+        this._configure(req, options || {});
+        req.send(data);
+        return this._end(req);
+    }
+
+    _makeUrl(path) {
+        return this.apiUrl+path;
+    }
+
+    _configure(req, { token, onProgress }) {
         req.set('Accept', 'application/json');
         req.set('Accept-Language', 'fr');
-        req.set('Authorization', options && options.token && options.token.id);
-        req.send(data);
+        if (token) req.set('Authorization', token.id);
+        if (onProgress) req.on('progress', ({ percent }) => onProgress({ percent }));
+    }
 
-        return new Promise((ok, ko) => {
+    _end(req) {
+        return new Promise((resolve, reject) => {
             req.end((err, res) => {
-                if (res.ok) ok(res.body);
-                else ko(err);
+                if (res.ok) resolve(res.body);
+                else reject(err);
             });
         });
     }

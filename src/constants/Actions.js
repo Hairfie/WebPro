@@ -7,6 +7,7 @@ const Actions = keyMirror({
     CHANGE_ROUTE_FAILURE: null,
 
     ERROR_404: null,
+    ERROR_401: null,
     ERROR_500: null,
 
     LOGIN_START: null,
@@ -18,11 +19,13 @@ const Actions = keyMirror({
 
     RECEIVE_USER_BUSINESSES: null,
 
-    UPLOAD_START: null,
-    UPLOAD_PROGRESS: null,
-    UPLOAD_SUCCESS: null,
-    UPLOAD_FAILURE: null
+    RECEIVE_BUSINESS: null,
 
+    RECEIVE_BUSINESS_MEMBER: null,
+    RECEIVE_BUSINESS_MEMBERS: null,
+
+    UPLOAD_BUSINESS_PICTURE_START: null,
+    UPLOAD_BUSINESS_PICTURE_END: null
 });
 
 export default Actions;
