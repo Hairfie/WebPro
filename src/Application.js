@@ -11,6 +11,7 @@ import DashboardPage from './pages/DashboardPage';
 import BusinessPage from './pages/BusinessPage';
 import BusinessPicturesPage from './pages/BusinessPicturesPage';
 import BusinessMembersPage from './pages/BusinessMembersPage';
+import BusinessMemberPage from './pages/BusinessMemberPage';
 
 const debug = require("debug")("hairfie");
 
@@ -36,6 +37,9 @@ function pageHandler(page) {
             return BusinessPicturesPage;
         case 'business_members':
             return BusinessMembersPage;
+        case 'new_business_member':
+        case 'edit_business_member':
+            return BusinessMemberPage;
         case 'error':
             return ErrorPage;
         default:

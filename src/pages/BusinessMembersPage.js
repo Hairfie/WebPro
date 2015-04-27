@@ -4,6 +4,7 @@ import React from 'react';
 import Layout from '../components/Layout';
 import { connectToStores } from 'fluxible/addons';
 import _ from 'lodash';
+import Link from '../components/Link';
 import mui from 'material-ui';
 import BusinessMemberActions from '../Actions/BusinessMemberActions';
 
@@ -12,11 +13,13 @@ class Member extends React.Component {
         executeAction: React.PropTypes.func.isRequired
     }
     render() {
-        const { member: { firstName, lastName } } = this.props;
+        const { member: { id, firstName, lastName } } = this.props;
 
         return (
             <div style={{ margin: '10px', padding: '10px' }}>
-                {firstName} {lastName}
+                <Link route="edit_business_member" params={{ businessMemberId: id }}>
+                    {firstName} {lastName}
+                </Link>
                 {this.renderActiveSwitch()}
             </div>
         );
@@ -42,11 +45,12 @@ class Member extends React.Component {
 
 class BusinessMembersPage extends React.Component {
     render() {
-        const { activeMembers, inactiveMembers } = this.props;
+        const { businessId, activeMembers, inactiveMembers } = this.props;
 
         return (
             <Layout>
                 <h1>Membres de l'équipe</h1>
+                <Link route="new_business_member" params={{ businessId }}>Ajouter une membre</Link>
                 <mui.Tabs>
                     <mui.Tab label={`Membres actifs (${activeMembers.length})`}>
                         {_.map(activeMembers, member => <Member key={member.id} {...{ member }} />)}
@@ -63,8 +67,8 @@ class BusinessMembersPage extends React.Component {
 BusinessMembersPage = connectToStores(BusinessMembersPage, [
     'BusinessMemberStore'
 ], (stores, props) => ({
-    activeMembers: stores.BusinessMemberStore.getAllActive(props.businessId),
-    inactiveMembers: stores.BusinessMemberStore.getAllInactive(props.businessId)
+    activeMembers: stores.BusinessMemberStore.getAllActiveByBusinessId(props.businessId),
+    inactiveMembers: stores.BusinessMemberStore.getAllInactiveByBusinessId(props.businessId)
 }));
 
 export default BusinessMembersPage;

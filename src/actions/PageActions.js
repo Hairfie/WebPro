@@ -25,8 +25,13 @@ const PageActions = {
         return context.hairfieApi
             .get(`/businessMembers?filter[where][businessId]=${businessId}`, { token })
             .then(members => context.dispatch(Actions.RECEIVE_BUSINESS_MEMBERS, { businessId, members }));
-    })
+    }),
 
+    businessMember: authenticated((context, { params: { businessMemberId } }, token) => {
+        return context.hairfieApi
+            .get(`/businessMembers/${businessMemberId}`, { token })
+            .then(member => context.dispatch(Actions.RECEIVE_BUSINESS_MEMBER, member));
+    })
 };
 
 function authenticated(action) {

@@ -3,8 +3,7 @@ import PageActions from './actions/PageActions';
 export default {
     home: {
         path: '/',
-        method: 'get',
-
+        method: 'get'
     },
     login: {
         path: '/login',
@@ -30,5 +29,14 @@ export default {
         path: '/businesses/:businessId/members',
         method: 'get',
         action: PageActions.businessMembers
+    },
+    new_business_member: {
+        path: '/businesses/:businessId/members/new',
+        method: 'get'
+    },
+    edit_business_member: {
+        path: '/business-members/:businessMemberId',
+        method: 'get',
+        action: PageActions.businessMember
     }
 };

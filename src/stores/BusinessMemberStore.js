@@ -31,11 +31,15 @@ export default class BusinessMemberStore extends BaseStore {
         this.emitChange();
     }
 
-    getAllActive(businessId) {
+    getById(id) {
+        return this.members[id];
+    }
+
+    getAllActiveByBusinessId(businessId) {
         return _.filter(this.members, { businessId, active: true });
     }
 
-    getAllInactive(businessId) {
+    getAllInactiveByBusinessId(businessId) {
         return _.filter(this.members, { businessId, active: false });
     }
 
