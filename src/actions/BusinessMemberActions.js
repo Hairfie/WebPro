@@ -2,13 +2,14 @@
 
 import Actions from '../constants/Actions';
 import RouteActions from './RouteActions';
+import _ from 'lodash';
 
 const BusinessMemberActions = {
-    createMember(context, { values }) {
+    createMember(context, { businessId, values }) {
         const token = context.getStore('AuthStore').getToken();
 
         return context.hairfieApi
-            .post('/businessMembers', values, { token })
+            .post('/businessMembers', _.assign({ businessId }, values), { token })
             .then(member => {
                 context.dispatch(Actions.RECEIVE_BUSINESS_MEMBER, member);
                 return context.executeAction(RouteActions.navigate, {

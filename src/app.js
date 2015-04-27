@@ -46,6 +46,17 @@ app.plug(hairfieApiPlugin({
     apiUrl: config.hairfieApiUrl
 }));
 
+app.plug({
+    name: 'HairfieWebPro',
+    plugContext(options, context) {
+        return {
+            plugStoreContext(storeContext) {
+                storeContext.executeAction = context.executeAction.bind(context);
+            }
+        };
+    }
+});
+
 app.registerStore(RouteStore);
 app.registerStore(HtmlHeadStore);
 app.registerStore(AuthStore);

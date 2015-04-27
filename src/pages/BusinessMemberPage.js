@@ -6,9 +6,14 @@ import { connectToStores } from 'fluxible/addons';
 import _ from 'lodash';
 import Link from '../components/Link';
 import mui from 'material-ui';
-import BusinessMemberActions from '../Actions/BusinessMemberActions';
+import BusinessMemberActions from '../actions/BusinessMemberActions';
+import UserPicker from '../components/UserPicker';
 
 class BusinessMemberPage extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { user: (this.props.businessMember || {}).user };
+    }
     static contextTypes = {
         executeAction: React.PropTypes.func.isRequired
     }
@@ -17,24 +22,73 @@ class BusinessMemberPage extends React.Component {
     }
     render() {
         const businessId = this.props.businessId || this.props.businessMember.businessId;
-        const { businessMember: { id, firstName, lastName, email, phoneNumber, hidden } } = this.props;
+        const businessMember = this.props.businessMember || {};
+        const user = this.state.user;
 
         return (
             <Layout>
-                <mui.TextField ref="firstName" floatingLabelText="Prénom" defaultValue={firstName} />
-                <mui.TextField ref="lastName" floatingLabelText="Nom" defaultValue={lastName} />
-                <mui.TextField ref="email" type="email" floatingLabelText="Email" defaultValue={email} />
-                <mui.TextField ref="phoneNumber" floatingLabelText="Téléphone" defaultValue={phoneNumber} />
-                <mui.Checkbox ref="isHairdresser" label="Afficher en tant que coiffeur" defaultChecked={!hidden} />
-                <mui.FlatButton label={id ? 'Sauver les modifications' : 'Ajouter à l\'équipe'} onClick={this.save} />
-                ou&nbsp;
+                <UserPicker
+                    ref="user"
+                    floatingLabelText="Utilisateur"
+                    defaultUser={businessMember.user}
+                    onChange={this.onUserChange}
+                    />
+                <br />
+                <mui.RadioButtonGroup ref="gender" name="gender" defaultSelected={businessMember.gender} valueSelected={user && user.gender}>
+                    <mui.RadioButton value="MALE" label="Monsieur"  />
+                    <mui.RadioButton value="FEMALE" label="Madame" />
+                </mui.RadioButtonGroup>
+                <br />
+                <mui.TextField
+                    ref="firstName"
+                    floatingLabelText="Prénom"
+                    defaultValue={businessMember.firstName}
+                    value={user && user.firstName}
+                    disabled={!!user}
+                    />
+                <br />
+                <mui.TextField
+                    ref="lastName"
+                    floatingLabelText="Nom"
+                    defaultValue={businessMember.lastName}
+                    value={user && user.lastName}
+                    disabled={!!user}
+                    />
+                <br />
+                <mui.TextField
+                    ref="email"
+                    type="email"
+                    floatingLabelText="Email"
+                    defaultValue={businessMember.email}
+                    />
+                <br />
+                <mui.TextField
+                    ref="phoneNumber"
+                    floatingLabelText="Téléphone"
+                    defaultValue={businessMember.phoneNumber}
+                    />
+                <br />
+                <mui.Checkbox
+                    ref="isHairdresser"
+                    label="Afficher en tant que coiffeur"
+                    defaultSwitched={!businessMember.hidden}
+                    />
+                <br />
+                <mui.FlatButton label={businessMember.id ? 'Sauver les modifications' : 'Ajouter à l\'équipe'} onClick={this.save} />
+                {' ou '}
                 <Link route="business_members" params={{ businessId }}>Annuler</Link>
             </Layout>
         );
     }
+    onUserChange = () => {
+        this.setState({ user: this.refs.user.getUser() });
+    }
     save = () => {
+        const businessId = this.props.businessId;
         const businessMemberId = this.props.businessMember.id;
         const values = {
+            userId: this.refs.user.getUserId(),
+            gender: this.refs.gender.getSelectedValue(),
             firstName: this.refs.firstName.getValue(),
             lastName: this.refs.lastName.getValue(),
             email: this.refs.email.getValue(),
@@ -45,7 +99,7 @@ class BusinessMemberPage extends React.Component {
         if (businessMemberId) {
             this.context.executeAction(BusinessMemberActions.updateMember, { businessMemberId, values });
         } else {
-            this.context.executeAction(BusinessMemberActions.createMember, { values });
+            this.context.executeAction(BusinessMemberActions.createMember, { businessId, values });
         }
     }
 }
