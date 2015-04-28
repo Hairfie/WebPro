@@ -6,7 +6,7 @@ import { connectToStores } from 'fluxible/addons';
 import _ from 'lodash';
 import Link from '../components/Link';
 import mui from 'material-ui';
-import BusinessMemberActions from '../Actions/BusinessMemberActions';
+import BusinessMemberActions from '../actions/BusinessMemberActions';
 
 class Member extends React.Component {
     static contextTypes = {

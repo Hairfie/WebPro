@@ -39,9 +39,10 @@ export default class Client {
         return this.apiUrl+path;
     }
 
-    _configure(req, { token, onProgress }) {
+    _configure(req, { query, token, onProgress }) {
         req.set('Accept', 'application/json');
         req.set('Accept-Language', 'fr');
+        req.query(query);
         if (token) req.set('Authorization', token.id);
         if (onProgress) req.on('progress', ({ percent }) => onProgress({ percent }));
     }
