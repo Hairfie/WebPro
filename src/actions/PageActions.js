@@ -3,6 +3,7 @@
 import RouteActions from './RouteActions';
 import Actions from '../constants/Actions';
 import _ from 'lodash';
+import AuthActions from './AuthActions';
 
 const PageActions = {
 
@@ -34,7 +35,10 @@ const PageActions = {
             .then(member => context.dispatch(Actions.RECEIVE_BUSINESS_MEMBER, member));
     }),
 
-    impersonateToken: hasPermissions(['IMPERSONATE_TOKEN'])
+    impersonateToken: hasPermissions(['IMPERSONATE_TOKEN']),
+
+    repersonateToken: AuthActions.repersonateToken,
+    logout: AuthActions.logout
 };
 
 function hasPermissions(perms, action) {

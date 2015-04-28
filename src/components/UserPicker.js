@@ -24,15 +24,16 @@ class Suggestions extends React.Component {
     }
     getStateFromStores({ q }) {
         const users = (q || '').length < MIN_CHARS ? [] : this.context.getStore('UserStore').getSuggestions(q);
-        return { users };
+        const loading = !users;
+        return { loading, users };
     }
     onStoreChange = () => {
         this.setState(this.getStateFromStores(this.props));
     }
     render() {
-        const { users } = this.state;
+        const { loading, users } = this.state;
 
-        if (!users) return <p>Chargement...</p>;
+        if (loading) return <p>Chargement...</p>;
 
         return (
             <div>

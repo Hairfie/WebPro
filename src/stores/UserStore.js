@@ -44,6 +44,6 @@ export default class UserStore extends BaseStore {
             this.getContext().executeAction(UserActions.loadUserSuggestions, { q });
         }
 
-        return _.map(this.suggestions[q], this.getById, this);
+        return ids && _.map(ids, this.getById, this);
     }
 }

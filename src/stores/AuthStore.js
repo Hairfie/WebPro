@@ -46,6 +46,10 @@ export default class AuthStore extends BaseStore {
         this.emitChange();
     }
 
+    isAuthenticated() {
+        return !!this.token;
+    }
+
     getToken() {
         return this.token;
     }
@@ -56,6 +60,14 @@ export default class AuthStore extends BaseStore {
 
     getUserId() {
         return this.token && this.token.userId;
+    }
+
+    isImpersonated() {
+        return !!this.getParentTokenId();
+    }
+
+    getParentTokenId() {
+        return this.token && this.token.parentId;
     }
 
     hasPermission(permission) {
