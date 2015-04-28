@@ -2,6 +2,7 @@
 
 import BaseStore from './BaseStore';
 import Actions from '../constants/Actions';
+import _ from 'lodash';
 
 export default class AuthStore extends BaseStore {
 
@@ -57,7 +58,7 @@ export default class AuthStore extends BaseStore {
         return this.token && this.token.userId;
     }
 
-    getAfterLoginUrl() {
-        return this.afterLoginUrl;
+    hasPermission(permission) {
+        return this.token && _.contains(this.token.permissions, permission);
     }
 }

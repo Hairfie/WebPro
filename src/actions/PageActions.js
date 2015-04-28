@@ -2,6 +2,7 @@
 
 import RouteActions from './RouteActions';
 import Actions from '../constants/Actions';
+import _ from 'lodash';
 
 const PageActions = {
 
@@ -31,11 +32,28 @@ const PageActions = {
         return context.hairfieApi
             .get(`/businessMembers/${businessMemberId}`, { token })
             .then(member => context.dispatch(Actions.RECEIVE_BUSINESS_MEMBER, member));
-    })
+    }),
+
+    impersonateToken: hasPermissions(['IMPERSONATE_TOKEN'])
 };
 
+function hasPermissions(perms, action) {
+    return authenticated((context, payload) => {
+        const granted = _.reduce(perms, (granted, perm) => granted && context.getStore('AuthStore').hasPermission(perm), true);
+        if (!granted) {
+            var error = new Error('Not authorized');
+            error.status = 403;
+            throw error;
+        }
+
+        if (action) {
+            return action(context, payload);
+        }
+    });
+}
+
 function authenticated(action) {
-    return (context, route) => {
+    return (context, payload) => {
         var token = context.getStore('AuthStore').getToken();
 
         if (!token) {
@@ -45,7 +63,7 @@ function authenticated(action) {
         }
 
         if (action) {
-            return action(context, route);
+            return action(context, payload);
         }
     }
 }

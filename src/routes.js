@@ -10,6 +10,11 @@ export default {
         method: 'get',
         action: PageActions.login
     },
+    impersonate_token: {
+        path: '/impersonate-token',
+        method: 'get',
+        action: PageActions.impersonateToken
+    },
     dashboard: {
         path: '/dashboard',
         method: 'get',

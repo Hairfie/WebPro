@@ -13,6 +13,7 @@ import BusinessStore from './stores/BusinessStore';
 import BusinessMemberStore from './stores/BusinessMemberStore';
 import UserStore from './stores/UserStore';
 import UserBusinessStore from './stores/UserBusinessStore';
+import UploadStore from './stores/UploadStore';
 
 import config from './config';
 
@@ -30,6 +31,8 @@ const app = new Fluxible({
                 return context.executeAction(RouteActions.show404, { err });
             } else if (status === 401) {
                 return context.executeAction(RouteActions.show401, { err });
+            } else if (status === 403) {
+                return context.executeAction(RouteActions.show403, { err });
             } else {
                 console.log(err.stack || err);
                 return context.executeAction(RouteActions.show500, { err });
@@ -64,5 +67,6 @@ app.registerStore(BusinessStore);
 app.registerStore(BusinessMemberStore);
 app.registerStore(UserStore);
 app.registerStore(UserBusinessStore);
+app.registerStore(UploadStore);
 
 export default app;

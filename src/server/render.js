@@ -77,9 +77,13 @@ function render(req, res, next) {
                     renderApp(req, res, context, next);
                 });
             } else if (err.status === 401) {
-                context.executeAction(RouteActions.show401, { err }, (err) => {
+                context.executeAction(RouteActions.show401, { err }, () => {
                     var url = context.getActionContext().getStore('RouteStore').getCurrentRoute().url;
                     res.redirect(302, url);
+                });
+            } else if (err.status === 403) {
+                context.executeAction(RouteActions.show403, { err }, () => {
+                    renderApp(req, res, context, next);
                 });
             } else {
                 res.status(500);

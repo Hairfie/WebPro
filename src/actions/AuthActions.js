@@ -17,8 +17,7 @@ const AuthActions = {
                 context.dispatch(Actions.LOGIN_SUCCESS, { token });
                 return afterLogin(context, token)
                     .then(() => {
-                        writeCookie(COOKIE_AUTH_TOKEN, token.id, 7);
-
+                        persistToken(token);
                         return context.executeAction(RouteActions.navigate, { route: 'dashboard' });
                     });
             }, error => {
@@ -36,6 +35,20 @@ const AuthActions = {
                 context.dispatch(Actions.LOGIN_SUCCESS, { token });
                 return afterLogin(context, token);
             }, () => {});
+    },
+    impersonateToken(context, { user }) {
+        const token = context.getStore('AuthStore').getToken();
+
+        return context.hairfieApi
+            .post(`/accessTokens/${token.id}/impersonate`, { userId: user.id })
+            .then(token => {
+                context.dispatch(Actions.LOGIN_SUCCESS, { token });
+                return afterLogin(context, token)
+                    .then(() => {
+                        persistToken(token);
+                        return context.executeAction(RouteActions.navigate, { route: 'dashboard' });
+                    });
+            }, () => {});
     }
 };
 
@@ -45,6 +58,10 @@ function afterLogin(context, token) {
             context.executeAction(UserActions.loadUser, token),
             context.executeAction(UserActions.loadUserBusinesses, token)
         ]);
+}
+
+function persistToken(token) {
+    writeCookie(COOKIE_AUTH_TOKEN, token.id, 7);
 }
 
 function afterLogout(context) {
