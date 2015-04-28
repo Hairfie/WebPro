@@ -10,6 +10,7 @@ import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import BusinessPage from './pages/BusinessPage';
 import BusinessPicturesPage from './pages/BusinessPicturesPage';
+import BusinessInfosPage from './pages/BusinessInfosPage';
 import BusinessMembersPage from './pages/BusinessMembersPage';
 import BusinessMemberPage from './pages/BusinessMemberPage';
 
@@ -37,6 +38,8 @@ function pageHandler(page) {
             return BusinessPage;
         case 'business_pictures':
             return BusinessPicturesPage;
+        case 'business_infos':
+            return BusinessInfosPage;
         case 'business_members':
             return BusinessMembersPage;
         case 'new_business_member':

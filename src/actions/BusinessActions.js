@@ -2,6 +2,7 @@
 
 import Actions from '../constants/Actions';
 import _ from 'lodash';
+import RouteActions from './RouteActions';
 import Uuid from 'uuid';
 
 const BusinessActions = {
@@ -45,7 +46,11 @@ const BusinessActions = {
             .put(`/businesses/${businessId}`, values, { token })
             .then(
                 business => {
-                    context.dispatch(Actions.UPDATE_BUSINESS_INFOS_END, business)
+                    context.dispatch(Actions.UPDATE_BUSINESS_INFOS_END, business);
+                    context.executeAction(RouteActions.navigate, {
+                        route: 'business',
+                        params: { businessId: business.id }
+                    })
                 },
                 error    => console.log(error)
             );

@@ -9,6 +9,9 @@ const UIKit = {
     LeftNav: mui.LeftNav,
     FlatButton: mui.FlatButton,
     TextField: mui.TextField,
+    Checkbox: mui.Checkbox,
+    RadioButton: mui.RadioButton,
+    RadioButtonGroup: mui.RadioButtonGroup,
     Image: Image
 };
 
