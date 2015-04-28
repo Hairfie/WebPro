@@ -67,7 +67,7 @@ let Application = React.createClass({
         const { loading, page, route } = this.props;
 
         if (loading) return (
-            <Layout>
+            <Layout {...this.props}>
                 <div>Chargement en cours...</div>
             </Layout>
         );

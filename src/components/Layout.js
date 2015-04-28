@@ -19,7 +19,7 @@ class Layout extends React.Component {
                     onMenuIconButtonTouchTap={this._onMenuIconButtonTouchTap.bind(this)}
                     zDepth={0} />
 
-                <AppLeftNav ref="leftNav" />
+                <AppLeftNav ref="leftNav" {...this.props} />
                 <div className="full-width-section">
                     {children}
                 </div>

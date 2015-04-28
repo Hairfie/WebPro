@@ -17,13 +17,10 @@ class AppLeftNav extends React.Component {
         getStore: PropTypes.func.isRequired
     }
 
-    isAuthenticated() {
-        return (this.context.getStore('AuthStore').getToken() != null);
-    }
-
     render() {
         var header = <div className="logo" onClick={this._onHeaderClick.bind(this)}>Hairfie</div>;
-        const menuItemsToDisplay = this.isAuthenticated() ? menuItems : _.reject(menuItems, 'authRequired');
+        let menuItemsToDisplay = this.isAuthenticated() ? menuItems : _.reject(menuItems, 'authRequired');
+        menuItemsToDisplay = menuItemsToDisplay.concat(this.businessMenuItems());
 
         return (
             <LeftNav
@@ -33,6 +30,21 @@ class AppLeftNav extends React.Component {
                 menuItems={menuItemsToDisplay}
                 onChange={this._onLeftNavChange.bind(this)} />
         );
+    }
+
+    businessMenuItems() {
+        const business = this.context.getStore('BusinessStore').getById(this.props.businessId);
+        if(!business) return [];
+
+        return [
+            { route: 'business', text: business.name, params: {businessId: business.id}, authRequired: true },
+            { route: 'business_pictures', text: 'Photos', params: {businessId: business.id}, authRequired: true },
+            { route: 'business_members', text: 'Équipe', params: {businessId: business.id}, authRequired: true },
+        ];
+    }
+
+    isAuthenticated() {
+        return (this.context.getStore('AuthStore').getToken() != null);
     }
 
     toggle() {
@@ -48,11 +60,5 @@ class AppLeftNav extends React.Component {
         this.refs.leftNav.close();
     }
 }
-
-// AppLeftNav = connectToStores(AppLeftNav, [
-//     'BusinessStore'
-// ], (stores, props) => ({
-//     business: stores.BusinessStore.getById(props.businessId)
-// }));
 
 export default AppLeftNav;

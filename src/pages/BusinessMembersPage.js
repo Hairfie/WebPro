@@ -48,7 +48,7 @@ class BusinessMembersPage extends React.Component {
         const { businessId, activeMembers, inactiveMembers } = this.props;
 
         return (
-            <Layout>
+            <Layout {...this.props}>
                 <h1>Membres de l'équipe</h1>
                 <Link route="new_business_member" params={{ businessId }}>Ajouter une membre</Link>
                 <mui.Tabs>

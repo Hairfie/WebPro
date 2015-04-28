@@ -26,7 +26,7 @@ class BusinessMemberPage extends React.Component {
         const user = this.state.user;
 
         return (
-            <Layout>
+            <Layout {...this.props}>
                 <UserPicker
                     ref="user"
                     floatingLabelText="Utilisateur"

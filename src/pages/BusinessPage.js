@@ -9,7 +9,7 @@ class BusinessPage extends React.Component {
 
   render() {
     return (
-        <Layout>
+        <Layout {...this.props}>
             <h1>{this.props.business.name}</h1>
             <nav>
                 <ul>

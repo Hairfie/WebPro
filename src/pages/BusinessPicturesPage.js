@@ -48,7 +48,7 @@ class BusinessPicturesPage extends React.Component {
         const { business, business: { pictures }, uploadIds } = this.props;
 
         return (
-            <Layout ref="layout">
+            <Layout ref="layout" {...this.props}>
                 <h1>Photos</h1>
                 {_.map(pictures, picture => <Picture key={picture.id} {...{business, picture}} />)}
                 {_.map(uploadIds, id => <Uploading key={id} />)}

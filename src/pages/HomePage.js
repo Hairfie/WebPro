@@ -7,7 +7,7 @@ class HomePage extends React.Component {
 
   render() {
     return (
-        <Layout>
+        <Layout {...this.props}>
             <h1>Accueil</h1>
             <p>Hey le coiffeur, viens donc <Link route="login">jouer avec nous</Link> !</p>
         </Layout>

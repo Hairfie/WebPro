@@ -10,7 +10,7 @@ class LoginPage extends React.Component {
     }
     render() {
         return (
-            <Layout>
+            <Layout {...this.props}>
                 <h1>Connexion</h1>
                 <TextField ref="email" type="email" floatingLabelText="Adresse email" />
                 <TextField ref="password" type="password" floatingLabelText="Mot de passe" />

@@ -9,7 +9,7 @@ class DashboardPage extends React.Component {
 
   render() {
     return (
-        <Layout>
+        <Layout {...this.props}>
             <h1>Mes salons</h1>
             <ul>
                 {this.props.businesses.map(business => (
