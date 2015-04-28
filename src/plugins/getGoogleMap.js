@@ -8,8 +8,6 @@ let loading = false;
 export default function loadMaps() {
     return new Promise((resolve, reject) => {
         function loadscript() {
-                    console.log("loadMaps");
-
             if (typeof window === 'undefined') {
                 debug('non-browser environment, aborting google maps SDK loading');
                 return reject(new Error('Not in browser'));
@@ -19,7 +17,7 @@ export default function loadMaps() {
                 debug('google maps SDK already loaded, resolving promise');
                 return resolve(window.google);
             }
-            console.log("here");
+
             if (!loading) {
                 loading = true;
                 debug('start loading google maps SDK');
