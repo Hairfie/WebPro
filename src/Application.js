@@ -11,6 +11,7 @@ import DashboardPage from './pages/DashboardPage';
 import BusinessPage from './pages/BusinessPage';
 import BusinessPicturesPage from './pages/BusinessPicturesPage';
 import BusinessInfosPage from './pages/BusinessInfosPage';
+import BusinessMapPage from './pages/BusinessMapPage';
 import BusinessMembersPage from './pages/BusinessMembersPage';
 import BusinessMemberPage from './pages/BusinessMemberPage';
 
@@ -40,6 +41,8 @@ function pageHandler(page) {
             return BusinessPicturesPage;
         case 'business_infos':
             return BusinessInfosPage;
+        case 'business_map':
+            return BusinessMapPage;
         case 'business_members':
             return BusinessMembersPage;
         case 'new_business_member':

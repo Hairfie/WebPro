@@ -12,7 +12,8 @@ const UIKit = {
     Checkbox: mui.Checkbox,
     RadioButton: mui.RadioButton,
     RadioButtonGroup: mui.RadioButtonGroup,
-    Image: Image
+    Image: Image,
+    Paper: mui.Paper
 };
 
 export default UIKit;

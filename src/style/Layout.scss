@@ -6,3 +6,7 @@ h1.mui-app-bar-title {
 }
 
 .main-container {}
+
+.clearfix {
+    @include clearfix();
+}

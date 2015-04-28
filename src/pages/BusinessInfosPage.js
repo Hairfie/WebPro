@@ -2,11 +2,65 @@
 
 import React from 'react';
 import Layout from '../components/Layout';
-import { FlatButton, TextField, Checkbox, RadioButton, RadioButtonGroup } from '../components/UIKit';
+import { FlatButton, TextField, Checkbox, RadioButton, RadioButtonGroup, Paper } from '../components/UIKit';
 import { connectToStores } from 'fluxible/addons';
 import Link, {FlatLink} from '../components/Link';
 import BusinessActions from '../actions/BusinessActions';
 import _ from 'lodash';
+
+if (process.env.BROWSER) {
+    require("../style/Page.scss");
+}
+
+class DescriptionInputGroup extends React.Component {
+    render() {
+        const {defaultDescription} = this.props;
+        const description = defaultDescription || {};
+
+        return (
+            <div>
+                <div>
+                    <TextField ref="geoTitle" type="text"
+                        floatingLabelText="Localisation (titre)"
+                        defaultValue={description.geoTitle} />
+                    <TextField ref="geoText" type="textarea"
+                        floatingLabelText="Localisation (paragraphe)"
+                        multiLine={true}
+                        defaultValue={description.geoText} />
+                </div>
+                <div>
+                    <TextField ref="proTitle" type="text"
+                        floatingLabelText="Coiffeurs & Spécialités (titre)"
+                        defaultValue={description.proTitle} />
+                    <TextField ref="proText" type="textarea"
+                        floatingLabelText="Coiffeurs & Spécialités (paragraphe)"
+                        multiLine={true}
+                        defaultValue={description.proText} />
+                </div>
+                <div>
+                    <TextField ref="businessTitle" type="text"
+                        floatingLabelText="Salon (titre)"
+                        defaultValue={description.businessTitle} />
+                    <TextField ref="businessText" type="textarea"
+                        floatingLabelText="Salon (parapgraphe)"
+                        multiLine={true}
+                        defaultValue={description.businessText} />
+                </div>
+            </div>
+        );
+    }
+
+    getDescription() {
+        return {
+            geoTitle  : this.refs.geoTitle.getValue(),
+            geoText    : this.refs.geoText.getValue(),
+            proTitle : this.refs.proTitle.getValue(),
+            proText : this.refs.proText.getValue(),
+            businessTitle : this.refs.businessTitle.getValue(),
+            businessText : this.refs.businessText.getValue()
+        };
+    }
+}
 
 class BusinessInfosPage extends React.Component {
     static contextTypes = {
@@ -18,6 +72,7 @@ class BusinessInfosPage extends React.Component {
 
         return (
             <Layout ref="layout" {...this.props}>
+                <Paper>
                 <h1>Infos</h1>
                 <TextField
                     ref="name"
@@ -53,9 +108,13 @@ class BusinessInfosPage extends React.Component {
                     <RadioButton value="HOME" label="Coiffeur à domicile" />
                 </RadioButtonGroup>
                 <br />
+                <div className="clearfix" />
+                <DescriptionInputGroup description={business.description} defaultDescription={business.description} ref="description"/>
+                <br />
                 <FlatButton label='Sauver les modifications' onClick={this.save} />
                 {' ou '}
                 <FlatLink route="business" params={{ businessId: business.id }} label='Annuler' />
+                </Paper>
             </Layout>
         );
     }
@@ -70,9 +129,7 @@ class BusinessInfosPage extends React.Component {
             children:       this.refs.children.isChecked(),
             kind:           this.refs.kind.getSelectedValue(),
             phoneNumber:    this.refs.phoneNumber.getValue(),
-            //address = this.refs.address.getAddress();
-            //gps = this.refs.address.getGps();
-            //description = this.refs.description.getDescription();
+            description:    this.refs.description.getDescription()
         };
 
         this.context.executeAction(BusinessActions.updateInfos, { businessId, values });

@@ -4,6 +4,7 @@ import AppLeftNav from './layout/AppLeftNav';
 
 if (process.env.BROWSER) {
     require("../style/Layout.scss");
+    require("../style/Page.scss");
 }
 
 class Layout extends React.Component {
@@ -20,7 +21,7 @@ class Layout extends React.Component {
                     zDepth={0} />
 
                 <AppLeftNav ref="leftNav" {...this.props} />
-                <div className="full-width-section">
+                <div className="page-with-nav">
                     {children}
                 </div>
             </AppCanvas>
