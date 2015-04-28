@@ -50,6 +50,13 @@ export default class RouteStore extends BaseStore {
         this.emitChange();
     }
 
+    onError403() {
+        this.route = null;
+        this.page = 'unauthorized';
+        this.loading = false;
+        this.emitChange();
+    }
+
     onError404() {
         this.route = null;
         this.page = null;

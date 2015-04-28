@@ -8,6 +8,7 @@ import Link from '../components/Link';
 import mui from 'material-ui';
 import BusinessMemberActions from '../actions/BusinessMemberActions';
 import UserPicker from '../components/UserPicker';
+import ImageField from '../components/ImageField';
 
 class BusinessMemberPage extends React.Component {
     constructor(props) {
@@ -32,6 +33,12 @@ class BusinessMemberPage extends React.Component {
                     floatingLabelText="Utilisateur"
                     defaultUser={businessMember.user}
                     onChange={this.onUserChange}
+                    />
+                <br />
+                <ImageField
+                    ref="picture"
+                    container="business-members"
+                    defaultImage={businessMember.picture}
                     />
                 <br />
                 <mui.RadioButtonGroup ref="gender" name="gender" defaultSelected={businessMember.gender} valueSelected={user && user.gender}>
@@ -87,13 +94,14 @@ class BusinessMemberPage extends React.Component {
         const businessId = this.props.businessId;
         const businessMemberId = this.props.businessMember.id;
         const values = {
-            userId: this.refs.user.getUserId(),
-            gender: this.refs.gender.getSelectedValue(),
-            firstName: this.refs.firstName.getValue(),
-            lastName: this.refs.lastName.getValue(),
-            email: this.refs.email.getValue(),
-            phoneNumber: this.refs.phoneNumber.getValue(),
-            hidden: !this.refs.isHairdresser.isChecked()
+            userId      : this.refs.user.getUserId(),
+            picture     : this.refs.picture.getImage(),
+            gender      : this.refs.gender.getSelectedValue(),
+            firstName   : this.refs.firstName.getValue(),
+            lastName    : this.refs.lastName.getValue(),
+            email       : this.refs.email.getValue(),
+            phoneNumber : this.refs.phoneNumber.getValue(),
+            hidden      : !this.refs.isHairdresser.isChecked()
         };
 
         if (businessMemberId) {

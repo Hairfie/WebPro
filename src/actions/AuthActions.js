@@ -13,42 +13,73 @@ const AuthActions = {
 
         return context.hairfieApi
             .post('/users/login', { email, password })
-            .then(token => {
-                context.dispatch(Actions.LOGIN_SUCCESS, { token });
-                return afterLogin(context, token)
-                    .then(() => {
-                        writeCookie(COOKIE_AUTH_TOKEN, token.id, 7);
-
-                        return context.executeAction(RouteActions.navigate, { route: 'dashboard' });
-                    });
-            }, error => {
-                context.dispatch(Actions.LOGIN_FAILURE, { error });
-            });
+            .then(
+                token => loginWithToken(context, token, { remember: true, route: 'dashboard' }),
+                error => context.dispatch(Actions.LOGIN_FAILURE, { error })
+           );
     },
     loginWithCookie(context, { cookies }) {
-        const tokenId = cookies[COOKIE_AUTH_TOKEN];
-
-        if (!tokenId) return;
+        return loginWithTokenId(context, cookies[COOKIE_AUTH_TOKEN])
+            .then(() => {}, () => {});
+    },
+    impersonateToken(context, { user }) {
+        const token = context.getStore('AuthStore').getToken();
 
         return context.hairfieApi
-            .get(`/accessTokens/${tokenId}`)
-            .then(token => {
-                context.dispatch(Actions.LOGIN_SUCCESS, { token });
-                return afterLogin(context, token);
-            }, () => {});
+            .post(`/accessTokens/${token.id}/impersonate`, { userId: user.id })
+            .then(
+                token => loginWithToken(context, token, { remember: true, route: 'dashboard' }),
+                () => {}
+            );
+    },
+    repersonateToken(context) {
+        const tokenId = context.getStore('AuthStore').getParentTokenId();
+
+        return loginWithTokenId(context, tokenId, { remember: true, route: 'dashboard' });
+    },
+    logout(context) {
+        clearCookie('authToken');
+        context.dispatch(Actions.LOGOUT);
+        return context.executeAction(RouteActions.navigate, { route: 'home' });
     }
 };
 
-function afterLogin(context, token) {
-    return Promise
-        .all([
-            context.executeAction(UserActions.loadUser, token),
-            context.executeAction(UserActions.loadUserBusinesses, token)
-        ]);
+function loginWithTokenId(context, tokenId, options) {
+    if (!tokenId) return Promise.resolve(null);
+
+    return context.hairfieApi
+        .get(`/accessTokens/${tokenId}`)
+        .then(token => loginWithToken(context, token, options));
 }
 
-function afterLogout(context) {
-    clearCookie('authToken');
+function loginWithToken(context, token, options) {
+    const { remember, route } = options || {};
+
+    context.dispatch(Actions.LOGIN_SUCCESS, { token });
+
+    var actions = [
+        context.executeAction(UserActions.loadUser, token),
+        context.executeAction(UserActions.loadUserBusinesses, token)
+    ];
+
+    if (token.parent) {
+        actions.push(context.executeAction(UserActions.loadUser, token.parent));
+    }
+
+    return Promise.all(actions)
+        .then(function () {
+            if (remember) {
+                writeCookie(COOKIE_AUTH_TOKEN, token.id, 7);
+            }
+
+            var promises = [];
+
+            if (route) {
+                promises.push(context.executeAction(RouteActions.navigate, { route }));
+            }
+
+            return Promise.all(promises)
+        });
 }
 
 export default AuthActions;

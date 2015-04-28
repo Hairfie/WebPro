@@ -18,6 +18,10 @@ const RouteActions = {
         return context.executeAction(navigate, { route: 'login' });
     },
 
+    show403(context, { err }) {
+        context.dispatch(Actions.ERROR_403, { err });
+    },
+
     show404(context, { err }) {
         context.dispatch(Actions.ERROR_404, { err });
     },

@@ -7,6 +7,7 @@ import _ from 'lodash';
 import Link from '../components/Link';
 import mui from 'material-ui';
 import BusinessMemberActions from '../actions/BusinessMemberActions';
+import Image from '../components/Image';
 
 class Member extends React.Component {
     static contextTypes = {
@@ -17,12 +18,24 @@ class Member extends React.Component {
 
         return (
             <div style={{ margin: '10px', padding: '10px' }}>
+                <div style={{ width: 50, height: 50, float: 'left', display: 'block', background: '#fafafa' }}>
+                    {this.renderPicture()}
+                </div>
                 <Link route="edit_business_member" params={{ businessMemberId: id }}>
                     {firstName} {lastName}
                 </Link>
                 {this.renderActiveSwitch()}
+                <div style={{ clear: 'both' }}>&nbsp;</div>
             </div>
         );
+    }
+    renderPicture() {
+        if (this.props.member.picture) {
+            return <Image
+                image={this.props.member.picture}
+                options={{ width: 50, height: 50, crop: 'thumb' }}
+                />;
+        }
     }
     renderActiveSwitch() {
         if (this.props.member.active) {

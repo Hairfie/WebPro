@@ -10,6 +10,21 @@ export default {
         method: 'get',
         action: PageActions.login
     },
+    logout: {
+        path: '/logout',
+        method: 'get',
+        action: PageActions.logout
+    },
+    impersonate_token: {
+        path: '/impersonate-token',
+        method: 'get',
+        action: PageActions.impersonateToken
+    },
+    repersonate_token: {
+        path: '/repersonate_token',
+        method: 'get',
+        action: PageActions.repersonateToken
+    },
     dashboard: {
         path: '/dashboard',
         method: 'get',

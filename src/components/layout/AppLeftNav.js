@@ -3,6 +3,8 @@ import { connectToStores } from 'fluxible/addons';
 import { MenuItem, LeftNav } from '../UIKit.js';
 import _ from 'lodash';
 import { navigateAction } from 'flux-router-component';
+import AuthActions from '../../actions/AuthActions';
+import Permissions from '../../constants/Permissions';
 
 const menuItems = [
     { route: 'dashboard', text: 'Mes salons', authRequired: true },
@@ -21,6 +23,7 @@ class AppLeftNav extends React.Component {
         var header = <div className="logo" onClick={this._onHeaderClick.bind(this)}>Hairfie</div>;
         let menuItemsToDisplay = this.isAuthenticated() ? menuItems : _.reject(menuItems, 'authRequired');
         menuItemsToDisplay = menuItemsToDisplay.concat(this.businessMenuItems());
+        menuItemsToDisplay = menuItemsToDisplay.concat(this.getUserMenuItems());
 
         return (
             <LeftNav
@@ -43,6 +46,40 @@ class AppLeftNav extends React.Component {
             { route: 'business_map', text: 'Adresse & GPS', params: {businessId: business.id}, authRequired: true },
             { route: 'business_members', text: 'Équipe', params: {businessId: business.id}, authRequired: true },
         ];
+    }
+
+    getUserMenuItems() {
+        const AuthStore = this.context.getStore('AuthStore');
+        const UserStore = this.context.getStore('UserStore');
+
+        if (!AuthStore.isAuthenticated()) {
+            return [];
+        }
+
+        const user = UserStore.getById(AuthStore.getUserId()) || {};
+
+        var items = [{ text: user.firstName+' '+user.lastName, type: MenuItem.Types.SUBHEADER }];
+
+        if (AuthStore.isImpersonated()) {
+            items.push({
+                text: 'Rendre la main',
+                route: 'repersonate_token'
+            });
+        }
+
+        if (AuthStore.hasPermission(Permissions.IMPERSONATE_TOKEN)) {
+            items.push({
+                text: 'Prendre la main',
+                route: 'impersonate_token'
+            });
+        }
+
+        items.push({
+            text: 'Se déconnecter',
+            route: 'logout'
+        });
+
+        return items;
     }
 
     isAuthenticated() {

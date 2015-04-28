@@ -1,10 +1,11 @@
-import React, { PropTypes } from "react";
-import { isEqual } from "lodash";
-import { provideContext, connectToStores } from "fluxible/addons";
-import { RouterMixin } from "flux-router-component";
+import React, { PropTypes } from 'react';
+import { isEqual } from 'lodash';
+import { provideContext, connectToStores } from 'fluxible/addons';
+import { RouterMixin } from 'flux-router-component';
 
-import NotFoundPage from "./pages/NotFoundPage";
-import ErrorPage from "./pages/ErrorPage";
+import NotFoundPage from './pages/NotFoundPage';
+import ErrorPage from './pages/ErrorPage';
+import UnauthorizedPage from './pages/UnauthorizedPage';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
@@ -14,13 +15,14 @@ import BusinessInfosPage from './pages/BusinessInfosPage';
 import BusinessMapPage from './pages/BusinessMapPage';
 import BusinessMembersPage from './pages/BusinessMembersPage';
 import BusinessMemberPage from './pages/BusinessMemberPage';
+import ImpersonateTokenPage from './pages/ImpersonateTokenPage';
 
 import Layout from './components/Layout';
 
 const debug = require("debug")("hairfie");
 
 if (process.env.BROWSER) {
-    require("./style/Application.scss");
+    require('./style/Application.scss');
 }
 
 // TODO: remove me as soon as react v1.0.0
@@ -33,6 +35,8 @@ function pageHandler(page) {
             return HomePage;
         case 'login':
             return LoginPage;
+        case 'impersonate_token':
+            return ImpersonateTokenPage;
         case 'dashboard':
             return DashboardPage;
         case 'business':
@@ -48,6 +52,8 @@ function pageHandler(page) {
         case 'new_business_member':
         case 'edit_business_member':
             return BusinessMemberPage;
+        case 'unauthorized':
+            return UnauthorizedPage;
         case 'error':
             return ErrorPage;
         default:
