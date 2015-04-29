@@ -2,6 +2,7 @@ import React from "react";
 import Layout from '../components/Layout';
 import AuthActions from '../actions/AuthActions';
 import { TextField, FlatButton } from '../components/UIKit';
+import FacebookLoginButton from '../components/FacebookLoginButton';
 import { connectToStores } from "fluxible/addons";
 
 class LoginPage extends React.Component {
@@ -15,6 +16,10 @@ class LoginPage extends React.Component {
                 <TextField ref="email" type="email" floatingLabelText="Adresse email" />
                 <TextField ref="password" type="password" floatingLabelText="Mot de passe" />
                 <FlatButton onClick={this.login.bind(this)} disabled={this.props.loading} label="Se connecter" />
+                <br />
+                <br />
+                <p>ou</p>
+                <FacebookLoginButton />
             </Layout>
         );
     }

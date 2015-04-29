@@ -18,6 +18,20 @@ const AuthActions = {
                 error => context.dispatch(Actions.LOGIN_FAILURE, { error })
            );
     },
+    loginWithFacebook(context, { response }) {
+        const access_token = response.authResponse.accessToken;
+
+        if (!access_token) {
+            return;
+        }
+
+        return context.hairfieApi
+            .post(`/auth/facebook/token`, { access_token })
+            .then(
+                token => loginWithToken(context, token, { remember: true, route: 'dashboard' }),
+                () => {}
+            );
+    },
     loginWithCookie(context, { cookies }) {
         return loginWithTokenId(context, cookies[COOKIE_AUTH_TOKEN])
             .then(() => {}, () => {});
