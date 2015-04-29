@@ -42,6 +42,7 @@
     "material-ui": "^0.7.4",
     "material-ui-sass": "^0.7.2",
     "morgan": "^1.5.2",
+    "newrelic": "^1.18.4",
     "react": "^0.13.1",
     "react-tap-event-plugin": "^0.1.6",
     "sass-loader": "0.4.2",
