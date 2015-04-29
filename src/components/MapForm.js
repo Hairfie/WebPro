@@ -3,7 +3,7 @@
 import React from 'react';
 import { FlatButton, TextField, Checkbox, RadioButton, RadioButtonGroup, Paper } from '../components/UIKit';
 import _ from 'lodash';
-import GetGoogleMaps from '../plugins/getGoogleMap';
+import GetGoogleMapsSDK from '../services/getGoogleMapScript';
 
 const DEFAULT_LOCATION = {lat: 48.867439, lng: 2.343644};
 
@@ -73,7 +73,8 @@ export default class MapForm extends React.Component {
 function createMap(el) {
     var options = {};
     options.zoom = 16;
-    return GetGoogleMaps()
+    return GetGoogleMapsSDK
+        .loadMaps()
         .then(function (google) {
             return new google.maps.Map(el, options);
         });
@@ -85,7 +86,8 @@ function createMarker(map, onMoved) {
     options.position = map.getCenter();
     options.draggable = true;
 
-    return GetGoogleMaps()
+    return GetGoogleMapsSDK
+        .loadMaps()
         .then(function (google) {
             var marker = new google.maps.Marker(options);
             google.maps.event.addListener(marker, 'dragend', onMoved);

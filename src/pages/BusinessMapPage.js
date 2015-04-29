@@ -7,6 +7,7 @@ import { connectToStores } from 'fluxible/addons';
 import Link, {FlatLink} from '../components/Link';
 import BusinessActions from '../actions/BusinessActions';
 import MapForm from '../components/MapForm';
+import PlaceInput from '../components/PlaceInput';
 import _ from 'lodash';
 
 
@@ -45,6 +46,12 @@ class BusinessMapPage extends React.Component {
         return (
             <Layout ref="layout" {...this.props}>
                 <h1>Adresse & Carte</h1>
+                <Paper>
+                    <h5>Recherche Google</h5>
+                    <PlaceInput ref="place" {...this.props} />
+                    <FlatButton label="Remplacer la localisation et l'adresse par ce lieu" onClick={this.getPlace} />
+                </Paper>
+                <br />
                 <AddressInputGroup address={business.address} ref="address" />
                 <br />
                 <MapForm ref="gps" defaultLocation={business.gps} />
@@ -64,6 +71,10 @@ class BusinessMapPage extends React.Component {
         };
 
         this.context.executeAction(BusinessActions.updateInfos, { businessId, values });
+    }
+
+    getPlace = () => {
+        console.log("place", this.refs.place.getLocation());
     }
 }
 
