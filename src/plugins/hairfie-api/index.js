@@ -3,12 +3,12 @@
 import Client from './client';
 
 function hairfieApiPlugin(options) {
-    var apiUrl = options.apiUrl || process.env.HAIRFIE_API_URL;
+    var options = options;
 
     return {
         name: 'HairfieApiPlugin',
         plugContext: function () {
-            var client = new Client({ apiUrl });
+            var client = new Client(options);
 
             return {
                 plugActionContext: function (actionContext) {
@@ -17,10 +17,10 @@ function hairfieApiPlugin(options) {
             };
         },
         dehydrate() {
-            return { apiUrl };
+            return { options };
         },
         rehydrate(state) {
-            apiUrl = state.apiUrl;
+            options = state.options;
         }
     };
 }
