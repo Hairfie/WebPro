@@ -3,6 +3,7 @@ import routrPlugin from 'fluxible-plugin-routr';
 import RouteActions from './actions/RouteActions';
 import routes from './routes';
 import hairfieApiPlugin from './plugins/hairfie-api';
+import facebookPlugin from 'fluxible-plugin-facebook';
 
 import Application from './Application';
 
@@ -43,6 +44,10 @@ const app = new Fluxible({
 
 app.plug(routrPlugin({
     routes: routes
+}));
+
+app.plug(facebookPlugin({
+    appId: config.facebookAppId
 }));
 
 app.plug(hairfieApiPlugin({

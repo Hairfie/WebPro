@@ -1,6 +1,8 @@
 'use strict';
 
 export function writeCookie(name, value, days) {
+    if (typeof document === undefined) return;
+
     var expires;
 
     if (days) {
