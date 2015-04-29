@@ -1,12 +1,12 @@
 'use strict';
 
 import React from 'react';
-import Facebook from '../services/facebook';
 import AuthActions from '../actions/AuthActions';
 import { RaisedButton } from 'material-ui';
 
 export default class FacebookLoginButton extends React.Component {
     static contextTypes = {
+        getFacebookSdk: React.PropTypes.func.isRequired,
         executeAction: React.PropTypes.func.isRequired,
     }
     constructor(props) {
@@ -14,7 +14,7 @@ export default class FacebookLoginButton extends React.Component {
         this.state = { sdk: null };
     }
     componentDidMount() {
-        Facebook.getSdk().then(sdk => this.setState({ sdk }));
+        this.context.getFacebookSdk().then(sdk => this.setState({ sdk }));
     }
     render() {
         const {

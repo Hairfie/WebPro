@@ -1,11 +1,8 @@
-// Load different configs for production or development
+'use strict';
 
-let configFile = "dev.js";
-
-if (process.env.NODE_ENV === "production") {
-  configFile = "prod.js";
-}
-
-const config = require("../config/" + configFile);
+const config = {
+    facebookAppId: process.env.FACEBOOK_APP_ID,
+    hairfieApiUrl: process.env.HAIRFIE_API_URL,
+};
 
 export default config;
