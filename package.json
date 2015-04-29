@@ -35,7 +35,8 @@
     "flux-router-component": "^0.6.1",
     "fluxible": "^0.4.3",
     "fluxible-action-utils": "^0.2.1",
-    "fluxible-plugin-facebook": "^0.1.0",
+    "fluxible-plugin-facebook": "^0.1.1",
+    "fluxible-plugin-hairfie-api": "^0.1.0",
     "fluxible-plugin-routr": "^0.3.0",
     "lodash": "^3.7.0",
     "material-ui": "^0.7.4",
@@ -48,7 +49,6 @@
     "serve-favicon": "^2.2.0",
     "strip-loader": "^0.1.0",
     "style-loader": "^0.9.0",
-    "superagent": "^1.2.0",
     "uuid": "^2.0.1",
     "webpack": "^1.8.4"
   },

@@ -2,7 +2,7 @@ import Fluxible from 'fluxible';
 import routrPlugin from 'fluxible-plugin-routr';
 import RouteActions from './actions/RouteActions';
 import routes from './routes';
-import hairfieApiPlugin from './plugins/hairfie-api';
+import hairfieApiPlugin from 'fluxible-plugin-hairfie-api';
 import facebookPlugin from 'fluxible-plugin-facebook';
 
 import Application from './Application';
