@@ -8,10 +8,6 @@ import Link, {FlatLink} from '../components/Link';
 import BusinessActions from '../actions/BusinessActions';
 import _ from 'lodash';
 
-if (process.env.BROWSER) {
-    require("../style/Page.scss");
-}
-
 class DescriptionInputGroup extends React.Component {
     render() {
         const {defaultDescription} = this.props;

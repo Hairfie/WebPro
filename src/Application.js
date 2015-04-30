@@ -12,6 +12,7 @@ import DashboardPage from './pages/DashboardPage';
 import BusinessPage from './pages/BusinessPage';
 import BusinessPicturesPage from './pages/BusinessPicturesPage';
 import BusinessInfosPage from './pages/BusinessInfosPage';
+import BusinessTimetablePage from './pages/BusinessTimetablePage';
 import BusinessMapPage from './pages/BusinessMapPage';
 import BusinessMembersPage from './pages/BusinessMembersPage';
 import BusinessMemberPage from './pages/BusinessMemberPage';
@@ -52,6 +53,8 @@ function pageHandler(page) {
         case 'new_business_member':
         case 'edit_business_member':
             return BusinessMemberPage;
+        case 'business_timetable':
+            return BusinessTimetablePage;
         case 'unauthorized':
             return UnauthorizedPage;
         case 'error':

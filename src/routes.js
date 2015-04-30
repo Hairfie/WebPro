@@ -63,5 +63,10 @@ export default {
         path: '/business-members/:businessMemberId',
         method: 'get',
         action: PageActions.businessMember
+    },
+    business_timetable: {
+        path: '/businesses/:businessId/timetable',
+        method: 'get',
+        action: PageActions.business
     }
 };

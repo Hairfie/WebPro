@@ -33,6 +33,11 @@ class BusinessPage extends React.Component {
                             Adresse & GPS
                         </Link>
                     </li>
+                    <li>
+                        <Link route="business_timetable" params={{businessId: this.props.businessId}}>
+                            Horaires
+                        </Link>
+                    </li>
                 </ul>
             </nav>
         </Layout>
