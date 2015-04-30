@@ -21,6 +21,13 @@ export default class MapForm extends React.Component {
         };
     }
 
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            location        : nextProps.defaultLocation,
+            markerHasMoved  : true
+        });
+    }
+
     render() {
         this.updateMap();
 
@@ -43,11 +50,13 @@ export default class MapForm extends React.Component {
     }
 
     updateMap() {
+
         if (this.state.map && !this.state.markerHasMoved) {
             this.state.map.panTo(this.state.location);
         }
         if (this.state.marker) {
             this.state.marker.setPosition(this.state.location);
+            this.state.map.panTo(this.state.location);
         }
     }
 

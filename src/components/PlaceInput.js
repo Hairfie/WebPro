@@ -6,14 +6,12 @@ import _ from 'lodash';
 import GetGoogleMapsSDK from '../services/getGoogleMapScript';
 
 const componentForm = {
-  street_number: 'short_name',
-  route: 'long_name',
-  locality: 'long_name',
-  country: 'long_name',
-  postal_code: 'short_name'
+    street_number: 'short_name',
+    route: 'long_name',
+    locality: 'long_name',
+    country: 'long_name',
+    postal_code: 'short_name'
 };
-
-
 export default class PlaceInput extends React.Component {
     constructor(props) {
         super(props);
@@ -22,10 +20,12 @@ export default class PlaceInput extends React.Component {
             autocomplete: null
         };
     }
+
     static propTypes = {
         types: React.PropTypes.array,
         onPlaceChanged: React.PropTypes.func
     }
+
     static defaultProps = {
         types: ['geocode'],
         onPlaceChanged: function () {}
@@ -82,8 +82,32 @@ export default class PlaceInput extends React.Component {
     }
 
     getLocation = () => {
+        const { geometry: {location} } = this.state.autocomplete.getPlace();
+        return {
+            lat: location.lat(),
+            lng: location.lng()
+        }
     }
 
     getHairfieFormattedAddress = () => {
+        const { address_components } = this.state.autocomplete.getPlace();
+        const parsedPlace = parsePlace(address_components);
+
+        return {
+            street  : `${(parsedPlace.street_number || {}).long_name} ${(parsedPlace.route || {}).long_name}`,
+            city    : (parsedPlace.locality || {}).long_name,
+            zipCode : (parsedPlace.postal_code || {}).long_name,
+            country : (parsedPlace.country || {}).short_name
+        }
     }
 }
+
+function parsePlace(address_components){
+    return _.reduce(address_components, function(result, component) {
+        result[component.types[0]] = {
+            long_name: component.long_name,
+            short_name: component.short_name
+        };
+        return result;
+    }, {});
+ };

@@ -17,9 +17,9 @@ class AddressInputGroup extends React.Component {
 
         return (
             <Paper>
-                <TextField ref="street" type="text" floatingLabelText="Numéro et nom de voie" defaultValue={address.street} />
-                <TextField ref="city" type="text" floatingLabelText="Ville" defaultValue={address.city} />
-                <TextField ref="zipCode" type="text" floatingLabelText="Code postal" defaultValue={address.zipCode} />
+                <TextField ref="street" type="text" floatingLabelText="Numéro et nom de voie" value={address.street} />
+                <TextField ref="city" type="text" floatingLabelText="Ville" value={address.city} />
+                <TextField ref="zipCode" type="text" floatingLabelText="Code postal" value={address.zipCode} />
                 <div className="clearfix" />
             </Paper>
         );
@@ -36,6 +36,14 @@ class AddressInputGroup extends React.Component {
 }
 
 class BusinessMapPage extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            address: props.business.address,
+            gps: props.business.gps
+        };
+    }
     static contextTypes = {
         executeAction: React.PropTypes.func.isRequired
     }
@@ -52,9 +60,9 @@ class BusinessMapPage extends React.Component {
                     <FlatButton label="Remplacer la localisation et l'adresse par ce lieu" onClick={this.getPlace} />
                 </Paper>
                 <br />
-                <AddressInputGroup address={business.address} ref="address" />
+                <AddressInputGroup address={this.state.address} ref="address" />
                 <br />
-                <MapForm ref="gps" defaultLocation={business.gps} />
+                <MapForm ref="gps" defaultLocation={this.state.gps} />
                 <FlatButton label='Sauver les modifications' onClick={this.save} />
                 {' ou '}
                 <FlatLink route="business" params={{ businessId: business.id }} label='Annuler' />
@@ -74,7 +82,10 @@ class BusinessMapPage extends React.Component {
     }
 
     getPlace = () => {
-        console.log("place", this.refs.place.getLocation());
+        this.setState({
+            address: this.refs.place.getHairfieFormattedAddress(),
+            gps: this.refs.place.getLocation()
+        });
     }
 }
 
