@@ -99,7 +99,8 @@ Application = connectToStores(Application, ['RouteStore', 'HtmlHeadStore'], (sto
 // wrap application in the fluxible context
 Application = provideContext(Application, {
     makePath        : React.PropTypes.func.isRequired,
-    getFacebookSdk  : React.PropTypes.func.isRequired
+    getFacebookSdk  : React.PropTypes.func.isRequired,
+    getGoogleMapsScript: React.PropTypes.func.isRequired
 });
 
 export default Application;

@@ -3,7 +3,6 @@
 import React from 'react';
 import { FlatButton, TextField, Checkbox, RadioButton, RadioButtonGroup, Paper } from '../components/UIKit';
 import _ from 'lodash';
-import GetGoogleMapsSDK from '../services/getGoogleMapScript';
 
 const DEFAULT_LOCATION = {lat: 48.867439, lng: 2.343644};
 
@@ -19,6 +18,10 @@ export default class MapForm extends React.Component {
             marker          : null,
             markerHasMoved  : false
         };
+    }
+
+    static contextTypes = {
+        getGoogleMapsScript: React.PropTypes.func.isRequired
     }
 
     componentWillReceiveProps(nextProps) {
@@ -39,10 +42,10 @@ export default class MapForm extends React.Component {
     }
 
     componentDidMount() {
-        createMap(this.refs.map.getDOMNode())
+        this.createMap(this.refs.map.getDOMNode())
             .then(function (map) {
                 this.setState({map: map});
-                return createMarker(map, this.onMarkerMoved);
+                return this.createMarker(map, this.onMarkerMoved);
             }.bind(this))
             .then(function (marker) {
                 this.setState({marker: marker});
@@ -77,29 +80,27 @@ export default class MapForm extends React.Component {
             lng: this.state.marker.position.lng()
         }
     }
-}
 
-function createMap(el) {
-    var options = {};
-    options.zoom = 16;
-    return GetGoogleMapsSDK
-        .loadMaps()
-        .then(function (google) {
-            return new google.maps.Map(el, options);
-        });
-}
+    createMap(el) {
+        var options = {};
+        options.zoom = 16;
+        return this.context.getGoogleMapsScript()
+            .then(function (google) {
+                return new google.maps.Map(el, options);
+            });
+    }
 
-function createMarker(map, onMoved) {
-    var options = {};
-    options.map = map;
-    options.position = map.getCenter();
-    options.draggable = true;
+    createMarker(map, onMoved) {
+        var options = {};
+        options.map = map;
+        options.position = map.getCenter();
+        options.draggable = true;
 
-    return GetGoogleMapsSDK
-        .loadMaps()
-        .then(function (google) {
-            var marker = new google.maps.Marker(options);
-            google.maps.event.addListener(marker, 'dragend', onMoved);
-            return marker;
-        });
+        return this.context.getGoogleMapsScript()
+            .then(function (google) {
+                var marker = new google.maps.Marker(options);
+                google.maps.event.addListener(marker, 'dragend', onMoved);
+                return marker;
+            });
+    }
 }

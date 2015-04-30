@@ -4,6 +4,7 @@ import RouteActions from './actions/RouteActions';
 import routes from './routes';
 import hairfieApiPlugin from 'fluxible-plugin-hairfie-api';
 import facebookPlugin from 'fluxible-plugin-facebook';
+import googleMapsPlugin from 'fluxible-plugin-google-maps';
 
 import Application from './Application';
 
@@ -53,6 +54,8 @@ app.plug(facebookPlugin({
 app.plug(hairfieApiPlugin({
     apiUrl: config.hairfieApiUrl
 }));
+
+app.plug(googleMapsPlugin());
 
 app.plug({
     name: 'HairfieWebPro',

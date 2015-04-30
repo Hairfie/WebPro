@@ -3,7 +3,6 @@
 import React from 'react';
 import { FlatButton, TextField, Checkbox, RadioButton, RadioButtonGroup, Paper } from '../components/UIKit';
 import _ from 'lodash';
-import GetGoogleMapsSDK from '../services/getGoogleMapScript';
 
 const componentForm = {
     street_number: 'short_name',
@@ -31,6 +30,10 @@ export default class PlaceInput extends React.Component {
         onPlaceChanged: function () {}
     }
 
+    static contextTypes = {
+        getGoogleMapsScript: React.PropTypes.func.isRequired
+    }
+
     render() {
         return (
             <div className="mui-text-field">
@@ -46,8 +49,7 @@ export default class PlaceInput extends React.Component {
     }
 
     componentDidMount() {
-        GetGoogleMapsSDK
-            .loadMaps()
+        this.context.getGoogleMapsScript()
             .then(function (google) {
                 var input = this.refs.input.getDOMNode();
                 var options = {};

@@ -36,6 +36,7 @@
     "fluxible": "^0.4.3",
     "fluxible-action-utils": "^0.2.1",
     "fluxible-plugin-facebook": "^0.1.1",
+    "fluxible-plugin-google-maps": "^0.1.0",
     "fluxible-plugin-hairfie-api": "^0.1.0",
     "fluxible-plugin-routr": "^0.3.0",
     "lodash": "^3.7.0",
