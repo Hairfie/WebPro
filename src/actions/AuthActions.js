@@ -3,7 +3,6 @@
 import Actions from '../constants/Actions';
 import UserActions from './UserActions';
 import RouteActions from './RouteActions';
-import { writeCookie, clearCookie } from '../utils/CookieUtils';
 
 const COOKIE_AUTH_TOKEN = 'authToken';
 
@@ -33,7 +32,8 @@ const AuthActions = {
             );
     },
     loginWithCookie(context, { cookies }) {
-        return loginWithTokenId(context, cookies[COOKIE_AUTH_TOKEN])
+        var tokenId = context.getCookie(COOKIE_AUTH_TOKEN);
+        return loginWithTokenId(context, tokenId)
             .then(() => {}, () => {});
     },
     impersonateToken(context, { user }) {
@@ -52,7 +52,7 @@ const AuthActions = {
         return loginWithTokenId(context, tokenId, { remember: true, route: 'dashboard' });
     },
     logout(context) {
-        clearCookie('authToken');
+        context.setCookie(COOKIE_AUTH_TOKEN, null);
         context.dispatch(Actions.LOGOUT);
         return context.executeAction(RouteActions.navigate, { route: 'home' });
     }
@@ -83,7 +83,9 @@ function loginWithToken(context, token, options) {
     return Promise.all(actions)
         .then(function () {
             if (remember) {
-                writeCookie(COOKIE_AUTH_TOKEN, token.id, 7);
+                context.setCookie(COOKIE_AUTH_TOKEN, token.id, {
+                    maxAge: 604800 // 7 days in seconds
+                });
             }
 
             var promises = [];

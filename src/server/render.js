@@ -59,11 +59,9 @@ function renderApp(req, res, context, next) {
 
 function render(req, res, next) {
 
-    const context = app.createContext({
-        req: req,
-    });
+    const context = app.createContext({ req, res });
 
-    context.executeAction(ServerActions.render, { req: req }, (err) => {
+    context.executeAction(ServerActions.render, { url: req.url }, (err) => {
 
         // If the action return an errors, execute another action to make
         // the RouteStore register the error and show the relative page.

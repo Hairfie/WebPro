@@ -3,6 +3,7 @@ import routrPlugin from 'fluxible-plugin-routr';
 import RouteActions from './actions/RouteActions';
 import routes from './routes';
 import hairfieApiPlugin from 'fluxible-plugin-hairfie-api';
+import cookiePlugin from 'fluxible-plugin-cookie';
 import facebookPlugin from 'fluxible-plugin-facebook';
 import googleMapsPlugin from 'fluxible-plugin-google-maps';
 
@@ -50,6 +51,8 @@ app.plug(routrPlugin({
 app.plug(facebookPlugin({
     appId: config.facebookAppId
 }));
+
+app.plug(cookiePlugin());
 
 app.plug(hairfieApiPlugin({
     apiUrl: config.hairfieApiUrl
