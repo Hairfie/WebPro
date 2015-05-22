@@ -20,12 +20,13 @@ class BusinessTimetablePage extends React.Component {
     }
     constructor(props) {
         super(props);
+
         this.state = {
-            timetable: props.business.timetable
+            timetable: props.business.timetable ? props.business.timetable : {}
         };
     }
 
-    menuItems (timetable) {
+    menuItems(timetable = {}) {
         const labelMenuItems = _.map(_.range(7), (i) => {
             const weekdayShort = enMoment.isoWeekday(i).format('ddd').toUpperCase();
 

@@ -14,7 +14,9 @@ class Member extends React.Component {
         executeAction: React.PropTypes.func.isRequired
     }
     render() {
-        const { member: { id, firstName, lastName } } = this.props;
+        const { member: { id, firstName, lastName, hidden } } = this.props;
+
+        const status = hidden ? "Admin" : "Coiffeur";
 
         return (
             <div style={{ margin: '10px', padding: '10px' }}>
@@ -24,6 +26,7 @@ class Member extends React.Component {
                 <Link route="edit_business_member" params={{ businessMemberId: id }}>
                     {firstName} {lastName}
                 </Link>
+                ({status})
                 {this.renderActiveSwitch()}
                 <div style={{ clear: 'both' }}>&nbsp;</div>
             </div>
