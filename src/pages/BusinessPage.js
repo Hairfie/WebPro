@@ -35,7 +35,7 @@ class BusinessPage extends React.Component {
                     </li>
                     <li>
                         <Link route="business_timetable" params={{businessId: this.props.businessId}}>
-                            Horaires
+                            Horaires & Promotions
                         </Link>
                     </li>
                 </ul>
