@@ -32,7 +32,9 @@ class BusinessTimetablePage extends React.Component {
             return {
                 text: frMoment.isoWeekday(i).format('dddd'),
                 data: _.map(timetable[weekdayShort], (t) => {
-                        return `${t.startTime} à ${t.endTime}`;
+                        let data = `${t.startTime} à ${t.endTime}`;
+                        if(t.discount) data += ` avec ${t.discount}%`;
+                        return data;
                     }).join(', '),
                 weekdayShort: weekdayShort
             }
@@ -142,12 +144,22 @@ class DaySelectModal extends React.Component {
 
         return (
             <Dialog ref="dialog" actions={customActions}>
+                <h4>Ajout d'une plage horaire</h4>
                 <dl>
-                  <dt>A partir de :</dt>
-                  <dd><TimePicker ref="startTime" defaultValue="10:00" /></dd>
-                  <dt>Jusque :</dt>
-                  <dd><TimePicker ref="endTime" defaultValue="19:00" /></dd>
-                  {this.renderDaysCheckboxes()}
+                    <dd>
+                        <TimePicker floatingLabelText="A partir de" ref="startTime" defaultValue="10:00" />
+                        <TimePicker floatingLabelText="Jusque" ref="endTime" defaultValue="19:00" />
+                    </dd>
+                    <dt>Promotions :</dt>
+                    <RadioButtonGroup ref="discount" name="discount" defaultSelected="0" >
+                        <RadioButton value="0" label="Pas de promotion"  />
+                        <RadioButton value="30" label="30%" />
+                        <RadioButton value="40" label="40%" />
+                        <RadioButton value="50" label="50%" />
+                    </RadioButtonGroup>
+                    <dt>Jours :</dt>
+
+                    {this.renderDaysCheckboxes()}
                 </dl>
             </Dialog>
         );
@@ -185,10 +197,13 @@ class DaySelectModal extends React.Component {
     _handleSave = () => {
         const startTime = this.refs.startTime.getValue();
         const endTime = this.refs.endTime.getValue();
+        const discount = this.refs.discount.getSelectedValue() != "0" ?  this.refs.discount.getSelectedValue() : null;
+
         const newTimetable = _.reduce(this._getSelectedWeekdays(), (result, day) => {
             result[day] = [{
                 startTime: startTime,
-                endTime: endTime
+                endTime: endTime,
+                discount: discount
             }]
             return result;
         }, {});
