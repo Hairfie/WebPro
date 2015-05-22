@@ -13,6 +13,8 @@ import BusinessPage from './pages/BusinessPage';
 import BusinessPicturesPage from './pages/BusinessPicturesPage';
 import BusinessInfosPage from './pages/BusinessInfosPage';
 import BusinessTimetablePage from './pages/BusinessTimetablePage';
+import BusinessServicesPage from './pages/BusinessServicesPage';
+import BusinessServicePage from './pages/BusinessServicePage';
 import BusinessMapPage from './pages/BusinessMapPage';
 import BusinessMembersPage from './pages/BusinessMembersPage';
 import BusinessMemberPage from './pages/BusinessMemberPage';
@@ -55,6 +57,11 @@ function pageHandler(page) {
             return BusinessMemberPage;
         case 'business_timetable':
             return BusinessTimetablePage;
+        case 'business_services':
+            return BusinessServicesPage;
+        case 'new_business_service':
+        case 'edit_business_service':
+            return BusinessServicePage;
         case 'unauthorized':
             return UnauthorizedPage;
         case 'error':

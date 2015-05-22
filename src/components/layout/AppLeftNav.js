@@ -45,7 +45,8 @@ class AppLeftNav extends React.Component {
             { route: 'business_infos', text: 'Infos', params: {businessId: business.id}, authRequired: true },
             { route: 'business_map', text: 'Adresse & GPS', params: {businessId: business.id}, authRequired: true },
             { route: 'business_members', text: 'Équipe', params: {businessId: business.id}, authRequired: true },
-            { route: 'business_timetable', text: 'Horaires & Promos', params: {businessId: business.id}, authRequired: true }
+            { route: 'business_timetable', text: 'Horaires & Promos', params: {businessId: business.id}, authRequired: true },
+            { route: 'business_services', text: 'Tarifs', params: {businessId: business.id}, authRequired: true }
         ];
     }
 

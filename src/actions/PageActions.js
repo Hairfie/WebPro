@@ -35,6 +35,18 @@ const PageActions = {
             .then(member => context.dispatch(Actions.RECEIVE_BUSINESS_MEMBER, member));
     }),
 
+    businessServices: authenticated((context, { params: { businessId } }, token) => {
+        return context.hairfieApi
+            .get(`/businessServices?filter[where][businessId]=${businessId}`, { token })
+            .then(services => context.dispatch(Actions.RECEIVE_BUSINESS_SERVICES, { businessId, services }));
+    }),
+
+    businessService: authenticated((context, { params: { businessServiceId } }, token) => {
+        return context.hairfieApi
+            .get(`/businessServices/${businessServiceId}`, { token })
+            .then(service => context.dispatch(Actions.RECEIVE_BUSINESS_SERVICE, service));
+    }),
+
     impersonateToken: hasPermissions(['IMPERSONATE_TOKEN']),
 
     repersonateToken: AuthActions.repersonateToken,

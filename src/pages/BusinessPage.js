@@ -38,6 +38,11 @@ class BusinessPage extends React.Component {
                             Horaires & Promotions
                         </Link>
                     </li>
+                    <li>
+                        <Link route="business_services" params={{businessId: this.props.businessId}}>
+                            Tarifs
+                        </Link>
+                    </li>
                 </ul>
             </nav>
         </Layout>

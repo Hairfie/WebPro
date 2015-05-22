@@ -68,5 +68,19 @@ export default {
         path: '/businesses/:businessId/timetable',
         method: 'get',
         action: PageActions.business
+    },
+    business_services: {
+        path: '/businesses/:businessId/services',
+        method: 'get',
+        action: PageActions.businessServices
+    },
+    new_business_service: {
+        path: '/businesses/:businessId/services/new',
+        method: 'get'
+    },
+    edit_business_service: {
+        path: '/business-services/:businessServiceId',
+        method: 'get',
+        action: PageActions.businessService
     }
 };
