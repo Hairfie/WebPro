@@ -20,6 +20,10 @@ export default {
         method: 'get',
         action: PageActions.impersonateToken
     },
+    business_search: {
+        path: '/search',
+        method: 'get'
+    },
     repersonate_token: {
         path: '/repersonate_token',
         method: 'get',

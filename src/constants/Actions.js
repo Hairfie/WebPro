@@ -42,8 +42,10 @@ const Actions = keyMirror({
     UPLOAD_START: null,
     UPLOAD_PROGRESS: null,
     UPLOAD_SUCCESS: null,
-    UPLOAD_FAILURE: null
+    UPLOAD_FAILURE: null,
 
+    RECEIVE_ADDRESS_PLACE: null,
+    RECEIVE_BUSINESS_SEARCH_RESULT: null
 });
 
 export default Actions;

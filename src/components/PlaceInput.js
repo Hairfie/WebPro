@@ -91,6 +91,23 @@ export default class PlaceInput extends React.Component {
         }
     }
 
+    getSearchFormattedAddress = () => {
+        const formatted_address = this.getFormattedAddress();
+
+        return (formatted_address || '')
+            .trim()
+            .replace('/', ' ')
+            .replace(')', '')
+            .replace('(', '')
+            .replace(']', '')
+            .replace('[', '')
+            .replace(/\s+/g, ' ')
+            .replace(/-/g, '~')
+            .replace(/, ?/g, '--')
+            .replace(/ /g, '-')
+            .replace(/\./g, '%252E');
+    }
+
     getHairfieFormattedAddress = () => {
         const { address_components } = this.state.autocomplete.getPlace();
         const parsedPlace = parsePlace(address_components);

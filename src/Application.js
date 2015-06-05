@@ -19,6 +19,7 @@ import BusinessMapPage from './pages/BusinessMapPage';
 import BusinessMembersPage from './pages/BusinessMembersPage';
 import BusinessMemberPage from './pages/BusinessMemberPage';
 import ImpersonateTokenPage from './pages/ImpersonateTokenPage';
+import BusinessSearchPage from './pages/BusinessSearchPage';
 
 import Layout from './components/Layout';
 
@@ -40,6 +41,8 @@ function pageHandler(page) {
             return LoginPage;
         case 'impersonate_token':
             return ImpersonateTokenPage;
+        case 'business_search':
+            return BusinessSearchPage;
         case 'dashboard':
             return DashboardPage;
         case 'business':

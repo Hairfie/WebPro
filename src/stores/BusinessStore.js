@@ -14,6 +14,7 @@ export default class BusinessStore extends BaseStore {
         [Actions.UPLOAD_BUSINESS_PICTURE_START]: 'onUploadBusinessPictureStart',
         [Actions.UPLOAD_BUSINESS_PICTURE_END]: 'onUploadBusinessPictureEnd',
         [Actions.UPDATE_BUSINESS_INFOS_END]: 'onUpdateBusinessInfosEnd',
+        [Actions.RECEIVE_BUSINESS_SEARCH_RESULT]: 'onReceiveBusinessSearchResult',
     }
 
     static isomorphicProps = ['businesses'];
@@ -50,6 +51,14 @@ export default class BusinessStore extends BaseStore {
         this.emitChange();
     }
 
+    onReceiveBusinessSearchResult(payload) {
+        this.businesses = _.assign({}, this.businesses, _.indexBy(payload.result.hits, 'id'));
+        this.searchResults = {
+            hits: payload.result.hits
+        };
+        this.emitChange();
+    }
+
     getById(id) {
         return this.businesses[id];
     }
@@ -60,5 +69,9 @@ export default class BusinessStore extends BaseStore {
 
     getPictureUploadIds(businessId) {
         return _.pluck(_.filter(this.pictureUploads, { businessId }), 'uploadId');
+    }
+
+    getBusinessSearchResults() {
+        return this.searchResults && this.searchResults.hits;
     }
 }
