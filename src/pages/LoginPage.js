@@ -3,7 +3,7 @@ import Layout from '../components/Layout';
 import AuthActions from '../actions/AuthActions';
 import { TextField, FlatButton } from '../components/UIKit';
 import FacebookLoginButton from '../components/FacebookLoginButton';
-import { connectToStores } from "fluxible/addons";
+import { connectToStores } from "fluxible-addons-react";
 
 class LoginPage extends React.Component {
     static contextTypes = {
@@ -31,8 +31,8 @@ class LoginPage extends React.Component {
     }
 }
 
-LoginPage = connectToStores(LoginPage, ['AuthStore'], stores => ({
-    loading: stores.AuthStore.isLoading()
+LoginPage = connectToStores(LoginPage, ['AuthStore'], (context, stores) => ({
+    loading: context.getStores('AuthStore').isLoading()
 }));
 
 export default LoginPage;

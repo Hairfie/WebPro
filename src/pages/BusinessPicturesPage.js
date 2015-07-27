@@ -3,7 +3,7 @@
 import React from 'react';
 import Layout from '../components/Layout';
 import { Image, FlatButton } from '../components/UIKit';
-import { connectToStores } from 'fluxible/addons';
+import { connectToStores } from 'fluxible-addons-react';
 import BusinessActions from '../actions/BusinessActions';
 import _ from 'lodash';
 
@@ -72,9 +72,9 @@ class BusinessPicturesPage extends React.Component {
 
 BusinessPicturesPage = connectToStores(BusinessPicturesPage, [
     'BusinessStore'
-], (stores, props) => ({
-    business : stores.BusinessStore.getById(props.businessId),
-    uploadIds: stores.BusinessStore.getPictureUploadIds(props.businessId)
+], (context, props) => ({
+    business : context.getStore('BusinessStore').getById(props.businessId),
+    uploadIds: context.getStore('BusinessStore').getPictureUploadIds(props.businessId)
 }));
 
 export default BusinessPicturesPage;

@@ -3,7 +3,6 @@
 import React from 'react';
 import _ from 'lodash';
 import mui from 'material-ui';
-import { connectToStores } from 'fluxible/addons';
 import Image from './Image';
 
 const MIN_CHARS = 2;

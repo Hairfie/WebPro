@@ -6,7 +6,7 @@ import { FlatButton, TextField, Checkbox, RadioButton, RadioButtonGroup, Paper }
 import AuthActions from '../actions/AuthActions';
 import SearchActions from '../actions/SearchActions';
 import PlaceInput from '../components/PlaceInput';
-import { connectToStores } from 'fluxible/addons';
+import { connectToStores } from 'fluxible-addons-react';
 import _ from 'lodash';
 
 class BusinessSearchPage extends React.Component {
@@ -49,8 +49,8 @@ class BusinessSearchPage extends React.Component {
 
 BusinessSearchPage = connectToStores(BusinessSearchPage, [
     'BusinessStore'
-], (stores, props) => ({
-    searchResults : stores.BusinessStore.getBusinessSearchResults()
+], (context, props) => ({
+    searchResults : context.getStore('BusinessStore').getBusinessSearchResults()
 }));
 
 export default BusinessSearchPage;

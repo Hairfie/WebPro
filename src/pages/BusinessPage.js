@@ -3,7 +3,7 @@ import Layout from '../components/Layout';
 
 import Link from '../components/Link';
 
-import { connectToStores } from 'fluxible/addons';
+import { connectToStores } from 'fluxible-addons-react';
 
 class BusinessPage extends React.Component {
 
@@ -53,8 +53,8 @@ class BusinessPage extends React.Component {
 
 BusinessPage = connectToStores(BusinessPage, [
     'BusinessStore'
-], (stores, props) => ({
-    business: stores.BusinessStore.getById(props.businessId)
+], (context, props) => ({
+    business: context.getStore('BusinessStore').getById(props.businessId)
 }));
 
 export default BusinessPage;

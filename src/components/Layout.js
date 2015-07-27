@@ -1,6 +1,10 @@
 import React from 'react';
 import {AppCanvas, AppBar} from './UIKit';
+import mui from 'material-ui';
 import AppLeftNav from './layout/AppLeftNav';
+
+let ThemeManager = new mui.Styles.ThemeManager();
+let Colors = mui.Styles.Colors;
 
 if (process.env.BROWSER) {
     require("../style/Layout.scss");
@@ -8,19 +12,17 @@ if (process.env.BROWSER) {
 }
 
 class Layout extends React.Component {
-
     render() {
         const { children } = this.props;
 
         return (
             <AppCanvas>
                 <AppBar
-                    className="mui-dark-theme"
                     title="Espace Coiffeur"
-                    onMenuIconButtonTouchTap={this._onMenuIconButtonTouchTap.bind(this)}
+                    onLeftIconButtonTouchTap={this._onLeftIconButtonTouchTap.bind(this)}
                     zDepth={0} />
 
-                <AppLeftNav ref="leftNav" {...this.props} />
+                <AppLeftNav ref="myLeftNav" {...this.props} />
                 <div className="page-with-nav">
                     {children}
                 </div>
@@ -28,8 +30,8 @@ class Layout extends React.Component {
         );
     }
 
-    _onMenuIconButtonTouchTap() {
-        this.refs.leftNav.toggle();
+    _onLeftIconButtonTouchTap() {
+        this.refs.myLeftNav.toggle();
     }
 }
 

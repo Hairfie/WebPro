@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import { connectToStores } from 'fluxible/addons';
 import { MenuItem, LeftNav } from '../UIKit.js';
 import _ from 'lodash';
 import { navigateAction } from 'flux-router-component';
@@ -19,9 +18,51 @@ class AppLeftNav extends React.Component {
         getStore: PropTypes.func.isRequired
     }
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            user : {},
+            isAuthenticated : false,
+            isImpersonated : false,
+            business : {}
+        };
+    }
+
+    componentWillMount() {
+        this.context.getStore('AuthStore').addChangeListener(this.onStoreChange);
+        this.context.getStore('UserStore').addChangeListener(this.onStoreChange);
+        this.context.getStore('BusinessStore').addChangeListener(this.onStoreChange);
+        this.setState(this.getStateFromStores());
+    }
+
+    componentWillUnmount() {
+        this.context.getStore('AuthStore').removeChangeListener(this.onStoreChange);
+        this.context.getStore('UserStore').removeChangeListener(this.onStoreChange);
+        this.context.getStore('BusinessStore').removeChangeListener(this.onStoreChange);
+    }
+
+    onStoreChange = () => {
+        this.setState(this.getStateFromStores());
+    }
+
+    getStateFromStores() {
+        const user =  this.context.getStore('UserStore').getById(this.context.getStore('AuthStore').getUserId()) || {};
+        const isAuthenticated = (this.context.getStore('AuthStore').getToken() != null);
+        const business = this.context.getStore('BusinessStore').getById(this.props.businessId);
+        return {
+            user : user,
+            isImpersonated : this.context.getStore('AuthStore').isImpersonated(),
+            isAuthenticated: isAuthenticated,
+            business : business
+        };
+    }
+
     render() {
+        const { isAuthenticated } = this.state;
+
         var header = <div className="logo" onClick={this._onHeaderClick.bind(this)}>Hairfie</div>;
-        let menuItemsToDisplay = this.isAuthenticated() ? menuItems : _.reject(menuItems, 'authRequired');
+        let menuItemsToDisplay = isAuthenticated ? menuItems : _.reject(menuItems, 'authRequired');
         menuItemsToDisplay = menuItemsToDisplay.concat(this.businessMenuItems());
         menuItemsToDisplay = menuItemsToDisplay.concat(this.getUserMenuItems());
 
@@ -36,7 +77,7 @@ class AppLeftNav extends React.Component {
     }
 
     businessMenuItems() {
-        const business = this.context.getStore('BusinessStore').getById(this.props.businessId);
+        const { business } = this.state;
         if(!business) return [];
 
         return [
@@ -51,18 +92,18 @@ class AppLeftNav extends React.Component {
     }
 
     getUserMenuItems() {
-        const AuthStore = this.context.getStore('AuthStore');
-        const UserStore = this.context.getStore('UserStore');
+        const { user, isImpersonated, isAuthenticated } = this.state;
 
-        if (!AuthStore.isAuthenticated()) {
+        const AuthStore = this.context.getStore('AuthStore');
+
+        if (!isAuthenticated) {
             return [];
         }
 
-        const user = UserStore.getById(AuthStore.getUserId()) || {};
 
         var items = [{ text: user.firstName+' '+user.lastName, type: MenuItem.Types.SUBHEADER }];
 
-        if (AuthStore.isImpersonated()) {
+        if (isImpersonated) {
             items.push({
                 text: 'Rendre la main',
                 route: 'repersonate_token'
@@ -89,10 +130,6 @@ class AppLeftNav extends React.Component {
         });
 
         return items;
-    }
-
-    isAuthenticated() {
-        return (this.context.getStore('AuthStore').getToken() != null);
     }
 
     toggle() {

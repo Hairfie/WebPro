@@ -3,7 +3,7 @@
 import React from 'react';
 import Layout from '../components/Layout';
 import { FlatButton, TextField, Checkbox, RadioButton, RadioButtonGroup, Paper } from '../components/UIKit';
-import { connectToStores } from 'fluxible/addons';
+import { connectToStores } from 'fluxible-addons-react';
 import Link, {FlatLink} from '../components/Link';
 import BusinessActions from '../actions/BusinessActions';
 import _ from 'lodash';
@@ -134,8 +134,8 @@ class BusinessInfosPage extends React.Component {
 
 BusinessInfosPage = connectToStores(BusinessInfosPage, [
     'BusinessStore'
-], (stores, props) => ({
-    business : stores.BusinessStore.getById(props.businessId)
+], (context, props) => ({
+    business : context.getStore('BusinessStore').getById(props.businessId)
 }));
 
 export default BusinessInfosPage;

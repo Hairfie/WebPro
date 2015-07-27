@@ -2,7 +2,7 @@ import React, { PropTypes } from "react";
 
 import { trackingId } from "../config";
 import ga from "./ga";
-import { provideContext } from "fluxible/addons";
+import { provideContext } from "fluxible-addons-react";
 
 class HtmlDocument extends React.Component {
     static defaultProps = {

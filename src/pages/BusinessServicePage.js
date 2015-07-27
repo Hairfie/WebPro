@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Layout from '../components/Layout';
-import { connectToStores } from 'fluxible/addons';
+import { connectToStores } from 'fluxible-addons-react';
 import _ from 'lodash';
 import Link from '../components/Link';
 import { FlatButton, TextField, Checkbox, RadioButton, RadioButtonGroup, Paper, Menu, Dialog, TimePicker } from '../components/UIKit';
@@ -106,9 +106,9 @@ class BusinessServicePage extends React.Component {
 
 BusinessServicePage = connectToStores(BusinessServicePage, [
     'BusinessServiceStore'
-], (stores, props) => {
+], (context, props) => {
     return {
-        businessService: props.businessServiceId && stores.BusinessServiceStore.getById(props.businessServiceId)
+        businessService: props.businessServiceId && context.getStore('BusinessServiceStore').getById(props.businessServiceId)
     };
 });
 

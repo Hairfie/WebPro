@@ -3,7 +3,7 @@
 import React from 'react';
 import Layout from '../components/Layout';
 import { FlatButton, TextField, Checkbox, RadioButton, RadioButtonGroup, Paper } from '../components/UIKit';
-import { connectToStores } from 'fluxible/addons';
+import { connectToStores } from 'fluxible-addons-react';
 import Link, {FlatLink} from '../components/Link';
 import BusinessActions from '../actions/BusinessActions';
 import MapForm from '../components/MapForm';

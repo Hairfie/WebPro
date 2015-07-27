@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Layout from '../components/Layout';
-import { connectToStores } from 'fluxible/addons';
+import { connectToStores } from 'fluxible-addons-react';
 import _ from 'lodash';
 import Link from '../components/Link';
 import mui from 'material-ui';
@@ -114,9 +114,9 @@ class BusinessMemberPage extends React.Component {
 
 BusinessMemberPage = connectToStores(BusinessMemberPage, [
     'BusinessMemberStore'
-], (stores, props) => {
+], (context, props) => {
     return {
-        businessMember: props.businessMemberId && stores.BusinessMemberStore.getById(props.businessMemberId)
+        businessMember: props.businessMemberId && context.getStore('BusinessMemberStore').getById(props.businessMemberId)
     };
 });
 

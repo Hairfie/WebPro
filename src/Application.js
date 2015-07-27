@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { isEqual } from 'lodash';
-import { provideContext, connectToStores } from 'fluxible/addons';
+import { provideContext, connectToStores } from 'fluxible-addons-react';
 import { RouterMixin } from 'flux-router-component';
 
 import NotFoundPage from './pages/NotFoundPage';
@@ -22,6 +22,11 @@ import ImpersonateTokenPage from './pages/ImpersonateTokenPage';
 import BusinessSearchPage from './pages/BusinessSearchPage';
 
 import Layout from './components/Layout';
+
+import mui from 'material-ui';
+
+let ThemeManager = new mui.Styles.ThemeManager();
+let Colors = mui.Styles.Colors;
 
 const debug = require("debug")("hairfie");
 
@@ -88,6 +93,21 @@ let Application = React.createClass({
             this.setState({ route });
         }
     },
+
+    childContextTypes: {
+        muiTheme: React.PropTypes.object
+    },
+    getChildContext() {
+        return {
+          muiTheme: ThemeManager.getCurrentTheme()
+        };
+    },
+    componentWillMount() {
+        ThemeManager.setPalette({
+            accent1Color: Colors.deepOrange500,
+            primary1Color: Colors.red400
+        });
+    },
     render() {
         const { loading, page, route } = this.props;
 
@@ -103,10 +123,10 @@ let Application = React.createClass({
     }
 });
 
-Application = connectToStores(Application, ['RouteStore', 'HtmlHeadStore'], (stores) => ({
-    loading: stores.RouteStore.isLoading(),
-    page: stores.RouteStore.getCurrentPage(),
-    route: stores.RouteStore.getCurrentRoute()
+Application = connectToStores(Application, ['RouteStore', 'HtmlHeadStore'], (context, stores) => ({
+    loading: context.getStore('RouteStore').isLoading(),
+    page: context.getStore('RouteStore').getCurrentPage(),
+    route: context.getStore('RouteStore').getCurrentRoute()
 }));
 
 // wrap application in the fluxible context

@@ -3,7 +3,7 @@ import Layout from '../components/Layout';
 
 import Link from '../components/Link';
 
-import { connectToStores } from 'fluxible/addons';
+import { connectToStores } from 'fluxible-addons-react';
 
 class DashboardPage extends React.Component {
 
@@ -30,12 +30,12 @@ DashboardPage = connectToStores(DashboardPage, [
     'AuthStore',
     'BusinessStore',
     'UserBusinessStore'
-], stores => {
-    const userId = stores.AuthStore.getUserId();
-    const businessIds = stores.UserBusinessStore.getIds(userId);
+], (context, props) => {
+    const userId = context.getStore('AuthStore').getUserId();
+    const businessIds = context.getStore('UserBusinessStore').getIds(userId);
 
     return {
-        businesses: stores.BusinessStore.getByIds(businessIds)
+        businesses: context.getStore('BusinessStore').getByIds(businessIds)
     }
 });
 

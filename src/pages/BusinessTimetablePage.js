@@ -3,7 +3,7 @@
 import React from 'react';
 import Layout from '../components/Layout';
 import { FlatButton, TextField, Checkbox, RadioButton, RadioButtonGroup, Paper, Menu, Dialog, TimePicker } from '../components/UIKit';
-import { connectToStores } from 'fluxible/addons';
+import { connectToStores } from 'fluxible-addons-react';
 import Link, {FlatLink} from '../components/Link';
 import BusinessActions from '../actions/BusinessActions';
 import _ from 'lodash';
@@ -219,9 +219,9 @@ class DaySelectModal extends React.Component {
 
 BusinessTimetablePage = connectToStores(BusinessTimetablePage, [
     'BusinessStore'
-], (stores, props) => {
+], (context, props) => {
     return {
-        business : stores.BusinessStore.getById(props.businessId)
+        business : context.getStore('BusinessStore').getById(props.businessId)
     };
 });
 
