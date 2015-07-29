@@ -10,7 +10,8 @@ import { connectToStores } from 'fluxible-addons-react';
 
 class DashboardPage extends React.Component {
     static contextTypes = {
-        executeAction: PropTypes.func.isRequired
+        makePath: PropTypes.func.isRequired,
+        executeAction: PropTypes.func.isRequired,
     }
 
     render() {
@@ -19,15 +20,16 @@ class DashboardPage extends React.Component {
                 <h1>Mes salons</h1>
                 <List desktop={true} width={320}>
                     {this.props.businesses.map(business => (
-                        <ListItem primaryText={business.name} onItemTouchTap={this._onItemTouchTap.bind(this, business)} />
+                        <ListItem primaryText={business.name} onClick={this._onTouchStart.bind(this, business)} />
                     ))}
                 </List>
             </Layout>
         );
     }
 
-    _onItemTouchTap(e, business) {
-        this.context.executeAction(navigateAction, {url: this.context.makePath("business", {businessId: business.id})});
+    _onTouchStart(business) {
+        const url = this.context.makePath("business", {businessId: business.id});
+        this.context.executeAction(navigateAction, {url: url});
     }
 }
 
