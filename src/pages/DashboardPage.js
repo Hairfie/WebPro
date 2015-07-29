@@ -1,9 +1,10 @@
 import React, { PropTypes } from 'react';
+import _ from 'lodash';
 import Layout from '../components/Layout';
 
 import Link from '../components/Link';
 import { List, ListItem} from '../components/UIKit';
-
+import Image from '../components/Image';
 
 import { navigateAction } from 'flux-router-component';
 import { connectToStores } from 'fluxible-addons-react';
@@ -15,15 +16,32 @@ class DashboardPage extends React.Component {
     }
 
     render() {
+
         return (
             <Layout {...this.props}>
                 <h1>Mes salons</h1>
                 <List desktop={true} width={320}>
-                    {this.props.businesses.map(business => (
-                        <ListItem primaryText={business.name} onClick={this._onTouchStart.bind(this, business)} />
-                    ))}
+                    {_.map(this.props.businesses, business => this.renderBusiness(business))}
                 </List>
             </Layout>
+        );
+    }
+
+    renderBusiness(business) {
+        const options = { width: 45, height: 45, crop: 'thumb' };
+        const avatar = <Image image={_.last(business.pictures)} options={options} placeholder="/assets/placeholder-55.png" />
+
+        return (
+            <ListItem
+                leftAvatar={avatar}
+                primaryText={business.name}
+                secondaryText={
+                    <p>
+                      {`${business.address.street} ${business.address.zipCode} ${business.address.city}`}
+                    </p>
+                }
+                secondaryTextLines={2}
+                onClick={this._onTouchStart.bind(this, business)} />
         );
     }
 

@@ -36,6 +36,9 @@ if (server.get("env") === "development") {
   require("../webpack/server");
 }
 
+const assetsDir = path.resolve(__dirname, "assets");
+server.use("/assets", express.static(assetsDir, { maxAge: 365 * 24 * 60 * 60 } ));
+
 // Render the app server-side and send it as response
 
 server.use(render);

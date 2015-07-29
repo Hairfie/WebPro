@@ -15,6 +15,8 @@ export default class Image extends React.Component {
         return <img src={this.getSrc()} {...this.props} />;
     }
     getSrc() {
+        if (!this.props.image) return this.props.placeholder;
+
         var options = _.assign({
             type: this.props.image.cloudinary.type,
             cloud_name: this.props.image.cloudinary.cloudName
