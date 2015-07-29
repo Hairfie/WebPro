@@ -20,6 +20,7 @@ import BusinessMembersPage from './pages/BusinessMembersPage';
 import BusinessMemberPage from './pages/BusinessMemberPage';
 import ImpersonateTokenPage from './pages/ImpersonateTokenPage';
 import BusinessSearchPage from './pages/BusinessSearchPage';
+import BookingsPage from './pages/BookingsPage';
 
 import Layout from './components/Layout';
 
@@ -70,6 +71,8 @@ function pageHandler(page) {
         case 'new_business_service':
         case 'edit_business_service':
             return BusinessServicePage;
+        case 'bookings':
+            return BookingsPage;
         case 'unauthorized':
             return UnauthorizedPage;
         case 'error':
@@ -118,7 +121,6 @@ let Application = React.createClass({
         );
 
         const Handler = pageHandler(page);
-
         return <Handler {...(route || {}).params} />;
     }
 });
@@ -131,9 +133,9 @@ Application = connectToStores(Application, ['RouteStore', 'HtmlHeadStore'], (con
 
 // wrap application in the fluxible context
 Application = provideContext(Application, {
-    makePath        : React.PropTypes.func.isRequired,
-    getFacebookSdk  : React.PropTypes.func.isRequired,
-    getGoogleMapsScript: React.PropTypes.func.isRequired
+    makePath            : React.PropTypes.func.isRequired,
+    getFacebookSdk      : React.PropTypes.func.isRequired,
+    getGoogleMapsScript : React.PropTypes.func.isRequired
 });
 
 export default Application;

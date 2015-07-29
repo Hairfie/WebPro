@@ -47,6 +47,14 @@ const PageActions = {
             .then(service => context.dispatch(Actions.RECEIVE_BUSINESS_SERVICE, service));
     }),
 
+    bookings: hasPermissions(['IMPERSONATE_TOKEN'], (context, { params: { } }, token) => {
+        return context.hairfieApi
+            .get(`/bookings`)
+            .then(function (bookings) {
+                context.dispatch(Actions.RECEIVE_BOOKINGS, { bookings });
+            });
+    }),
+
     impersonateToken: hasPermissions(['IMPERSONATE_TOKEN']),
 
     repersonateToken: AuthActions.repersonateToken,

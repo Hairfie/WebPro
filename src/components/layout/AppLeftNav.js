@@ -124,6 +124,13 @@ class AppLeftNav extends React.Component {
             });
         }
 
+        if (AuthStore.hasPermission(Permissions.IMPERSONATE_TOKEN)) {
+            items.push({
+                text: 'Réservations',
+                route: 'bookings'
+            });
+        }
+
         items.push({
             text: 'Se déconnecter',
             route: 'logout'

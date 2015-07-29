@@ -45,7 +45,9 @@ const Actions = keyMirror({
     UPLOAD_FAILURE: null,
 
     RECEIVE_ADDRESS_PLACE: null,
-    RECEIVE_BUSINESS_SEARCH_RESULT: null
+    RECEIVE_BUSINESS_SEARCH_RESULT: null,
+
+    RECEIVE_BOOKINGS: null
 });
 
 export default Actions;

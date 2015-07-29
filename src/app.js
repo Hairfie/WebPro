@@ -8,6 +8,7 @@ import facebookPlugin from 'fluxible-plugin-facebook';
 import googleMapsPlugin from 'fluxible-plugin-google-maps';
 
 import Application from './Application';
+import ApplicationStore from './stores/ApplicationStore';
 
 import RouteStore from './stores/RouteStore';
 import HtmlHeadStore from './stores/HtmlHeadStore';
@@ -18,6 +19,7 @@ import BusinessServiceStore from './stores/BusinessServiceStore';
 import UserStore from './stores/UserStore';
 import UserBusinessStore from './stores/UserBusinessStore';
 import UploadStore from './stores/UploadStore';
+import BookingStore from './stores/BookingStore';
 
 import config from './config';
 
@@ -81,5 +83,7 @@ app.registerStore(BusinessServiceStore);
 app.registerStore(UserStore);
 app.registerStore(UserBusinessStore);
 app.registerStore(UploadStore);
+app.registerStore(BookingStore);
+app.registerStore(ApplicationStore);
 
 export default app;

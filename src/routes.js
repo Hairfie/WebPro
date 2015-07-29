@@ -3,25 +3,30 @@ import PageActions from './actions/PageActions';
 export default {
     home: {
         path: '/',
-        method: 'get'
+        method: 'get',
+        title: 'Espace Pro Hairfie'
     },
     login: {
         path: '/login',
         method: 'get',
+        title: 'Connexion',
         action: PageActions.login
     },
     logout: {
         path: '/logout',
         method: 'get',
+        title: 'Déconnexion',
         action: PageActions.logout
     },
     impersonate_token: {
         path: '/impersonate-token',
         method: 'get',
+        title: 'Prendre la main',
         action: PageActions.impersonateToken
     },
     business_search: {
         path: '/search',
+        title: 'Recherche de salons',
         method: 'get'
     },
     repersonate_token: {
@@ -32,21 +37,25 @@ export default {
     dashboard: {
         path: '/dashboard',
         method: 'get',
+        title: 'Mes Salons',
         action: PageActions.dashboard
     },
     business: {
         path: '/businesses/:businessId',
         method: 'get',
+        title: 'Mon Salon',
         action: PageActions.business
     },
     business_pictures: {
         path: '/businesses/:businessId/pictures',
         method: 'get',
+        title: 'Les photos de mon salon',
         action: PageActions.business
     },
     business_infos: {
         path: '/businesses/:businessId/infos',
         method: 'get',
+        title: 'Les infos de mon salons',
         action: PageActions.business
     },
     business_map: {
@@ -86,5 +95,11 @@ export default {
         path: '/business-services/:businessServiceId',
         method: 'get',
         action: PageActions.businessService
-    }
+    },
+    bookings: {
+        path: '/bookings',
+        method: 'get',
+        title: 'Réservations',
+        action: PageActions.bookings
+    },
 };

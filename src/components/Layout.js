@@ -2,6 +2,8 @@ import React from 'react';
 import {AppCanvas, AppBar} from './UIKit';
 import mui from 'material-ui';
 import AppLeftNav from './layout/AppLeftNav';
+import { connectToStores } from 'fluxible-addons-react';
+import ApplicationStore from '../stores/ApplicationStore';
 
 let ThemeManager = new mui.Styles.ThemeManager();
 let Colors = mui.Styles.Colors;
@@ -13,12 +15,12 @@ if (process.env.BROWSER) {
 
 class Layout extends React.Component {
     render() {
-        const { children } = this.props;
+        const { children, title } = this.props;
 
         return (
             <AppCanvas>
                 <AppBar
-                    title="Espace Coiffeur"
+                    title={title}
                     onLeftIconButtonTouchTap={this._onLeftIconButtonTouchTap.bind(this)}
                     zDepth={0} />
 
@@ -34,5 +36,11 @@ class Layout extends React.Component {
         this.refs.myLeftNav.toggle();
     }
 }
+
+Layout = connectToStores(Layout, [
+    'ApplicationStore'
+], (context, props) => ({
+    title : context.getStore('ApplicationStore').getCurrentPageTitle()
+}));
 
 export default Layout;
