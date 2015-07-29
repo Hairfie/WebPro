@@ -6,6 +6,7 @@ import { FlatButton, TextField, Checkbox, RadioButton, RadioButtonGroup, Paper }
 import AuthActions from '../actions/AuthActions';
 import SearchActions from '../actions/SearchActions';
 import PlaceInput from '../components/PlaceInput';
+import Link, {FlatLink} from '../components/Link';
 import { connectToStores } from 'fluxible-addons-react';
 import _ from 'lodash';
 
@@ -21,9 +22,10 @@ class BusinessSearchPage extends React.Component {
             <Layout>
                 <Paper>
                     <h5>Recherche de salon !</h5>
+                    <br />
                     <PlaceInput ref="place" {...this.props} />
                     <TextField ref="q" type="text"
-                        floatingLabelText="Nom du salon" />
+                        placeholder="Nom du salon" />
                     <FlatButton label="Recherche" onClick={this.search}/>
                 </Paper>
                 <Paper>
@@ -35,7 +37,15 @@ class BusinessSearchPage extends React.Component {
     }
 
     renderBusiness(business) {
-        return (<li>{business.name}</li>);
+        return (
+            <li>
+            <FlatLink route="business" params={{ businessId: business.id }}>
+                {business.name}
+                <br />
+                <small>{business.address.street} {business.address.zipCode} {business.address.city}</small>
+            </FlatLink>
+            </li>
+        );
     }
 
     search = () => {

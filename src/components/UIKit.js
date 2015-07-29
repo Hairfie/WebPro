@@ -8,6 +8,8 @@ const UIKit = {
     AppBar: mui.AppBar,
     MenuItem: mui.MenuItem,
     Menu: mui.Menu,
+    ListItem: mui.ListItem,
+    List: mui.List,
     Dialog: mui.Dialog,
     LeftNav: mui.LeftNav,
     FlatButton: mui.FlatButton,

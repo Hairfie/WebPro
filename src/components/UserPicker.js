@@ -3,6 +3,7 @@
 import React from 'react';
 import _ from 'lodash';
 import mui from 'material-ui';
+import { Dialog, TextField } from '../components/UIKit';
 import Image from './Image';
 
 const MIN_CHARS = 2;
@@ -62,17 +63,21 @@ class Suggestions extends React.Component {
 }
 
 class Picker extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {};
     }
     render() {
         return (
             <div>
-                <mui.TextField ref="input" type="search" placeholder="Nom à chercher..."  onChange={this.onInputChange} />
+                <TextField ref="input" type="search" placeholder="Nom à chercher..."  onChange={this.onInputChange} />
                 <Suggestions key={'q'+this.state.q} q={this.state.q} onSelect={this.props.onSelect} />
             </div>
         );
+    }
+    componentDidMount() {
+        this.reset();
+        this.focus();
     }
     reset() {
         this.refs.input.clearValue();
@@ -89,17 +94,13 @@ class Picker extends React.Component {
 class Modal extends React.Component {
     render() {
         return (
-            <mui.DialogWindow ref="dialog" onShow={this.onDialogShow}>
-                <Picker ref="picker" onSelect={this.onPickerSelect} />
-            </mui.DialogWindow>
+            <Dialog ref="dialog" onShow={this.onDialogShow} {...this.props}>
+                <Picker onSelect={this.onPickerSelect} />
+            </Dialog>
         );
     }
     show() {
-        this.refs.picker.reset();
         this.refs.dialog.show();
-    }
-    onDialogShow = () => {
-        this.refs.picker.focus();
     }
     onPickerSelect = (user) => {
         this.refs.dialog.dismiss();
@@ -127,7 +128,7 @@ class UserPicker extends React.Component {
 
         return (
             <div>
-                <mui.TextField ref="input" value={this.formatInputValue(user)} onFocus={this.onInputFocus} onTouchTap={this.onInputTouchTap} {...otherProps} />
+                <TextField ref="input" value={this.formatInputValue(user)} onFocus={this.onInputFocus} onTouchTap={this.onInputTouchTap} {...otherProps} />
                 <Modal ref="dialog" onSelect={this.onDialogSelect} />
             </div>
         );
