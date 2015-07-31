@@ -1,38 +1,88 @@
 'use strict';
 
-import React from 'react';
-import Layout from '../components/Layout';
-import { FlatButton, TextField, Checkbox, RadioButton, RadioButtonGroup, Paper } from '../components/UIKit';
-import BookingActions from '../actions/BookingActions';
-import Link, {FlatLink} from '../components/Link';
-import { connectToStores } from 'fluxible-addons-react';
+import React, { PropTypes } from 'react';
 import _ from 'lodash';
+
+import Layout from '../components/Layout';
+
+import BookingActions from '../actions/BookingActions';
+import { navigateAction } from 'flux-router-component';
+import { connectToStores } from 'fluxible-addons-react';
+
+import { FlatButton, Table, Paper } from '../components/UIKit';
+import Link, {FlatLink} from '../components/Link';
 
 class BookingsPage extends React.Component {
     static contextTypes = {
-        executeAction: React.PropTypes.func.isRequired
+        makePath: PropTypes.func.isRequired,
+        executeAction: PropTypes.func.isRequired,
+    }
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            rowData: this.rowDataFromBookings()
+        };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            rowData: this.rowDataFromBookings()
+        });
+    }
+
+    rowDataFromBookings() {
+        return _.map(this.props.bookings, booking => {
+            // ['id', 'status', 'dateTime', 'businessName', 'businessAddress', 'clientName'];
+            return  {
+                id: booking.id,
+                status: {
+                    content: booking.status,
+                    style: this.styleFromStatus(booking.status)
+                },
+                dateTime: {content: booking.displayDateTime},
+                businessName: {content: booking.business.name},
+                businessAddress: {content: `${booking.business.address.city} ${booking.business.address.zipCode}`},
+                clientName: {content: `${booking.firstName} ${booking.lastName}`}
+            }
+        })
+    }
+
+    styleFromStatus(status) {
+        switch (status) {
+            case 'HONORED':
+                return { backgroundColor:'blue' };
+            case 'CONFIRMED':
+                return { backgroundColor:'green' };
+            case 'NOT_CONFIRMED':
+                return { backgroundColor:'orange' };
+            case 'REQUEST':
+                return { backgroundColor:'' };
+            default:
+                return {};
+        }
     }
 
     render() {
-        const { bookings } = this.props;
+        const colOrder = ['status', 'dateTime', 'businessName', 'businessAddress', 'clientName'];
 
         return (
             <Layout>
-                <Paper>
-                    <h5>Réservations</h5>
-                    <br />
-                    {_.map(bookings, booking => this.renderBooking(booking))}
-                </Paper>
+                <h2>Réservations</h2>
+                <br />
+                <Table
+                    rowData={this.state.rowData}
+                    columnOrder={colOrder}
+                    displayRowCheckbox={false}
+                    showRowHover={false}
+                    onCellClick={this._onCellClick.bind(this)} />
             </Layout>
         );
     }
 
-    renderBooking(booking) {
-        return (
-            <li>
-                {booking.id}
-            </li>
-        );
+    _onCellClick(rowNumber, cell) {
+        const url = this.context.makePath('booking', {bookingId: this.state.rowData[rowNumber].id});
+        this.context.executeAction(navigateAction, {url: url});
     }
 }
 

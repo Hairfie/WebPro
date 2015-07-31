@@ -47,7 +47,8 @@ const Actions = keyMirror({
     RECEIVE_ADDRESS_PLACE: null,
     RECEIVE_BUSINESS_SEARCH_RESULT: null,
 
-    RECEIVE_BOOKINGS: null
+    RECEIVE_BOOKINGS: null,
+    RECEIVE_BOOKING: null
 });
 
 export default Actions;

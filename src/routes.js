@@ -102,4 +102,9 @@ export default {
         title: 'Réservations',
         action: PageActions.bookings
     },
+    booking: {
+        path: '/bookings/:bookingId',
+        method: 'get',
+        title: 'Réservation'
+    }
 };

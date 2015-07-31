@@ -21,6 +21,7 @@ import BusinessMemberPage from './pages/BusinessMemberPage';
 import ImpersonateTokenPage from './pages/ImpersonateTokenPage';
 import BusinessSearchPage from './pages/BusinessSearchPage';
 import BookingsPage from './pages/BookingsPage';
+import BookingPage from './pages/BookingPage';
 
 import Layout from './components/Layout';
 
@@ -73,6 +74,8 @@ function pageHandler(page) {
             return BusinessServicePage;
         case 'bookings':
             return BookingsPage;
+        case 'booking':
+            return BookingPage;
         case 'unauthorized':
             return UnauthorizedPage;
         case 'error':

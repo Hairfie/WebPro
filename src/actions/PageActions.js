@@ -1,6 +1,7 @@
 'use strict';
 
 import RouteActions from './RouteActions';
+import BookingActions from './BookingActions';
 import Actions from '../constants/Actions';
 import _ from 'lodash';
 import AuthActions from './AuthActions';
@@ -48,11 +49,7 @@ const PageActions = {
     }),
 
     bookings: hasPermissions(['IMPERSONATE_TOKEN'], (context, { params: { } }, token) => {
-        return context.hairfieApi
-            .get(`/bookings`)
-            .then(function (bookings) {
-                context.dispatch(Actions.RECEIVE_BOOKINGS, { bookings });
-            });
+        return context.executeAction(BookingActions.getBookings, {});
     }),
 
     impersonateToken: hasPermissions(['IMPERSONATE_TOKEN']),

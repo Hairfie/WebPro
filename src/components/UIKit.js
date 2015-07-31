@@ -19,7 +19,8 @@ const UIKit = {
     RadioButtonGroup: mui.RadioButtonGroup,
     Image: Image,
     Paper: mui.Paper,
-    TimePicker: TimePicker
+    TimePicker: TimePicker,
+    Table: mui.Table
 };
 
 export default UIKit;
