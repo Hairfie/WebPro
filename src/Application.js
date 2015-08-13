@@ -128,7 +128,7 @@ let Application = React.createClass({
     }
 });
 
-Application = connectToStores(Application, ['RouteStore', 'HtmlHeadStore'], (context, stores) => ({
+Application = connectToStores(Application, ['RouteStore', 'HtmlHeadStore'], (context, props) => ({
     loading: context.getStore('RouteStore').isLoading(),
     page: context.getStore('RouteStore').getCurrentPage(),
     route: context.getStore('RouteStore').getCurrentRoute()

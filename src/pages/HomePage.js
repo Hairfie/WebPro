@@ -8,8 +8,9 @@ class HomePage extends React.Component {
   render() {
     return (
         <Layout {...this.props}>
-            <h1>Accueil</h1>
-            <p>Hey le coiffeur, viens donc <Link route="login">jouer avec nous</Link> !</p>
+            <h1>Accueil !</h1>
+            <p>Interface d'administration de Hairfie réservée aux coiffeurs</p>
+            <p><Link route="login">Espace Coiffeur</Link></p>
         </Layout>
     );
   }

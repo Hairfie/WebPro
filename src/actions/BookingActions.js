@@ -23,11 +23,6 @@ const BookingActions = {
                     context.dispatch(Actions.RECEIVE_BOOKINGS, { bookings });
                 });
         }
-        return context.hairfieApi
-            .get(`/bookings`)
-            .then(function (bookings) {
-                context.dispatch(Actions.RECEIVE_BOOKINGS, { bookings });
-            });
     },
 
     getBookingById(context, { bookingId }) {

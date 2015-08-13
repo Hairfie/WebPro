@@ -31,8 +31,8 @@ class LoginPage extends React.Component {
     }
 }
 
-LoginPage = connectToStores(LoginPage, ['AuthStore'], (context, stores) => ({
-    loading: context.getStores('AuthStore').isLoading()
+LoginPage = connectToStores(LoginPage, ['AuthStore'], (context, props) => ({
+    loading: context.getStore('AuthStore').isLoading()
 }));
 
 export default LoginPage;
