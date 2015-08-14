@@ -3,7 +3,7 @@ import Actions from "../constants/Actions";
 import { navigateAction } from 'fluxible-router';
 
 function navigate(context, options) {
-    const url = options.url || context.router.makePath(options.route, options.params);
+    const url = options.url || context.getStore('RouteStore').makePath(options.route, options.params);
 
     return context.executeAction(navigateAction, { url });
 }

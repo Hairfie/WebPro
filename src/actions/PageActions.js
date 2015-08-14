@@ -18,37 +18,42 @@ const PageActions = {
 
     dashboard: authenticated(),
 
-    business: authenticated((context, { params: { businessId } }, token) => {
+    business: authenticated((context, route, token) => {
+        const businessId = route.getIn(["params", "businessId"]);
         return context.hairfieApi
             .get(`/businesses/${businessId}`, { token })
             .then(business => context.dispatch(Actions.RECEIVE_BUSINESS, business));
     }),
 
-    businessMembers: authenticated((context, { params: { businessId } }, token) => {
+    businessMembers: authenticated((context, route, token) => {
+        const businessId = route.getIn(["params", "businessId"]);
         return context.hairfieApi
             .get(`/businessMembers?filter[where][businessId]=${businessId}`, { token })
             .then(members => context.dispatch(Actions.RECEIVE_BUSINESS_MEMBERS, { businessId, members }));
     }),
 
-    businessMember: authenticated((context, { params: { businessMemberId } }, token) => {
+    businessMember: authenticated((context, route, token) => {
+        const businessMemberId = route.getIn(["params", "businessMemberId"]);
         return context.hairfieApi
             .get(`/businessMembers/${businessMemberId}`, { token })
             .then(member => context.dispatch(Actions.RECEIVE_BUSINESS_MEMBER, member));
     }),
 
-    businessServices: authenticated((context, { params: { businessId } }, token) => {
+    businessServices: authenticated((context, route, token) => {
+        const businessId = route.getIn(["params", "businessId"]);
         return context.hairfieApi
             .get(`/businessServices?filter[where][businessId]=${businessId}`, { token })
             .then(services => context.dispatch(Actions.RECEIVE_BUSINESS_SERVICES, { businessId, services }));
     }),
 
-    businessService: authenticated((context, { params: { businessServiceId } }, token) => {
+    businessService: authenticated((context, route, token) => {
+        const businessServiceId = route.getIn(["params", "businessServiceId"]);
         return context.hairfieApi
             .get(`/businessServices/${businessServiceId}`, { token })
             .then(service => context.dispatch(Actions.RECEIVE_BUSINESS_SERVICE, service));
     }),
 
-    bookings: hasPermissions(['IMPERSONATE_TOKEN'], (context, { params: { } }, token) => {
+    bookings: hasPermissions(['IMPERSONATE_TOKEN'], (context, route, token) => {
         return context.executeAction(BookingActions.getBookings, {});
     }),
 
