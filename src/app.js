@@ -1,5 +1,5 @@
 import Fluxible from 'fluxible';
-import routrPlugin from 'fluxible-plugin-routr';
+import routrPlugin from 'fluxible-router';
 import RouteActions from './actions/RouteActions';
 import routes from './routes';
 import hairfieApiPlugin from 'fluxible-plugin-hairfie-api';
@@ -10,7 +10,8 @@ import googleMapsPlugin from 'fluxible-plugin-google-maps';
 import Application from './Application';
 import ApplicationStore from './stores/ApplicationStore';
 
-import RouteStore from './stores/RouteStore';
+import { RouteStore } from 'fluxible-router';
+
 import HtmlHeadStore from './stores/HtmlHeadStore';
 import AuthStore from './stores/AuthStore';
 import BusinessStore from './stores/BusinessStore';
@@ -47,9 +48,9 @@ const app = new Fluxible({
     }
 });
 
-app.plug(routrPlugin({
-    routes: routes
-}));
+// app.plug(routrPlugin({
+//     routes: routes
+// }));
 
 app.plug(facebookPlugin({
     appId: config.facebookAppId
@@ -74,7 +75,10 @@ app.plug({
     }
 });
 
-app.registerStore(RouteStore);
+const AppRouteStore = RouteStore.withStaticRoutes(routes);
+app.registerStore(AppRouteStore);
+
+//app.registerStore(RouteStore);
 app.registerStore(HtmlHeadStore);
 app.registerStore(AuthStore);
 app.registerStore(BusinessStore);

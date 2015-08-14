@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { isEqual } from 'lodash';
 import { provideContext, connectToStores } from 'fluxible-addons-react';
-import { RouterMixin } from 'flux-router-component';
+import { handleHistory } from 'fluxible-router';
 
 import NotFoundPage from './pages/NotFoundPage';
 import ErrorPage from './pages/ErrorPage';
@@ -85,60 +85,82 @@ function pageHandler(page) {
     }
 }
 
-// Can't create class as we use the RouterMixin
-let Application = React.createClass({
-    mixins: [RouterMixin],
+@provideContext({
+    makePath            : PropTypes.func.isRequired,
+    getFacebookSdk      : React.PropTypes.func.isRequired,
+    getGoogleMapsScript : React.PropTypes.func.isRequired
+})
 
-    // we synchronize the state's route with props's route because the RouterMixin
-    // supports state only
-    getInitialState() {
-        return { route: this.props.route };
-    },
-    componentWillReceiveProps({ route }) {
-        if (!isEqual(this.state.route, route)) {
-            this.setState({ route });
+@handleHistory
+
+@connectToStores(["HtmlHeadStore"], (context) =>
+  ({ documentTitle: context.getStore("HtmlHeadStore").getTitle() })
+)
+
+class Application extends React.Component {
+    // static contextTypes = {
+    //     makePath            : PropTypes.func.isRequired,
+    //     getStore            : React.PropTypes.func.isRequired,
+    //     getFacebookSdk      : React.PropTypes.func.isRequired,
+    //     getGoogleMapsScript : React.PropTypes.func.isRequired
+    // }
+
+    static propTypes = {
+        isNavigateComplete: PropTypes.bool,
+        currentRoute: PropTypes.object,
+        currentNavigateError: PropTypes.shape({
+            statusCode: PropTypes.number.isRequired,
+            message: PropTypes.string.isRequired
+        }),
+        documentTitle: PropTypes.string
+    }
+
+    componentDidUpdate(prevProps) {
+        const { documentTitle, currentRoute } = this.props;
+
+        if (prevProps.documentTitle !== documentTitle) {
+          document.title = documentTitle;
         }
-    },
+    }
 
-    childContextTypes: {
+    static childContextTypes = {
         muiTheme: React.PropTypes.object
-    },
+    }
+
     getChildContext() {
         return {
           muiTheme: ThemeManager.getCurrentTheme()
         };
-    },
+    }
+
     componentWillMount() {
         ThemeManager.setPalette({
             accent1Color: Colors.deepOrange500,
             primary1Color: Colors.red400
         });
-    },
-    render() {
-        const { loading, page, route } = this.props;
+    }
 
-        if (loading) return (
+    render() {
+        const { currentRoute, currentNavigateError, isNavigateComplete } = this.props;
+        //const { loading, page, route } = this.props;
+
+        if (false) return (
             <Layout {...this.props}>
                 <div>Chargement en cours...</div>
             </Layout>
         );
 
         const Handler = pageHandler(page);
-        return <Handler {...(route || {}).params} />;
+        return <Handler {...(currentRoute || {}).params} />;
     }
-});
+}
 
-Application = connectToStores(Application, ['RouteStore', 'HtmlHeadStore'], (context, props) => ({
-    loading: context.getStore('RouteStore').isLoading(),
-    page: context.getStore('RouteStore').getCurrentPage(),
-    route: context.getStore('RouteStore').getCurrentRoute()
-}));
+// Application.childContextTypes = {
+//     muiTheme: React.PropTypes.object
+// };
 
-// wrap application in the fluxible context
-Application = provideContext(Application, {
-    makePath            : React.PropTypes.func.isRequired,
-    getFacebookSdk      : React.PropTypes.func.isRequired,
-    getGoogleMapsScript : React.PropTypes.func.isRequired
-});
+// Application = connectToStores(Application, ['RouteStore', 'HtmlHeadStore'], (context, props) => ({
+//     documentTitle: context.getStore("HtmlHeadStore").getTitle()
+// }));
 
 export default Application;

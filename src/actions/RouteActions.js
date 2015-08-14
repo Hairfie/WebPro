@@ -1,6 +1,6 @@
 import Actions from "../constants/Actions";
 
-import { navigateAction } from 'flux-router-component';
+import { navigateAction } from 'fluxible-router';
 
 function navigate(context, options) {
     const url = options.url || context.router.makePath(options.route, options.params);

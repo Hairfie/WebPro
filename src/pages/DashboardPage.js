@@ -6,7 +6,7 @@ import Link from '../components/Link';
 import { List, ListItem} from '../components/UIKit';
 import Image from '../components/Image';
 
-import { navigateAction } from 'flux-router-component';
+import { navigateAction } from 'fluxible-router';
 import { connectToStores } from 'fluxible-addons-react';
 
 class DashboardPage extends React.Component {

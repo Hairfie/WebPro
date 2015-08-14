@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react';
 
-import { NavLink } from 'flux-router-component';
+import { NavLink } from 'fluxible-router';
 import { FlatButton} from './UIKit';
-import { navigateAction } from 'flux-router-component';
+import { navigateAction } from 'fluxible-router';
 
 
 export class Link extends React.Component {

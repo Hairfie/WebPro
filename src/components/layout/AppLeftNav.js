@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { MenuItem, LeftNav } from '../UIKit.js';
 import _ from 'lodash';
-import { navigateAction } from 'flux-router-component';
+import { navigateAction } from 'fluxible-router';
 import AuthActions from '../../actions/AuthActions';
 import Permissions from '../../constants/Permissions';
 

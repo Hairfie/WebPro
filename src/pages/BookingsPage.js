@@ -6,7 +6,7 @@ import _ from 'lodash';
 import Layout from '../components/Layout';
 
 import BookingActions from '../actions/BookingActions';
-import { navigateAction } from 'flux-router-component';
+import { navigateAction } from 'fluxible-router';
 import { connectToStores } from 'fluxible-addons-react';
 
 import { FlatButton, Table, Paper } from '../components/UIKit';
