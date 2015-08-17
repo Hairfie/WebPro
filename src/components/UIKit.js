@@ -13,6 +13,7 @@ const UIKit = {
     Dialog: mui.Dialog,
     LeftNav: mui.LeftNav,
     FlatButton: mui.FlatButton,
+    RaisedButton: mui.RaisedButton,
     TextField: mui.TextField,
     Checkbox: mui.Checkbox,
     RadioButton: mui.RadioButton,

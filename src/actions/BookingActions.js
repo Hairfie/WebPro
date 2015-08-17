@@ -38,6 +38,51 @@ const BookingActions = {
             .then(function (booking) {
                 context.dispatch(Actions.RECEIVE_BOOKING, { booking });
             });
+    },
+
+    confirmBooking(context, { bookingId }) {
+        const token = context.getStore('AuthStore').getToken();
+        if (!token) {
+            var error = new Error('Not authorized');
+            error.status = 403;
+            throw error;
+        }
+
+        return context.hairfieApi
+            .post(`/bookings/${bookingId}/confirm`, {}, { token })
+            .then(function (booking) {
+                context.dispatch(Actions.RECEIVE_BOOKING, { booking });
+            });
+    },
+
+    cancelBooking(context, { bookingId }) {
+        const token = context.getStore('AuthStore').getToken();
+        if (!token) {
+            var error = new Error('Not authorized');
+            error.status = 403;
+            throw error;
+        }
+
+        return context.hairfieApi
+            .delete(`/bookings/${bookingId}`, {}, { token })
+            .then(function (booking) {
+                context.dispatch(Actions.RECEIVE_BOOKING, { booking });
+            });
+    },
+
+    honorBooking(context, { bookingId }) {
+        const token = context.getStore('AuthStore').getToken();
+        if (!token) {
+            var error = new Error('Not authorized');
+            error.status = 403;
+            throw error;
+        }
+
+        return context.hairfieApi
+            .post(`/bookings/${bookingId}/honored`, {}, { token })
+            .then(function (booking) {
+                context.dispatch(Actions.RECEIVE_BOOKING, { booking });
+            });
     }
 }
 

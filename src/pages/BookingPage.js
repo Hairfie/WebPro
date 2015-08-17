@@ -5,8 +5,9 @@ import Layout from '../components/Layout';
 import { connectToStores } from 'fluxible-addons-react';
 import _ from 'lodash';
 import Link from '../components/Link';
-import { FlatButton, Table, Paper } from '../components/UIKit';
+import { FlatButton, Table, Paper, RaisedButton } from '../components/UIKit';
 import BookingActions from '../actions/BookingActions';
+import moment from 'moment';
 
 class BookingPage extends React.Component {
     constructor(props) {
@@ -28,31 +29,35 @@ class BookingPage extends React.Component {
             <Layout {...this.props}>
                 <Paper>
                     <h4>Réservation</h4>
-                    {this.renderProperty('ID', booking.id)}
-                    {this.renderProperty('Statut', booking.status)}
-                    {this.renderProperty('Demande', booking.comment)}
-                </Paper>
-                <br />
-                <Paper>
+                    {this.renderField('ID', booking.id)}
+                    {this.renderField('Statut', booking.status)}
+                    {this.renderField('Date et heure', moment(booking.dateTime).format("dddd D MMMM YYYY [@] HH:mm"))}
+                    {this.renderField('Demande', booking.comment)}
+                    <br />
                     <h4>Salon</h4>
-                    {this.renderProperty('Nom', booking.business.name)}
-                    {this.renderProperty('Adresse',`${booking.business.address.street} ${booking.business.address.zipCode} ${booking.business.address.city}`)}
-                    {this.renderProperty('Téléphone', booking.business.phoneNumber)}
+                    {this.renderField('Nom', booking.business.name)}
+                    {this.renderField('Adresse',`${booking.business.address.street} ${booking.business.address.zipCode} ${booking.business.address.city}`)}
+                    {this.renderField('Téléphone', booking.business.phoneNumber)}
+                    <br />
+                    <h4>Client</h4>
+                    {this.renderField('Nom',`${booking.firstName} ${booking.lastName}`)}
+                    {this.renderField('Téléphone', booking.phoneNumber)}
+                    {this.renderField('Email', booking.email)}
                 </Paper>
                 <br />
-                <Paper>
-                    <h4>Client</h4>
-                    {this.renderProperty('Nom',`${booking.firstName} ${booking.lastName}`)}
-                    {this.renderProperty('Téléphone', booking.phoneNumber)}
-                    {this.renderProperty('Email', booking.email)}
-                </Paper>
+                <div>
+                    <h4>Gérer cette réservation</h4>
+                        <RaisedButton fullWidth={true} label="Confirmer la réservation" onClick={this.confirmBooking.bind(this)} {...this.props} />
+                        <RaisedButton fullWidth={true} label="Cette réservation a bien été honorée" onClick={this.honorBooking.bind(this)} {...this.props} />
+                        <RaisedButton fullWidth={true} label="Annuler la réservation" onClick={this.cancelBooking.bind(this)} {...this.props} />
+                </div>
                 <br />
                 <Link route="bookings" >Retour</Link>
             </Layout>
         );
     }
 
-    renderProperty(title, content) {
+    renderField(title, content) {
         return (
             <span>
                 <strong>{title + ' : '}</strong>
@@ -60,6 +65,21 @@ class BookingPage extends React.Component {
                 <br />
             </span>
         );
+    }
+
+    confirmBooking = () => {
+        const bookingId = this.props.bookingId;
+        this.context.executeAction(BookingActions.confirmBooking, { bookingId });
+    }
+
+    honorBooking = () => {
+        const bookingId = this.props.bookingId;
+        this.context.executeAction(BookingActions.honorBooking, { bookingId });
+    }
+
+    cancelBooking = () => {
+        const bookingId = this.props.bookingId;
+        this.context.executeAction(BookingActions.cancelBooking, { bookingId });
     }
 
     save = () => {

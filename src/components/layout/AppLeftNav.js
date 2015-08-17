@@ -50,6 +50,7 @@ class AppLeftNav extends React.Component {
         const user =  this.context.getStore('UserStore').getById(this.context.getStore('AuthStore').getUserId()) || {};
         const isAuthenticated = (this.context.getStore('AuthStore').getToken() != null);
         const business = this.context.getStore('BusinessStore').getById(this.props.businessId);
+
         return {
             user : user,
             isImpersonated : this.context.getStore('AuthStore').isImpersonated(),
@@ -101,7 +102,7 @@ class AppLeftNav extends React.Component {
         }
 
 
-        var items = [{ text: user.firstName+' '+user.lastName, type: MenuItem.Types.SUBHEADER }];
+        var items = [{ text: user.firstName + ' ' + user.lastName, type: MenuItem.Types.SUBHEADER }];
 
         if (isImpersonated) {
             items.push({
