@@ -48,7 +48,8 @@ const Actions = keyMirror({
     RECEIVE_BUSINESS_SEARCH_RESULT: null,
 
     RECEIVE_BOOKINGS: null,
-    RECEIVE_BOOKING: null
+    RECEIVE_BOOKING: null,
+    UPDATE_BOOKING_START: null
 });
 
 export default Actions;

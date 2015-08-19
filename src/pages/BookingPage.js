@@ -5,9 +5,9 @@ import Layout from '../components/Layout';
 import { connectToStores } from 'fluxible-addons-react';
 import _ from 'lodash';
 import Link from '../components/Link';
-import { FlatButton, Table, Paper, RaisedButton } from '../components/UIKit';
+import { FlatButton, Table, Paper, RaisedButton, Dialog, TextField, DatePicker, TimePicker, CircularProgress } from '../components/UIKit';
 import BookingActions from '../actions/BookingActions';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 class BookingPage extends React.Component {
     constructor(props) {
@@ -22,16 +22,26 @@ class BookingPage extends React.Component {
 
     render() {
         const booking = this.props.booking || {};
-        if(!booking || !booking.business) {
-            return <Layout {...this.props} />
+
+        if(!booking || !booking.business || booking.loading) {
+            return (
+                <Layout {...this.props}>
+                    <div style={{'text-align': 'center'}}>
+                        <CircularProgress mode="indeterminate" />
+                    </div>
+                </Layout>
+            );
         }
+
         return (
             <Layout {...this.props}>
+                <BookingModal ref="modal" booking={booking} />
                 <Paper>
                     <h4>Réservation</h4>
                     {this.renderField('ID', booking.id)}
                     {this.renderField('Statut', booking.status)}
-                    {this.renderField('Date et heure', moment(booking.dateTime).format("dddd D MMMM YYYY [@] HH:mm"))}
+                    {this.renderField('Date', moment(booking.dateTime).format("dddd D MMMM YYYY"))}
+                    {this.renderField('Heure', moment(booking.dateTime).format("HH:mm"))}
                     {this.renderField('Demande', booking.comment)}
                     <br />
                     <h4>Salon</h4>
@@ -49,6 +59,7 @@ class BookingPage extends React.Component {
                     <h4>Gérer cette réservation</h4>
                         <RaisedButton fullWidth={true} label="Confirmer la réservation" onClick={this.confirmBooking.bind(this)} {...this.props} />
                         <RaisedButton fullWidth={true} label="Cette réservation a bien été honorée" onClick={this.honorBooking.bind(this)} {...this.props} />
+                        <RaisedButton fullWidth={true} label="Modifier la réservation" onClick={this.showModal.bind(this)} {...this.props} />
                         <RaisedButton fullWidth={true} label="Annuler la réservation" onClick={this.cancelBooking.bind(this)} {...this.props} />
                 </div>
                 <br />
@@ -67,6 +78,10 @@ class BookingPage extends React.Component {
         );
     }
 
+    showModal = () => {
+        this.refs.modal.show();
+    }
+
     confirmBooking = () => {
         const bookingId = this.props.bookingId;
         this.context.executeAction(BookingActions.confirmBooking, { bookingId });
@@ -81,26 +96,53 @@ class BookingPage extends React.Component {
         const bookingId = this.props.bookingId;
         this.context.executeAction(BookingActions.cancelBooking, { bookingId });
     }
+}
 
-    save = () => {
-        // const businessId = this.props.businessId;
-        // const businessMemberId = this.props.businessMember.id;
-        // const values = {
-        //     userId      : this.refs.user.getUserId(),
-        //     picture     : this.refs.picture.getImage(),
-        //     gender      : this.refs.gender.getSelectedValue(),
-        //     firstName   : this.refs.firstName.getValue(),
-        //     lastName    : this.refs.lastName.getValue(),
-        //     email       : this.refs.email.getValue(),
-        //     phoneNumber : this.refs.phoneNumber.getValue(),
-        //     hidden      : !this.refs.isHairdresser.isChecked()
-        // };
+class BookingModal extends React.Component {
+    static contextTypes = {
+        executeAction: React.PropTypes.func.isRequired
+    }
 
-        // if (businessMemberId) {
-        //     this.context.executeAction(BusinessMemberActions.updateMember, { businessMemberId, values });
-        // } else {
-        //     this.context.executeAction(BusinessMemberActions.createMember, { businessId, values });
-        // }
+    render() {
+        const {booking} = this.props;
+
+        const customActions = [
+            <FlatButton
+                label="Annuler"
+                secondary={true}
+                onTouchTap={this._handleCancel} />,
+            <FlatButton
+                label="Enregistrer"
+                primary={true}
+                onTouchTap={this._handleSave} />
+        ];
+
+        return (
+            <Dialog ref="dialog" actions={customActions}>
+                <h4>Modifier la réservation</h4>
+                <p>
+                    <TextField ref="date" type="date" floatingLabelText="Date" defaultValue={moment(booking.dateTime).tz('Europe/Paris').format("YYYY-MM-DD")} />
+                    <TextField ref="time" type="time" floatingLabelText="Horaire" defaultValue={moment(booking.dateTime).tz('Europe/Paris').format("HH:mm")} />
+                </p>
+            </Dialog>
+        );
+    }
+
+    _handleCancel = () => {
+        this.refs.dialog.dismiss();
+    }
+
+    _handleSave = () => {
+        const bookingId = this.props.booking.id
+        const values = {
+            dateTime: moment(`${this.refs.date.getValue()} ${this.refs.time.getValue()}`, "YYYY-MM-DD HH:mm").toDate()
+        };
+        this.context.executeAction(BookingActions.updateBooking, { bookingId,  values });
+        this.refs.dialog.dismiss();
+    }
+
+    show() {
+        this.refs.dialog.show();
     }
 }
 

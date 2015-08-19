@@ -6,6 +6,8 @@ import TimePicker from './TimePicker';
 const UIKit = {
     AppCanvas: mui.AppCanvas,
     AppBar: mui.AppBar,
+    CircularProgress: mui.CircularProgress,
+    DatePicker: mui.DatePicker,
     MenuItem: mui.MenuItem,
     Menu: mui.Menu,
     ListItem: mui.ListItem,

@@ -11,8 +11,8 @@ export default class BookingStore extends BaseStore {
 
     static handlers = {
         [Actions.RECEIVE_BOOKINGS]: 'onReceiveBookings',
-        [Actions.RECEIVE_BOOKING]:  'onReceiveBooking'
-
+        [Actions.RECEIVE_BOOKING]:  'onReceiveBooking',
+        [Actions.UPDATE_BOOKING_START]: 'onUpdateBookingStart'
     }
 
     static isomorphicProps = ['bookings'];
@@ -30,6 +30,13 @@ export default class BookingStore extends BaseStore {
 
     onReceiveBooking({booking}) {
         this.bookings[booking.id] = booking;
+        this.bookings[booking.id].loading = false;
+
+        this.emitChange();
+    }
+
+    onUpdateBookingStart({ bookingId }) {
+        this.bookings[bookingId].loading = true;
         this.emitChange();
     }
 

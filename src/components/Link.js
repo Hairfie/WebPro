@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 
 import { NavLink } from 'fluxible-router';
-import { FlatButton} from './UIKit';
+import { FlatButton, RaisedButton } from './UIKit';
 import { navigateAction } from 'fluxible-router';
 
 
@@ -24,6 +24,24 @@ export class FlatLink extends React.Component {
         const url = this.context.makePath(route, params);
 
         return <FlatButton label={label} linkButton={true} onClick={this.navigateTo.bind(this, url)} {...this.props} />
+    }
+
+    navigateTo(url) {
+        this.context.executeAction(navigateAction, {url: url});
+    }
+}
+
+export class RaisedLink extends React.Component {
+    static contextTypes = {
+        makePath: PropTypes.func.isRequired,
+        executeAction: PropTypes.func.isRequired
+    }
+
+    render() {
+        const { route, params, label } = this.props;
+        const url = this.context.makePath(route, params);
+
+        return <RaisedButton label={label} linkButton={true} onClick={this.navigateTo.bind(this, url)} {...this.props} />
     }
 
     navigateTo(url) {

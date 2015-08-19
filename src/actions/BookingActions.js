@@ -48,6 +48,8 @@ const BookingActions = {
             throw error;
         }
 
+        context.dispatch(Actions.UPDATE_BOOKING_START, { bookingId });
+
         return context.hairfieApi
             .post(`/bookings/${bookingId}/confirm`, {}, { token })
             .then(function (booking) {
@@ -62,6 +64,8 @@ const BookingActions = {
             error.status = 403;
             throw error;
         }
+
+        context.dispatch(Actions.UPDATE_BOOKING_START, { bookingId });
 
         return context.hairfieApi
             .delete(`/bookings/${bookingId}`, {}, { token })
@@ -78,8 +82,28 @@ const BookingActions = {
             throw error;
         }
 
+        context.dispatch(Actions.UPDATE_BOOKING_START, { bookingId });
+
         return context.hairfieApi
             .post(`/bookings/${bookingId}/honored`, {}, { token })
+            .then(function (booking) {
+                context.dispatch(Actions.RECEIVE_BOOKING, { booking });
+            });
+    },
+
+    updateBooking(context, { bookingId, values }) {
+        const token = context.getStore('AuthStore').getToken();
+
+        if (!token) {
+            var error = new Error('Not authorized');
+            error.status = 403;
+            throw error;
+        }
+
+        context.dispatch(Actions.UPDATE_BOOKING_START, { bookingId });
+
+        return context.hairfieApi
+            .put(`/bookings/${bookingId}`, values, { token })
             .then(function (booking) {
                 context.dispatch(Actions.RECEIVE_BOOKING, { booking });
             });

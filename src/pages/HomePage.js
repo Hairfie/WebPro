@@ -1,6 +1,6 @@
 import React from "react";
 
-import Link from '../components/Link';
+import Link, {RaisedLink} from '../components/Link';
 import Layout from '../components/Layout';
 
 class HomePage extends React.Component {
@@ -10,7 +10,7 @@ class HomePage extends React.Component {
         <Layout {...this.props}>
             <h1>Accueil</h1>
             <p>Interface d'administration de Hairfie réservée aux coiffeurs</p>
-            <p><Link route="login">Espace Coiffeur</Link></p>
+            <p><RaisedLink route="login" fullWidth={true} label={'Espace Coiffeur'}/></p>
         </Layout>
     );
   }

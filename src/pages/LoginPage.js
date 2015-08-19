@@ -1,7 +1,7 @@
 import React from "react";
 import Layout from '../components/Layout';
 import AuthActions from '../actions/AuthActions';
-import { TextField, FlatButton } from '../components/UIKit';
+import { TextField, FlatButton, RaisedButton, CircularProgress } from '../components/UIKit';
 import FacebookLoginButton from '../components/FacebookLoginButton';
 import { connectToStores } from "fluxible-addons-react";
 
@@ -10,16 +10,29 @@ class LoginPage extends React.Component {
         executeAction: React.PropTypes.func.isRequired
     }
     render() {
+        const {loading} = this.props;
+        let content;
+
+        if(loading) {
+            content = <CircularProgress mode="indeterminate" />;
+        } else {
+            content = (
+                <div>
+                    <TextField ref="email" type="email" floatingLabelText="Adresse email" fullWidth={true} />
+                    <TextField ref="password" type="password" floatingLabelText="Mot de passe" fullWidth={true} />
+                    <RaisedButton onClick={this.login.bind(this)} disabled={this.props.loading} fullWidth={true} label="Se connecter" />
+                    <br />
+                    <br />
+                    <hr />
+                    <FacebookLoginButton fullWidth={true} />
+                </div>
+            );
+        }
+
         return (
             <Layout {...this.props}>
                 <h1>Connexion</h1>
-                <TextField ref="email" type="email" floatingLabelText="Adresse email" />
-                <TextField ref="password" type="password" floatingLabelText="Mot de passe" />
-                <FlatButton onClick={this.login.bind(this)} disabled={this.props.loading} label="Se connecter" />
-                <br />
-                <br />
-                <p>ou</p>
-                <FacebookLoginButton />
+                {content}
             </Layout>
         );
     }
