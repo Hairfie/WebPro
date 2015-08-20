@@ -8,10 +8,15 @@ import BookingStore from '../stores/BookingStore';
 
 const BookingActions = {
     getBookings(context) {
-        var bookingStore = context.getStore('BookingStore');
+        const bookingStore = context.getStore('BookingStore');
+
+        const query = {
+            'filter[sort]': 'createdAt DESC'
+        };
+
         if(_.size(bookingStore.getBookings()) > 0) {
             context.hairfieApi
-                .get(`/bookings`)
+                .get(`/bookings`, { query })
                 .then(function (bookings) {
                     context.dispatch(Actions.RECEIVE_BOOKINGS, { bookings });
                 });

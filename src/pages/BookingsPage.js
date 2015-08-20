@@ -27,12 +27,14 @@ class BookingsPage extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            rowData: this.rowDataFromBookings()
+            rowData: this.rowDataFromBookings(nextProps)
         });
     }
 
-    rowDataFromBookings() {
-        return _.map(this.props.bookings, booking => {
+    rowDataFromBookings(nextProps) {
+        const bookings = nextProps ? nextProps.bookings : this.props.bookings;
+
+        return _.map(bookings, booking => {
             // ['id', 'status', 'dateTime', 'businessName', 'businessAddress', 'clientName'];
             return  {
                 id: booking.id,

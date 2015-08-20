@@ -25,12 +25,14 @@ export default class BookingStore extends BaseStore {
 
     onReceiveBookings({bookings}) {
         this.bookings = _.merge({}, this.bookings, _.indexBy(bookings, 'id'));
+        this.bookings = _.sortByOrder(this.bookings, 'createdAt', 'desc');
         this.emitChange();
     }
 
     onReceiveBooking({booking}) {
         this.bookings[booking.id] = booking;
         this.bookings[booking.id].loading = false;
+        this.bookings = _.sortByOrder(this.bookings, 'createdAt', 'desc');
 
         this.emitChange();
     }

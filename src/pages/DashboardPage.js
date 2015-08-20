@@ -47,7 +47,6 @@ class DashboardPage extends React.Component {
 
     _onTouchStart(business) {
         const url = this.context.makePath("business", {businessId: business.id});
-        console.log("url", url);
         this.context.executeAction(navigateAction, {url: url});
     }
 }
