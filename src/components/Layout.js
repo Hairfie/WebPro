@@ -3,7 +3,6 @@ import {AppCanvas, AppBar} from './UIKit';
 import mui from 'material-ui';
 import AppLeftNav from './layout/AppLeftNav';
 import { connectToStores } from 'fluxible-addons-react';
-import ApplicationStore from '../stores/ApplicationStore';
 
 let ThemeManager = new mui.Styles.ThemeManager();
 let Colors = mui.Styles.Colors;
@@ -39,7 +38,7 @@ class Layout extends React.Component {
 }
 
 Layout = connectToStores(Layout, [
-    'ApplicationStore'
+    'HtmlHeadStore'
 ], (context, props) => ({
     title : context.getStore('HtmlHeadStore').getTitle()
 }));

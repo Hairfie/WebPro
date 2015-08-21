@@ -9,12 +9,6 @@ import mui from 'material-ui';
 import { Styles } from 'material-ui';
 let { Colors, Spacing, Typography } = Styles;
 
-const menuItems = [
-    { route: 'dashboard', text: 'Mes salons', authRequired: true },
-    { route: 'login', text: 'Login', authRequired: false },
-    { type: MenuItem.Types.LINK, payload: 'http://www.hairfie.com', text: 'Retour au site', authRequired: false },
-];
-
 class AppLeftNav extends React.Component {
     static contextTypes = {
         makePath: PropTypes.func.isRequired,
@@ -87,9 +81,11 @@ class AppLeftNav extends React.Component {
                 <img src="/assets/logo@2x.png" style={{width: 110, height: 36, display: 'block', margin: 'auto'}}/>
             </div>
         );
-        let menuItemsToDisplay = isAuthenticated ? menuItems : _.reject(menuItems, 'authRequired');
-        menuItemsToDisplay = menuItemsToDisplay.concat(this.businessMenuItems());
+
+        let menuItemsToDisplay = this.getBusinessMenuItems()
+        menuItemsToDisplay = menuItemsToDisplay.concat(this.getAdminMenuItems());
         menuItemsToDisplay = menuItemsToDisplay.concat(this.getUserMenuItems());
+        menuItemsToDisplay = menuItemsToDisplay.concat(this.getGenericMenuItems());
 
         return (
             <LeftNav
@@ -101,18 +97,37 @@ class AppLeftNav extends React.Component {
         );
     }
 
-    businessMenuItems() {
-        const { business } = this.state;
-        if(!business) return [];
+    getBusinessMenuItems() {
+        const { business, isAuthenticated } = this.state;
 
+        if (!isAuthenticated) {
+            return [];
+        }
+
+        let items = [{ route: 'dashboard', text: 'Tous mes salons'}];
+
+        if(!business) return items;
+
+        const nestedStyle = this.getNesteditemStyle();
+
+        return items.concat([
+            { route: 'business', text: business.name, params: {businessId: business.id} },
+            { route: 'business_pictures', text: '-> Photos', params: {businessId: business.id}},
+            { route: 'business_infos', text: '-> Infos', params: {businessId: business.id} },
+            { route: 'business_map', text: '-> Adresse & GPS', params: {businessId: business.id} },
+            { route: 'business_members', text: '-> Équipe', params: {businessId: business.id} },
+            { route: 'business_timetable', text: '-> Horaires & Promos', params: {businessId: business.id} },
+            { route: 'business_services', text: '-> Tarifs', params: {businessId: business.id} }
+        ]);
+    }
+
+    getGenericMenuItems() {
         return [
-            { route: 'business', text: business.name, params: {businessId: business.id}, authRequired: true },
-            { route: 'business_pictures', text: 'Photos', params: {businessId: business.id}, authRequired: true },
-            { route: 'business_infos', text: 'Infos', params: {businessId: business.id}, authRequired: true },
-            { route: 'business_map', text: 'Adresse & GPS', params: {businessId: business.id}, authRequired: true },
-            { route: 'business_members', text: 'Équipe', params: {businessId: business.id}, authRequired: true },
-            { route: 'business_timetable', text: 'Horaires & Promos', params: {businessId: business.id}, authRequired: true },
-            { route: 'business_services', text: 'Tarifs', params: {businessId: business.id}, authRequired: true }
+            {
+                text: 'Autres liens',
+                type: MenuItem.Types.SUBHEADER
+            },
+            { type: MenuItem.Types.LINK, payload: 'http://www.hairfie.com', text: 'Retour au site', authRequired: false },
         ];
     }
 
@@ -122,11 +137,34 @@ class AppLeftNav extends React.Component {
         const AuthStore = this.context.getStore('AuthStore');
 
         if (!isAuthenticated) {
-            return [];
+            return [{ route: 'login', text: 'Connexion'}];
         }
 
+        var items = [{
+            text: user.firstName + ' ' + user.lastName,
+            type: MenuItem.Types.SUBHEADER
+        }];
 
-        var items = [{ text: user.firstName + ' ' + user.lastName, type: MenuItem.Types.SUBHEADER }];
+        items.push({
+            text: 'Se déconnecter',
+            route: 'logout'
+        });
+
+        return items;
+    }
+
+    getAdminMenuItems() {
+        const { user, isImpersonated, isAuthenticated } = this.state;
+
+        const AuthStore = this.context.getStore('AuthStore');
+
+        if (!isAuthenticated) {
+            return [];
+        }
+        let items = [{
+            text: 'Admin',
+            type: MenuItem.Types.SUBHEADER
+        }];
 
         if (isImpersonated) {
             items.push({
@@ -156,12 +194,13 @@ class AppLeftNav extends React.Component {
             });
         }
 
-        items.push({
-            text: 'Se déconnecter',
-            route: 'logout'
-        });
-
         return items;
+    }
+
+    getNesteditemStyle() {
+        return {
+            backgroundColor: 'red'
+        };
     }
 
     toggle() {

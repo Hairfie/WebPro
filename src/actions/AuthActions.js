@@ -19,6 +19,7 @@ const AuthActions = {
     },
     loginWithFacebook(context, { response }) {
         const access_token = response.authResponse.accessToken;
+        context.dispatch(Actions.LOGIN_START);
 
         if (!access_token) {
             return;
@@ -33,6 +34,7 @@ const AuthActions = {
     },
     loginWithCookie(context, { cookies }) {
         var tokenId = context.getCookie(COOKIE_AUTH_TOKEN);
+
         return loginWithTokenId(context, tokenId)
             .then(() => {}, () => {});
     },

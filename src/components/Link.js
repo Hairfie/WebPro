@@ -41,7 +41,7 @@ export class RaisedLink extends React.Component {
         const { route, params, label } = this.props;
         const url = this.context.makePath(route, params);
 
-        return <RaisedButton label={label} linkButton={true} style={{'text-align' : 'center'}} onClick={this.navigateTo.bind(this, url)} {...this.props} />
+        return <RaisedButton label={label} linkButton={true} style={{'textAlign' : 'center'}} onClick={this.navigateTo.bind(this, url)} {...this.props} />
     }
 
     navigateTo(url) {

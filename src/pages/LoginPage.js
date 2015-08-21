@@ -1,7 +1,7 @@
 import React from "react";
 import Layout from '../components/Layout';
 import AuthActions from '../actions/AuthActions';
-import { TextField, FlatButton, RaisedButton, CircularProgress } from '../components/UIKit';
+import { TextField, FlatButton, RaisedButton, CircularProgress, Center } from '../components/UIKit';
 import FacebookLoginButton from '../components/FacebookLoginButton';
 import { connectToStores } from "fluxible-addons-react";
 
@@ -14,7 +14,7 @@ class LoginPage extends React.Component {
         let content;
 
         if(loading) {
-            content = <CircularProgress mode="indeterminate" />;
+            content = <Center><CircularProgress mode="indeterminate" /></Center>;
         } else {
             content = (
                 <div>
