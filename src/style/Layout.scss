@@ -10,3 +10,9 @@ h1.mui-app-bar-title {
 .clearfix {
     @include clearfix();
 }
+
+.appbar {
+    h1 {
+        text-align: left;
+    }
+}

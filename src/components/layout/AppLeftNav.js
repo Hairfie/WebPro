@@ -5,6 +5,10 @@ import { navigateAction } from 'fluxible-router';
 import AuthActions from '../../actions/AuthActions';
 import Permissions from '../../constants/Permissions';
 
+import mui from 'material-ui';
+import { Styles } from 'material-ui';
+let { Colors, Spacing, Typography } = Styles;
+
 const menuItems = [
     { route: 'dashboard', text: 'Mes salons', authRequired: true },
     { route: 'login', text: 'Login', authRequired: false },
@@ -59,10 +63,30 @@ class AppLeftNav extends React.Component {
         };
     }
 
+    getHeaderStyles() {
+        return {
+            cursor: 'pointer',
+            fontSize: '24px',
+            color: Typography.textFullWhite,
+            height: Spacing.desktopKeylineIncrement + 'px',
+            fontWeight: Typography.fontWeightLight,
+            backgroundColor: Colors.red400,
+            //paddingLeft: Spacing.desktopGutter,
+            paddingTop: '14px',
+            marginBottom: '8px'
+        };
+    }
+
     render() {
         const { isAuthenticated } = this.state;
 
-        var header = <div className="logo" onClick={this._onHeaderClick.bind(this)}>Hairfie</div>;
+        var header = (
+            <div className="logo"
+                style={this.getHeaderStyles()}
+                onClick={this._onHeaderClick.bind(this)}>
+                <img src="/assets/logo@2x.png" style={{width: 110, height: 36, display: 'block', margin: 'auto'}}/>
+            </div>
+        );
         let menuItemsToDisplay = isAuthenticated ? menuItems : _.reject(menuItems, 'authRequired');
         menuItemsToDisplay = menuItemsToDisplay.concat(this.businessMenuItems());
         menuItemsToDisplay = menuItemsToDisplay.concat(this.getUserMenuItems());

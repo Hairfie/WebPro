@@ -22,7 +22,8 @@ class Layout extends React.Component {
                 <AppBar
                     title={title}
                     onLeftIconButtonTouchTap={this._onLeftIconButtonTouchTap.bind(this)}
-                    zDepth={0} />
+                    zDepth={0}
+                    className="appbar" />
 
                 <AppLeftNav ref="myLeftNav" {...this.props} />
                 <div className="page-with-nav">
@@ -40,7 +41,7 @@ class Layout extends React.Component {
 Layout = connectToStores(Layout, [
     'ApplicationStore'
 ], (context, props) => ({
-    title : context.getStore('ApplicationStore').getCurrentPageTitle()
+    title : context.getStore('HtmlHeadStore').getTitle()
 }));
 
 export default Layout;

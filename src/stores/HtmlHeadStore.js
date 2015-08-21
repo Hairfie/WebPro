@@ -12,7 +12,10 @@ export default class HtmlHeadStore extends BaseStore {
     static handlers = {
         [Actions.CHANGE_ROUTE_START]: 'onChangeRouteStart',
         [Actions.STATUS_404]: 'on404Error',
-        [Actions.STATUS_500]: 'on500Error'
+        [Actions.STATUS_500]: 'on500Error',
+        //[Actions.NAVIGATE_START]: 'handleNavigateStart',
+        [Actions.NAVIGATE_SUCCESS]: 'handleNavigateSuccess',
+        //[Actions.NAVIGATE_FAILURE]: 'handleNavigateFailure'
     }
 
     static isomorphicProps = ['title'];
@@ -25,6 +28,16 @@ export default class HtmlHeadStore extends BaseStore {
 
     getTitle() {
         return this.title;
+    }
+
+    getHtmlHeadTitle() {
+        return `${this.title} | Hairfie Pro`;
+    }
+
+    handleNavigateSuccess(route) {
+        this.title = route.get('title') || DEFAULT_TITLE;
+
+        this.emitChange();
     }
 
     onChangeRouteStart(payload) {

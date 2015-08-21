@@ -23,7 +23,7 @@ class HtmlDocument extends React.Component {
                 <head>
                 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
 
-                <title>{ htmlHead.getTitle() }</title>
+                <title>{ htmlHead.getHtmlHeadTitle() }</title>
 
                 { css.map((href, k) =>
                         <link key={k} rel="stylesheet" type="text/css" href={href} />)

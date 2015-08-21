@@ -31,7 +31,6 @@ class LoginPage extends React.Component {
 
         return (
             <Layout {...this.props}>
-                <h1>Connexion</h1>
                 {content}
             </Layout>
         );

@@ -6,6 +6,11 @@ const Actions = keyMirror({
     CHANGE_ROUTE_SUCCESS: null,
     CHANGE_ROUTE_FAILURE: null,
 
+    // fluxible-router actions
+    NAVIGATE_START: null,
+    NAVIGATE_SUCCESS: null,
+    NAVIGATE_FAILURE: null,
+
     ERROR_404: null,
     ERROR_401: null,
     ERROR_403: null,
