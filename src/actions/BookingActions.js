@@ -11,7 +11,9 @@ const BookingActions = {
         const bookingStore = context.getStore('BookingStore');
 
         const query = {
-            'filter[sort]': 'createdAt DESC'
+            'filter[order]': 'createdAt DESC',
+            //'filter[skip]': (params.page - 1) * params.pageSize,
+            //'filter[limit]': params.pageSize
         };
 
         if(_.size(bookingStore.getBookings()) > 0) {
