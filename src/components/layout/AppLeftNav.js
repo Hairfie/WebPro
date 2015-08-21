@@ -12,7 +12,7 @@ let { Colors, Spacing, Typography } = Styles;
 const menuItems = [
     { route: 'dashboard', text: 'Mes salons', authRequired: true },
     { route: 'login', text: 'Login', authRequired: false },
-    { type: MenuItem.Types.LINK, payload: 'http://www.hairfie.com', text: 'Site Hairfie', authRequired: false },
+    { type: MenuItem.Types.LINK, payload: 'http://www.hairfie.com', text: 'Retour au site', authRequired: false },
 ];
 
 class AppLeftNav extends React.Component {
