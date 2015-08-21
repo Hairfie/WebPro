@@ -21,18 +21,20 @@ export default class BookingStore extends BaseStore {
         super(dispatcher);
 
         this.bookings = {};
+        this.currentPage = 1;
     }
 
-    onReceiveBookings({bookings}) {
+    onReceiveBookings({bookings, page}) {
         this.bookings = _.merge({}, this.bookings, _.indexBy(bookings, 'id'));
-        this.bookings = _.sortByOrder(this.bookings, 'createdAt', 'desc');
+        this.bookings = _.indexBy(_.sortByOrder(this.bookings, 'createdAt', 'desc'), 'id');
+        this.currentPage = page;
         this.emitChange();
     }
 
     onReceiveBooking({booking}) {
         this.bookings[booking.id] = booking;
         this.bookings[booking.id].loading = false;
-        this.bookings = _.sortByOrder(this.bookings, 'createdAt', 'desc');
+        this.bookings = _.indexBy(_.sortByOrder(this.bookings, 'createdAt', 'desc'), 'id');
 
         this.emitChange();
     }
@@ -51,5 +53,9 @@ export default class BookingStore extends BaseStore {
 
     getBookings() {
         return this.bookings;
+    }
+
+    getCurrentPage() {
+        return this.currentPage;
     }
 }

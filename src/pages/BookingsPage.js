@@ -9,7 +9,7 @@ import BookingActions from '../actions/BookingActions';
 import { navigateAction } from 'fluxible-router';
 import { connectToStores } from 'fluxible-addons-react';
 
-import { FlatButton, Table, Paper } from '../components/UIKit';
+import { FlatButton, Table, Paper, RaisedButton, Center } from '../components/UIKit';
 import Link, {FlatLink} from '../components/Link';
 
 class BookingsPage extends React.Component {
@@ -67,7 +67,6 @@ class BookingsPage extends React.Component {
 
     render() {
         const colOrder = ['status', 'dateTime', 'businessName', 'businessAddress', 'clientName'];
-
         return (
             <Layout>
                 <h2>Réservations</h2>
@@ -78,8 +77,19 @@ class BookingsPage extends React.Component {
                     displayRowCheckbox={false}
                     showRowHover={false}
                     onCellClick={this._onCellClick.bind(this)} />
+                <br />
+                <Center>
+                    <RaisedButton label={'Load More'} onClick={this.loadMore.bind(this)}/>
+                </Center>
+
             </Layout>
         );
+    }
+
+    loadMore() {
+        const { currentPage } = this.props;
+
+        this.context.executeAction(BookingActions.getBookings, {page: currentPage + 1});
     }
 
     _onCellClick(rowNumber, cell) {
@@ -91,7 +101,8 @@ class BookingsPage extends React.Component {
 BookingsPage = connectToStores(BookingsPage, [
     'BookingStore'
 ], (context, props) => ({
-    bookings : context.getStore('BookingStore').getBookings()
+    bookings : context.getStore('BookingStore').getBookings(),
+    currentPage: context.getStore('BookingStore').getCurrentPage()
 }));
 
 export default BookingsPage;

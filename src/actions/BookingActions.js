@@ -7,27 +7,28 @@ import _ from 'lodash';
 import BookingStore from '../stores/BookingStore';
 
 const BookingActions = {
-    getBookings(context) {
+    getBookings(context, {page = 1, pageSize = 10}, done) {
         const bookingStore = context.getStore('BookingStore');
 
         const query = {
             'filter[order]': 'createdAt DESC',
-            //'filter[skip]': (params.page - 1) * params.pageSize,
-            //'filter[limit]': params.pageSize
+            'filter[skip]': (page - 1) * pageSize,
+            'filter[limit]': pageSize
         };
 
         if(_.size(bookingStore.getBookings()) > 0) {
             context.hairfieApi
                 .get(`/bookings`, { query })
                 .then(function (bookings) {
-                    context.dispatch(Actions.RECEIVE_BOOKINGS, { bookings });
+                    context.dispatch(Actions.RECEIVE_BOOKINGS, { bookings, page });
                 });
-            return;
+            done();
         } else {
-            return context.hairfieApi
-                .get(`/bookings`)
+            context.hairfieApi
+                .get(`/bookings`, { query })
                 .then(function (bookings) {
-                    context.dispatch(Actions.RECEIVE_BOOKINGS, { bookings });
+                    context.dispatch(Actions.RECEIVE_BOOKINGS, { bookings, page });
+                    done();
                 });
         }
     },

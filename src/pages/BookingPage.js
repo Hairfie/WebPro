@@ -5,7 +5,7 @@ import Layout from '../components/Layout';
 import { connectToStores } from 'fluxible-addons-react';
 import _ from 'lodash';
 import Link from '../components/Link';
-import { FlatButton, Table, Paper, RaisedButton, Dialog, TextField, DatePicker, TimePicker, CircularProgress } from '../components/UIKit';
+import { FlatButton, Table, Paper, RaisedButton, Dialog, TextField, CircularProgress, Center } from '../components/UIKit';
 import BookingActions from '../actions/BookingActions';
 import moment from 'moment-timezone';
 
@@ -26,9 +26,9 @@ class BookingPage extends React.Component {
         if(!booking || !booking.business || booking.loading) {
             return (
                 <Layout {...this.props}>
-                    <div style={{'text-align': 'center'}}>
+                    <Center>
                         <CircularProgress mode="indeterminate" />
-                    </div>
+                    </Center>
                 </Layout>
             );
         }

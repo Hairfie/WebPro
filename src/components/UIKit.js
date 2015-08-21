@@ -2,11 +2,13 @@ import React from 'react';
 import mui from 'material-ui';
 import Image from './Image';
 import TimePicker from './TimePicker';
+import Center from './Center';
 
 const UIKit = {
     AppCanvas: mui.AppCanvas,
     AppBar: mui.AppBar,
     CircularProgress: mui.CircularProgress,
+    Center: Center,
     DatePicker: mui.DatePicker,
     MenuItem: mui.MenuItem,
     Menu: mui.Menu,
