@@ -5,14 +5,12 @@ import PlaceActions from './PlaceActions';
 
 const SearchActions = {
     searchBusiness(context, { query: {address, q} }) {
-        console.log("address", address);
-        console.log("q", q);
         return context.executeAction(PlaceActions.loadAddressPlace, {address: address})
             .then(place => {
                 const search = {
                     location    : place && !place.bounds && place.location,
                     bounds      : place && place.bounds,
-                    q           : q,
+                    q           : q
                 };
 
                 let query = {};
@@ -28,6 +26,8 @@ const SearchActions = {
                     query['location[lng]'] = search.location.lng;
                 }
                 if (search.q) query.query = search.q;
+
+                query.limit = 20;
 
                 return context.hairfieApi
                     .get('/businesses/search', { query: query })
