@@ -53,9 +53,15 @@ export default class BusinessStore extends BaseStore {
 
     onReceiveBusinessSearchResult(payload) {
         this.businesses = _.assign({}, this.businesses, _.indexBy(payload.result.hits, 'id'));
+
         this.searchResults = {
-            hits: payload.result.hits
+            hits: payload.result.hits,
+            hitsPerPage: payload.result.hitsPerPage,
+            nbHits: payload.result.nbHits,
+            nbPages: payload.result.nbPages,
+            page: payload.result.page
         };
+
         this.emitChange();
     }
 
@@ -72,6 +78,6 @@ export default class BusinessStore extends BaseStore {
     }
 
     getBusinessSearchResults() {
-        return this.searchResults && this.searchResults.hits;
+        return this.searchResults;
     }
 }

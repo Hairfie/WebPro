@@ -19,7 +19,6 @@ class DashboardPage extends React.Component {
 
         return (
             <Layout {...this.props}>
-                <h1>Mes salons</h1>
                 <List desktop={true} width={320}>
                     {_.map(this.props.businesses, business => this.renderBusiness(business))}
                 </List>
@@ -29,7 +28,7 @@ class DashboardPage extends React.Component {
 
     renderBusiness(business) {
         const options = { width: 45, height: 45, crop: 'thumb' };
-        const avatar = <Image image={_.last(business.pictures)} options={options} placeholder="/assets/placeholder-55.png" />
+        const avatar = <Image image={_.last(business.pictures)} options={options} placeholder="/assets/placeholder-45.png" />
 
         return (
             <ListItem

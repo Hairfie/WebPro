@@ -36,7 +36,7 @@ export default class PlaceInput extends React.Component {
 
     render() {
         return (
-            <div className="mui-text-field">
+            <div className="mui-text-field" style={{width: '100%'}}>
                 <input
                     ref="input"
                     type="search"

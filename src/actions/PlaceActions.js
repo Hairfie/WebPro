@@ -6,6 +6,7 @@ import _ from 'lodash';
 const PlaceActions = {
     loadAddressPlace(context, { address }) {
         const token = context.getStore('AuthStore').getToken();
+        if(!address) return;
 
         return context.hairfieApi
             .get('/places', { query: { address: encodeURI(address) } })
