@@ -36,9 +36,9 @@ class BusinessServicePage extends React.Component {
                     />
                 <br />
                 <form ref="sex">
-                <input type="radio" name="gender" ref="gender" value="Femme">Femme</input>
+                <input type="radio" name="gender" ref="gender" value="FEMALE">Femme</input>
                 <br />
-                <input type="radio" name="gender" ref="gender" value="Homme">Homme</input>
+                <input type="radio" name="gender" ref="gender" value="MALE">Homme</input>
                 <br />
                 </form>
                 <TextField
@@ -93,7 +93,7 @@ class BusinessServicePage extends React.Component {
             	amount: this.refs.amount.getValue(),
             	currency: 'EUR'
             }
-            gender: $('input[name="gender"]:checked').value.substr(0,1)
+            gender: $('input[name="gender"]:checked').value
         };
 
         if (businessServiceId) {
