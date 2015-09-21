@@ -9,6 +9,10 @@ import { FlatButton, TextField, Checkbox, RadioButton, RadioButtonGroup, Paper, 
 import BusinessServiceActions from '../actions/BusinessServiceActions';
 
 class BusinessServicePage extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { gender: "" };
+    }
     static contextTypes = {
         executeAction: React.PropTypes.func.isRequired
     }
@@ -35,12 +39,10 @@ class BusinessServicePage extends React.Component {
                     defaultValue={businessService.label}
                     />
                 <br />
-                <form ref="sex">
-                <input type="radio" name="gender" ref="gender" value="FEMALE">Femme</input>
+                <input type="radio" name="gender" ref="gender" value="FEMALE" checked={this.state.gender === "FEMALE"} onChange={this.handleGenderChange.bind(this, this.value)} >Femme</input>
                 <br />
-                <input type="radio" name="gender" ref="gender" value="MALE">Homme</input>
+                <input type="radio" name="gender" ref="gender" value="MALE" checked={this.state.gender === "MALE"} onChange={this.handleGenderChange.bind(this, this.value)} >Homme</input>
                 <br />
-                </form>
                 <TextField
                     ref="durationMinutes"
                     floatingLabelText="Durée (en minutes)"
@@ -58,6 +60,10 @@ class BusinessServicePage extends React.Component {
                 {this.renderActionButtons()}
             </Layout>
         );
+    }
+
+    handleGenderChange = (gender, e) => {
+        this.setState({gender: gender});
     }
 
     renderActionButtons = () => {
@@ -86,14 +92,15 @@ class BusinessServicePage extends React.Component {
     save = () => {
         const businessId = this.props.businessId || this.props.businessService.businessId;
         const businessServiceId = this.props.businessService.id;
+
         const values = {
             label       : this.refs.label.getValue(),
             durationMinutes    : this.refs.durationMinutes.getValue(),
             price       :  {
             	amount: this.refs.amount.getValue(),
             	currency: 'EUR'
-            }
-            gender: $('input[name="gender"]:checked').value
+            },
+            gender: this.state.gender
         };
 
         if (businessServiceId) {
