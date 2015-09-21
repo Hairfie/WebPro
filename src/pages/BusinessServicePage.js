@@ -9,10 +9,6 @@ import { FlatButton, TextField, Checkbox, RadioButton, RadioButtonGroup, Paper, 
 import BusinessServiceActions from '../actions/BusinessServiceActions';
 
 class BusinessServicePage extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { gender: "" };
-    }
     static contextTypes = {
         executeAction: React.PropTypes.func.isRequired
     }
@@ -39,9 +35,9 @@ class BusinessServicePage extends React.Component {
                     defaultValue={businessService.label}
                     />
                 <br />
-                <input type="radio" name="gender" ref="gender" value="FEMALE" checked={this.state.gender === "FEMALE"} onChange={this.handleGenderChange.bind(this, this.value)} >Femme</input>
+                <input type="checkbox" name="gender" ref="FEMALE">Femme</input>
                 <br />
-                <input type="radio" name="gender" ref="gender" value="MALE" checked={this.state.gender === "MALE"} onChange={this.handleGenderChange.bind(this, this.value)} >Homme</input>
+                <input type="checkbox" name="gender" ref="MALE">Homme</input>
                 <br />
                 <TextField
                     ref="durationMinutes"
@@ -63,7 +59,13 @@ class BusinessServicePage extends React.Component {
     }
 
     handleGenderChange = (gender, e) => {
-        this.setState({gender: gender});
+        debugger;
+        if (gender.value == "MALE") {
+            this.setState({isManPrice: gender.checked});
+        }
+        else if (gender.value == "FEMALE") {
+            this.setState({isWomanPrice: gender.checked})
+        }
     }
 
     renderActionButtons = () => {
@@ -99,9 +101,14 @@ class BusinessServicePage extends React.Component {
             price       :  {
             	amount: this.refs.amount.getValue(),
             	currency: 'EUR'
-            },
-            gender: this.state.gender
+            }
         };
+        if (this.refs.MALE.getDOMNode().checked) {
+            values['isWomanPrice'] = this.refs.MALE.getDOMNode().checked;
+        }
+        if (this.refs.FEMALE.getDOMNode().checked) {
+            values['isManPrice'] = this.refs.FEMALE.getDOMNode().checked;
+        }
 
         if (businessServiceId) {
             this.context.executeAction(BusinessServiceActions.updateService, { businessServiceId, values });
