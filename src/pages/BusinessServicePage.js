@@ -19,7 +19,7 @@ class BusinessServicePage extends React.Component {
         		amount: 20,
         		currency: 'EUR'
         	},
-        	label: "Shampoing Coupe Brushing Femme"
+        	label: "Shampoing Coupe Brushing"
         }
     }
 
@@ -35,6 +35,12 @@ class BusinessServicePage extends React.Component {
                     defaultValue={businessService.label}
                     />
                 <br />
+                <form ref="sex">
+                <input type="radio" name="gender" ref="gender" value="Femme">Femme</input>
+                <br />
+                <input type="radio" name="gender" ref="gender" value="Homme">Homme</input>
+                <br />
+                </form>
                 <TextField
                     ref="durationMinutes"
                     floatingLabelText="Durée (en minutes)"
@@ -87,6 +93,7 @@ class BusinessServicePage extends React.Component {
             	amount: this.refs.amount.getValue(),
             	currency: 'EUR'
             }
+            gender: $('input[name="gender"]:checked').value.substr(0,1)
         };
 
         if (businessServiceId) {
