@@ -83,7 +83,6 @@ class BusinessPicturesPage extends React.Component {
         executeAction: React.PropTypes.func.isRequired
     }
     render() {
-        console.log(this);
         const { business, business: { pictures }, uploadIds, reorderImage } = this.props;
         const businessPictures = _.isEmpty(reorderImage) ? pictures : reorderImage;
 
