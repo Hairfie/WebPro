@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Layout from '../components/Layout';
-import { Image, FlatButton, RaisedButton } from '../components/UIKit';
+import { Image, FlatButton, RaisedButton, CircularProgress } from '../components/UIKit';
 import { connectToStores } from 'fluxible-addons-react';
 import BusinessActions from '../actions/BusinessActions';
 import _ from 'lodash';
@@ -70,18 +70,29 @@ class Uploading extends React.Component {
     }
 }
 
+class Reordering extends React.Component {
+    render() {
+        return (
+            <CircularProgress mode="indeterminate" style={{position: 'fixed', top: '45%', 'left': '45%'}} />
+        );
+    }
+}
+
 class BusinessPicturesPage extends React.Component {
     static contextTypes = {
         executeAction: React.PropTypes.func.isRequired
     }
     render() {
-        const { business, business: { pictures }, uploadIds } = this.props;
+        console.log(this);
+        const { business, business: { pictures }, uploadIds, reorderImage } = this.props;
+        const businessPictures = _.isEmpty(reorderImage) ? pictures : reorderImage;
 
         return (
             <Layout ref="layout" {...this.props}>
                 <h1>Photos</h1>
-                {_.map(pictures, picture => <Picture key={picture.id} {...{business, picture}} />)}
+                {_.map(businessPictures, picture => <Picture key={picture.id} {...{business, picture}} />)}
                 {_.map(uploadIds, id => <Uploading key={id} />)}
+                {(!(_.isEmpty(reorderImage))) ? <Reordering /> : ''}
                 <FlatButton label="Ajouter une photo" onClick={this.addPicture} />
                 <input ref="file" type="file" style={{ display: 'none' }} accept="image/jpeg" multiple={true} onChange={this.upload} />
             </Layout>
@@ -104,7 +115,8 @@ BusinessPicturesPage = connectToStores(BusinessPicturesPage, [
     'BusinessStore'
 ], (context, props) => ({
     business : context.getStore('BusinessStore').getById(props.businessId),
-    uploadIds: context.getStore('BusinessStore').getPictureUploadIds(props.businessId)
+    uploadIds: context.getStore('BusinessStore').getPictureUploadIds(props.businessId),
+    reorderImage: context.getStore('BusinessStore').getPictureReorderIds(props.businessId)
 }));
 
 export default BusinessPicturesPage;

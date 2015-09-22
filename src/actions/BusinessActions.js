@@ -29,10 +29,11 @@ const BusinessActions = {
             );
     },
     orderPictures(context, {businessId, pictures}) {
+        context.dispatch(Actions.REORDER_BUSINESS_PICTURE_START, { businessId,  pictures});
         const token = context.getStore('AuthStore').getToken();
 
         return context.hairfieApi.put(`/businesses/${businessId}`, { pictures }, { token })
-            .then(business => context.dispatch(Actions.RECEIVE_BUSINESS, business));;
+            .then(business => context.dispatch(Actions.RECEIVE_BUSINESS, business));
     },
     removePicture(context, { businessId, pictureId }) {
         const token = context.getStore('AuthStore').getToken();

@@ -44,6 +44,8 @@ const Actions = keyMirror({
     UPDATE_BUSINESS_INFOS_START: null,
     UPDATE_BUSINESS_INFOS_END: null,
 
+    REORDER_BUSINESS_PICTURE_START: null,
+
     UPLOAD_START: null,
     UPLOAD_PROGRESS: null,
     UPLOAD_SUCCESS: null,
