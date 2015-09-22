@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Layout from '../components/Layout';
-import { Image, FlatButton } from '../components/UIKit';
+import { Image, FlatButton, RaisedButton } from '../components/UIKit';
 import { connectToStores } from 'fluxible-addons-react';
 import BusinessActions from '../actions/BusinessActions';
 import _ from 'lodash';
@@ -19,6 +19,8 @@ class Picture extends React.Component {
                     height: 100,
                     crop: 'thumb'
                 }} />
+                <RaisedButton label="UP"  />
+                <RaisedButton label="DOWN" />
                 <FlatButton label="Supprimer" onClick={this.remove} />
             </div>
         );
