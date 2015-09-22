@@ -35,9 +35,9 @@ class BusinessServicePage extends React.Component {
                     defaultValue={businessService.label}
                     />
                 <br />
-                <input type="checkbox" name="gender" ref="FEMALE">Femme</input>
+                <Checkbox name="gender" ref="FEMALE" label="Shampoing Coupe Brushing Femme"/>
                 <br />
-                <input type="checkbox" name="gender" ref="MALE">Homme</input>
+                <Checkbox name="gender" ref="MALE" label="Shampoing Coupe Brushing Homme"/>
                 <br />
                 <TextField
                     ref="durationMinutes"
@@ -103,11 +103,11 @@ class BusinessServicePage extends React.Component {
             	currency: 'EUR'
             }
         };
-        if (this.refs.MALE.getDOMNode().checked) {
-            values['isWomanPrice'] = this.refs.MALE.getDOMNode().checked;
+        if (this.refs.MALE.isChecked()) {
+            values['isManClassicPrice'] = this.refs.MALE.isChecked();
         }
-        if (this.refs.FEMALE.getDOMNode().checked) {
-            values['isManPrice'] = this.refs.FEMALE.getDOMNode().checked;
+        if (this.refs.FEMALE.isChecked()) {
+            values['isWomanClassicPrice'] = this.refs.FEMALE.isChecked();
         }
 
         if (businessServiceId) {
