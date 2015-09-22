@@ -40,27 +40,24 @@ class Picture extends React.Component {
         const index = _.findIndex(pictures, {id: picture.id});
         if (index <= 0)
             return;
-        pictures = _.compact(_.reject(business.pictures, { id: picture.id }));
-        pictures.splice((index - 1), 0, picture);
-        console.log(pictures); debugger;
 
-        //this.context.executeAction(BusinessActions.orderPictures, {
-        //    businessId: business.id,
-        //    pictureId: pictures
-        //});
+        pictures.splice((index - 1), 0, pictures.splice(index, 1)[0]);
+        this.context.executeAction(BusinessActions.orderPictures, {
+            businessId: business.id,
+            pictures: pictures
+        });
     }
     down = () => {
         const { business, picture } = this.props;
-        const pictures = business.pictures;
+        var pictures = business.pictures;
         const index = _.findIndex(pictures, {id: picture.id});
         if (index >= pictures.length)
             return;
-        const s = pictures[index + 1];
-        pictures[index + 1] = picture;
-        pictures[index] = s;
+
+        pictures.splice((index + 1), 0, pictures.splice(index, 1)[0]);
         this.context.executeAction(BusinessActions.orderPictures, {
             businessId: business.id,
-            pictureId: pictures
+            pictures: pictures
         });
     }
 }

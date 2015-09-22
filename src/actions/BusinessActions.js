@@ -18,7 +18,6 @@ const BusinessActions = {
                 const business = context.getStore('BusinessStore').getById(businessId); // refresh business
                 const pictures = _.clone(business.pictures || []);
                 pictures.push(image);
-                debugger;
                 return context.hairfieApi.put(`/businesses/${businessId}`, { pictures }, { token });
             })
             .then(
@@ -31,7 +30,6 @@ const BusinessActions = {
     },
     orderPictures(context, {businessId, pictures}) {
         const token = context.getStore('AuthStore').getToken();
-        const business = context.getStore('BusinessStore').getById(businessId);
 
         return context.hairfieApi.put(`/businesses/${businessId}`, { pictures }, { token })
             .then(business => context.dispatch(Actions.RECEIVE_BUSINESS, business));;
