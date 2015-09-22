@@ -19,7 +19,7 @@ class BusinessServicePage extends React.Component {
         		amount: 20,
         		currency: 'EUR'
         	},
-        	label: "Shampoing Coupe Brushing Femme"
+        	label: "Shampoing Coupe Brushing"
         }
     }
 
@@ -34,6 +34,10 @@ class BusinessServicePage extends React.Component {
                     floatingLabelText="Description du Service"
                     defaultValue={businessService.label}
                     />
+                <br />
+                <Checkbox name="gender" ref="FEMALE" label="Shampoing Coupe Brushing Femme"/>
+                <br />
+                <Checkbox name="gender" ref="MALE" label="Shampoing Coupe Brushing Homme"/>
                 <br />
                 <TextField
                     ref="durationMinutes"
@@ -52,6 +56,15 @@ class BusinessServicePage extends React.Component {
                 {this.renderActionButtons()}
             </Layout>
         );
+    }
+
+    handleGenderChange = (gender, e) => {
+        if (gender.value == "MALE") {
+            this.setState({isManPrice: gender.checked});
+        }
+        else if (gender.value == "FEMALE") {
+            this.setState({isWomanPrice: gender.checked})
+        }
     }
 
     renderActionButtons = () => {
@@ -80,6 +93,7 @@ class BusinessServicePage extends React.Component {
     save = () => {
         const businessId = this.props.businessId || this.props.businessService.businessId;
         const businessServiceId = this.props.businessService.id;
+
         const values = {
             label       : this.refs.label.getValue(),
             durationMinutes    : this.refs.durationMinutes.getValue(),
@@ -88,6 +102,9 @@ class BusinessServicePage extends React.Component {
             	currency: 'EUR'
             }
         };
+
+        values['isManClassicPrice'] = this.refs.MALE.isChecked();
+        values['isWomanClassicPrice'] = this.refs.FEMALE.isChecked();
 
         if (businessServiceId) {
             this.context.executeAction(BusinessServiceActions.updateService, { businessServiceId, values });
