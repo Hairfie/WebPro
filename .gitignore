@@ -2,3 +2,5 @@ node_modules
 public
 src/server/webpack-stats.json
 npm-debug.log
+.DS_Store
+.env
