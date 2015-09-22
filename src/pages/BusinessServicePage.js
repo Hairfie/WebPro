@@ -59,7 +59,6 @@ class BusinessServicePage extends React.Component {
     }
 
     handleGenderChange = (gender, e) => {
-        debugger;
         if (gender.value == "MALE") {
             this.setState({isManPrice: gender.checked});
         }
