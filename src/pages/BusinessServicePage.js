@@ -102,12 +102,9 @@ class BusinessServicePage extends React.Component {
             	currency: 'EUR'
             }
         };
-        if (this.refs.MALE.isChecked()) {
-            values['isManClassicPrice'] = this.refs.MALE.isChecked();
-        }
-        if (this.refs.FEMALE.isChecked()) {
-            values['isWomanClassicPrice'] = this.refs.FEMALE.isChecked();
-        }
+
+        values['isManClassicPrice'] = this.refs.MALE.isChecked();
+        values['isWomanClassicPrice'] = this.refs.FEMALE.isChecked();
 
         if (businessServiceId) {
             this.context.executeAction(BusinessServiceActions.updateService, { businessServiceId, values });
