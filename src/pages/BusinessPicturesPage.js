@@ -89,9 +89,9 @@ class BusinessPicturesPage extends React.Component {
         return (
             <Layout ref="layout" {...this.props}>
                 <h1>Photos</h1>
+                {(!(_.isEmpty(reorderImage))) ? <Reordering /> : ''}
                 {_.map(businessPictures, picture => <Picture key={picture.id} {...{business, picture}} />)}
                 {_.map(uploadIds, id => <Uploading key={id} />)}
-                {(!(_.isEmpty(reorderImage))) ? <Reordering /> : ''}
                 <FlatButton label="Ajouter une photo" onClick={this.addPicture} />
                 <input ref="file" type="file" style={{ display: 'none' }} accept="image/jpeg" multiple={true} onChange={this.upload} />
             </Layout>
