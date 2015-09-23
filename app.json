@@ -1,0 +1,21 @@
+{
+  "name":"WebPro",
+  "scripts":{},
+  "env":{
+    "FACEBOOK_APP_ID":{
+      "required":true
+    },
+    "HAIRFIE_API_URL":{
+      "required":true
+    },
+    "NEW_RELIC_APP_NAME":{
+      "required":true
+    },
+    "NEW_RELIC_NO_CONFIG_FILE":{
+      "required":true
+    }
+  },
+  "addons":[
+    "newrelic"
+  ]
+}
