@@ -10,7 +10,7 @@ import _ from 'lodash';
 
 class DescriptionInputGroup extends React.Component {
     render() {
-        const {defaultDescription, labels} = this.props;
+        const {defaultDescription} = this.props;
         const description = defaultDescription || {};
 
         return (
@@ -130,7 +130,7 @@ class BusinessInfosPage extends React.Component {
             kind:           this.refs.kind.getSelectedValue(),
             phoneNumber:    this.refs.phoneNumber.getValue(),
             description:    this.refs.description.getDescription(),
-            labels:         this.refs.labels.getValue().split(',')
+            labels:         _.map(this.refs.labels.getValue().split(','), label => label.trim())
         };
 
         this.context.executeAction(BusinessActions.updateInfos, { businessId, values });
