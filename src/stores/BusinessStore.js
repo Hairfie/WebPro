@@ -13,6 +13,7 @@ export default class BusinessStore extends BaseStore {
         [Actions.RECEIVE_USER_BUSINESSES]: 'onReceiveUserBusinesses',
         [Actions.UPLOAD_BUSINESS_PICTURE_START]: 'onUploadBusinessPictureStart',
         [Actions.UPLOAD_BUSINESS_PICTURE_END]: 'onUploadBusinessPictureEnd',
+        [Actions.REORDER_BUSINESS_PICTURE_START]: 'onReorderBusinessPictureStart',
         [Actions.UPDATE_BUSINESS_INFOS_END]: 'onUpdateBusinessInfosEnd',
         [Actions.RECEIVE_BUSINESS_SEARCH_RESULT]: 'onReceiveBusinessSearchResult',
     }
@@ -24,10 +25,12 @@ export default class BusinessStore extends BaseStore {
 
         this.businesses = {};
         this.pictureUploads = [];
+        this.pictureReorder = {};
     }
 
     onReceiveBusiness(business) {
         this.businesses[business.id] = business;
+        this.pictureReorder = [];
         this.emitChange();
     }
 
@@ -43,6 +46,11 @@ export default class BusinessStore extends BaseStore {
 
     onUploadBusinessPictureEnd({ uploadId }) {
         this.pictureUploads = _.reject(this.pictureUploads, { uploadId });
+        this.emitChange();
+    }
+
+    onReorderBusinessPictureStart({ businessId, pictures }) {
+        this.pictureReorder[businessId] = pictures;
         this.emitChange();
     }
 
@@ -75,6 +83,10 @@ export default class BusinessStore extends BaseStore {
 
     getPictureUploadIds(businessId) {
         return _.pluck(_.filter(this.pictureUploads, { businessId }), 'uploadId');
+    }
+
+    getPictureReorderIds(businessId) {
+        return this.pictureReorder[businessId] || [];
     }
 
     getBusinessSearchResults() {

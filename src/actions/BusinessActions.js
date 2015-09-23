@@ -28,6 +28,13 @@ const BusinessActions = {
                 error    => console.log(error)
             );
     },
+    orderPictures(context, {businessId, pictures}) {
+        context.dispatch(Actions.REORDER_BUSINESS_PICTURE_START, { businessId,  pictures});
+        const token = context.getStore('AuthStore').getToken();
+
+        return context.hairfieApi.put(`/businesses/${businessId}`, { pictures }, { token })
+            .then(business => context.dispatch(Actions.RECEIVE_BUSINESS, business));
+    },
     removePicture(context, { businessId, pictureId }) {
         const token = context.getStore('AuthStore').getToken();
         const business = context.getStore('BusinessStore').getById(businessId);
