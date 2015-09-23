@@ -56,7 +56,9 @@ const Actions = keyMirror({
 
     RECEIVE_BOOKINGS: null,
     RECEIVE_BOOKING: null,
-    UPDATE_BOOKING_START: null
+    UPDATE_BOOKING_START: null,
+
+    RECEIVE_CATEGORIES: null
 });
 
 export default Actions;

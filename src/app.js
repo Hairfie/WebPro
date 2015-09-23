@@ -20,6 +20,7 @@ import UserStore from './stores/UserStore';
 import UserBusinessStore from './stores/UserBusinessStore';
 import UploadStore from './stores/UploadStore';
 import BookingStore from './stores/BookingStore';
+import CategoryStore from './stores/CategoryStore';
 
 import config from './config';
 
@@ -87,5 +88,6 @@ app.registerStore(UserStore);
 app.registerStore(UserBusinessStore);
 app.registerStore(UploadStore);
 app.registerStore(BookingStore);
+app.registerStore(CategoryStore);
 
 export default app;
