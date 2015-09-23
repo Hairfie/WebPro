@@ -10,7 +10,7 @@ import _ from 'lodash';
 
 class DescriptionInputGroup extends React.Component {
     render() {
-        const {defaultDescription} = this.props;
+        const {defaultDescription, labels} = this.props;
         const description = defaultDescription || {};
 
         return (
@@ -104,6 +104,10 @@ class BusinessInfosPage extends React.Component {
                     <RadioButton value="HOME" label="Coiffeur à domicile" />
                 </RadioButtonGroup>
                 <br />
+                <TextField ref="labels" type="text"
+                    floatingLabelText="Labels (séparés par des vigules)"
+                    defaultValue={business.labels ? business.labels.join(',') : ''} />
+                <br />
                 <div className="clearfix" />
                 <DescriptionInputGroup description={business.description} defaultDescription={business.description} ref="description"/>
                 <br />
@@ -125,7 +129,8 @@ class BusinessInfosPage extends React.Component {
             children:       this.refs.children.isChecked(),
             kind:           this.refs.kind.getSelectedValue(),
             phoneNumber:    this.refs.phoneNumber.getValue(),
-            description:    this.refs.description.getDescription()
+            description:    this.refs.description.getDescription(),
+            labels:         this.refs.labels.getValue().split(',')
         };
 
         this.context.executeAction(BusinessActions.updateInfos, { businessId, values });

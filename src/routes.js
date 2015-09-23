@@ -125,7 +125,8 @@ export default {
     business_category: {
         path: '/businesses/:businessId/categories',
         method: 'get',
-        handler: BusinessCategoriesPage
+        handler: BusinessCategoriesPage,
+        title: 'Spécialités & Catégories'
     },
     new_business_service: {
         path: '/businesses/:businessId/services/new',

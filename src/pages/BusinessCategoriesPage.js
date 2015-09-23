@@ -14,7 +14,7 @@ class BusinessCategoriesPage extends React.Component {
     }
 
     render() {
-        const { categories, businessId } = this.props;
+        const { categories, businessId, business } = this.props;
         return (
             <Layout {...this.props}>
                 <h1>Spécialités & Catégories</h1>
@@ -22,7 +22,7 @@ class BusinessCategoriesPage extends React.Component {
                     Vous pouvez cocher les catégories que vous désirez et ainsi permettre
                     au utilisateur de vous trouver plus facilement via la recherche.
                 </h5>
-                {_.map(categories, categorie => <Checkbox label={categorie.name} ref={categorie.name}/>)}
+                {_.map(categories, categorie => <Checkbox label={categorie.name} ref={categorie.name} defaultChecked={_.isEmpty(_.intersection([categorie.id], business.addedCategories)) ? false : true} />)}
                 <FlatButton label='Sauver les modifications' onClick={this.save} />
                 {' ou '}
                 <Link route="business" params={{ businessId: businessId }}>
@@ -33,12 +33,10 @@ class BusinessCategoriesPage extends React.Component {
     }
 
     save = () => {
-        const { businessId, categories } = this.props;
-
         const values = {
             addedCategories: _.compact(_.map(categories, function(categorie) {
                 if (this.refs[categorie.name].isChecked())
-                    return categorie.name;
+                    return categorie.id;
             }.bind(this)))
         };
 
@@ -49,7 +47,8 @@ class BusinessCategoriesPage extends React.Component {
 BusinessCategoriesPage = connectToStores(BusinessCategoriesPage, [
     'CategoryStore'
 ], (context, props) => ({
-    categories: context.getStore('CategoryStore').getAllCategories()
+    categories: context.getStore('CategoryStore').getAllCategories(),
+    business : context.getStore('BusinessStore').getById(props.businessId)
 }));
 
 export default BusinessCategoriesPage;
