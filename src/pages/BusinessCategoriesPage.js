@@ -33,7 +33,7 @@ class BusinessCategoriesPage extends React.Component {
     }
 
     save = () => {
-        const { categories } = this.props;
+        const { categories, businessId } = this.props;
 
         const values = {
             addedCategories: _.compact(_.map(categories, function(categorie) {
