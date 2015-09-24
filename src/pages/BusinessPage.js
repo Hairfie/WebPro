@@ -29,6 +29,11 @@ class BusinessPage extends React.Component {
                         </Link>
                     </li>
                     <li>
+                        <Link route="business_category" params={{businessId: this.props.businessId}}>
+                            Spécialités & Catégories
+                        </Link>
+                    </li>
+                    <li>
                         <Link route="business_map" params={{businessId: this.props.businessId}}>
                             Adresse & GPS
                         </Link>

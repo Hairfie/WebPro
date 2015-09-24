@@ -19,6 +19,7 @@ import ImpersonateTokenPage from './pages/ImpersonateTokenPage';
 import BusinessSearchPage from './pages/BusinessSearchPage';
 import BookingsPage from './pages/BookingsPage';
 import BookingPage from './pages/BookingPage';
+import BusinessCategoriesPage from './pages/BusinessCategoriesPage';
 
 export default {
     home: {
@@ -120,6 +121,12 @@ export default {
         method: 'get',
         handler: BusinessServicesPage,
         action: PageActions.businessServices
+    },
+    business_category: {
+        path: '/businesses/:businessId/categories',
+        method: 'get',
+        handler: BusinessCategoriesPage,
+        title: 'Spécialités & Catégories'
     },
     new_business_service: {
         path: '/businesses/:businessId/services/new',
