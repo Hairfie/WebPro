@@ -1,5 +1,7 @@
 'use strict';
 
+import Actions from '../constants/Actions';
+
 const HairfieActions = {
     loadBusinessHairfies: function (context, {page, pageSize, businessId, add}) {
         const query = {
@@ -10,14 +12,13 @@ const HairfieActions = {
         };
 
         return  context.hairfieApi
-            .get('/hairfies', { query: query })
-            .then(hairfies => {
-                context.dispatch(Actions.RECEIVE_HAIRFIE, {
+            .get('/hairfies', { query })
+            .then(hairfies => context.dispatch(Actions.RECEIVE_BUSINESS_HAIRFIE, {
                     hairfies: hairfies,
                     businessId : businessId,
                     page: page
-                });
-            });
+                })
+            );
     }
 }
 

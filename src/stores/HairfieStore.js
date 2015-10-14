@@ -9,7 +9,7 @@ export default class HairfieStore extends BaseStore {
     static storeName = 'HairfieStore';
 
     static handlers =  {
-        [Actions.RECEIVE_HAIRFIE]: 'onReceiveHairfie'
+        [Actions.RECEIVE_BUSINESS_HAIRFIE]: 'onReceiveBusinessHairfies'
     }
 
     constructor(dispatcher) {
@@ -20,8 +20,8 @@ export default class HairfieStore extends BaseStore {
     }
 
     onReceiveBusinessHairfies({ hairfies, businessId, page }) {
-        if (_.isUndefined(this.businessId[businessId])) {
-            this.businessId[businessId] = [];
+        if (_.isUndefined(this.businessHairfies[businessId])) {
+            this.businessHairfies[businessId] = [];
         }
 
         _.map(hairfies, function(hairfie) {

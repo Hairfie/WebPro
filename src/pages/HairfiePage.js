@@ -14,7 +14,7 @@ const PAGE_SIZE = 12;
 
 function displayName(u) { var u = u || {}; return u.firstName+' '+(u.lastName || '').substr(0, 1); }
 
-class BusinessHairfiesPage extends React.Component {
+class HairfiePage extends React.Component {
     static contextTypes = {
         executeAction: PropTypes.func.isRequired
     }
@@ -81,13 +81,12 @@ class BusinessHairfiesPage extends React.Component {
 
 }
 
-BusinessHairfiesPage = connectToStores(BusinessHairfiesPage, [
+HairfiePage = connectToStores(HairfiePage, [
     'BusinessStore',
     'HairfieStore'
 ], (context, props) => ({
     business: context.getStore('BusinessStore').getById(props.businessId),
-    hairfies: context.getStore('HairfieStore').getByBusiness(props.businessId),
-    page: context.getStore('HairfieStore').getBusinessPage(props.businessId)
+    hairfies: context.getStore('HairfieStore').getByBusiness(props.hairfieId)
 }));
 
-export default BusinessHairfiesPage;
+export default HairfiePage;
