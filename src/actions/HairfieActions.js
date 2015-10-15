@@ -3,7 +3,7 @@
 import Actions from '../constants/Actions';
 
 const HairfieActions = {
-    loadBusinessHairfies: function (context, {page, pageSize, businessId, add}) {
+    loadBusinessHairfies (context, {page, pageSize, businessId, add}) {
         const query = {
             'filter[where][businessId]': businessId,
             'filter[order]': 'createdAt DESC',
@@ -19,6 +19,30 @@ const HairfieActions = {
                     page: page
                 })
             );
+    },
+
+    loadHairfie(context, id) {
+        return context.hairfieApi
+            .get('/hairfies/' + id)
+            .then(hairfie => context.dispatch(Actions.RECEIVE_HAIRFIE, hairfie));
+    },
+
+    deleteHairfie(context, id) {
+        const token = context.getStore('AuthStore').getToken();
+        const user = context.getStore('UserStore').getById(token.userId);
+
+        console.log(token, user);
+
+        return context.hairfieApi
+            .delete('/hairfies/' + id, { token, user })
+            .then(() => {
+                context.dispatch(Actions.DELETE_HAIRFIE, id);
+
+                return context.executeAction(RouteActions.navigate, {
+                     route: 'business_hairfies',
+                     params: { businessId: businessId }
+                });
+            });
     }
 }
 

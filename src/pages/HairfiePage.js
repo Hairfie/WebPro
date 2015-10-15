@@ -4,6 +4,7 @@ import Layout from '../components/Layout';
 import Link from '../components/Link';
 import HairfieActions from '../actions/HairfieActions';
 
+import { TextField, DropDownMenu, Menu, MenuItem, RaisedButton } from '../components/UIKit';
 import { connectToStores } from 'fluxible-addons-react';
 import _ from 'lodash';
 import moment from 'moment';
@@ -20,73 +21,82 @@ class HairfiePage extends React.Component {
     }
 
     render() {
+        const { hairfie, business, tags } = this.props;
         console.log(this.props);
-        if (!this.props.business) return null;
+        if (!business || !hairfie) return (
+            <Layout {...this.props}>
+
+            </Layout>
+        );
+
+        const businessMembers = _.map(business.activeHairdressers, hairdresser => {
+            return {
+                payload: hairdresser.id, text: hairdresser.firstName + ' ' + hairdresser.lastName
+            };
+        });
+
+        var hairdresser = <p></p>;
+        if (hairfie.businessMember) {
+            hairdresser = <p>Coiffé par <span>{displayName(hairfie.businessMember)}</span></p>;
+        }
+
+        var price = <div></div>;
+        if (hairfie.price) {
+            price = <div className="pricetag">{hairfie.price.amount}€</div>;
+        }
+
         return (
             <Layout {...this.props}>
-                {this.renderTitle()}
                 <div className="hairfies">
-                    {_.map(this.props.hairfies, function (hairfie) {
-                        var hairdresser = <p></p>;
-                        if (hairfie.hairdresser) {
-                            hairdresser = <p>Coiffé par <span>{displayName(hairfie.hairdresser)}</span></p>;
-                        }
-
-                        var price = <div></div>;
-                        if (hairfie.price) {
-                            price = <div className="pricetag">{hairfie.price.amount}€</div>;
-                        }
-                        return (
-                            <div key={hairfie.id} className="single-hairfie">
-                                <figure style={{width: 250, height: 250}}>
-                                        <Picture image={_.last(hairfie.pictures)}
-                                                alt="" />
-                                                <figcaption>
-                                                    {hairdresser}
-                                                    <p><span>Le {moment(hairfie.createdAt).format('L')}</span></p>
-                                                    {price}
-                                                </figcaption>
-                                        </figure>
-                                    </div>
-                                );
-                    }, this)}
+                    <div key={hairfie.id} className="single-hairfie Grid">
+                        <figure className="Grid-cell">
+                            <Picture image={_.last(hairfie.pictures)} alt="" />
+                            <figcaption>
+                                {hairdresser}
+                                <p><span>Le {moment(hairfie.createdAt).format('L')}</span></p>
+                                {price}
+                            </figcaption>
+                        </figure>
+                        <div className="Grid-cell">
+                            <TextField
+                            ref="price"
+                            floatingLabelText="Prix de la coupe"
+                            defaultValue={hairfie.price ? hairfie.price.amount + '€' : ''}
+                            />
+                            <TextField
+                            ref="description"
+                            floatingLabelText="Description"
+                            defaultValue={hairfie.description || ''}
+                            />
+                            <select ref="hairdresser">
+                                <option value="">Sélectionnez un coiffeur</option>
+                                {_.map(business.activeHairdressers, hairdresser => {
+                                    return <option value={hairdresser.id}>{hairdresser.firstName + ' ' + hairdresser.lastName}</option>
+                                })}
+                            </select>
+                            <RaisedButton style={{marginTop: '45px'}} backgroundColor='skyblue' label="Valider les modifications"/>
+                            <RaisedButton style={{marginTop: '45px'}} backgroundColor='tomato' label="Supprimer le Hairfie" onClick={this.removeHairfie}/>
+                        </div>
+                    </div>
                 </div>
-                {this.renderMoreButton()}
             </Layout>
         );
     }
+    removeHairfie = (e) => {
+        e.preventDefault();
 
-    ComponentWillReceiveProps() {}
-
-    renderMoreButton() {
-        if (this.props.page * PAGE_SIZE > this.props.hairfies.length) return null;
-
-        return <a role="button" onClick={this.loadMore.bind(this)} className="btn btn-red">Voir plus de Hairfies</a>;
+        this.context.executeAction(HairfieActions.deleteHairfie, this.props.hairfie.id);
     }
-
-    loadMore(e) {
-        if (e) e.preventDefault();
-        this.context.executeAction(HairfieActions.loadBusinessHairfies, {
-            businessId: this.props.business.id,
-            page: (this.props.page || 0) + 1,
-            pageSize: PAGE_SIZE
-        });
-    }
-
-    renderTitle() {
-        if (_.isEmpty(this.props.hairfies))
-            return <h3>{this.props.business.name} n'a pas d'Hairfie.</h3>
-        return <h3>{this.props.business.name} a les Hairfies suivant:</h3>;
-    }
-
 }
 
 HairfiePage = connectToStores(HairfiePage, [
     'BusinessStore',
-    'HairfieStore'
+    'HairfieStore',
+    'TagStore'
 ], (context, props) => ({
     business: context.getStore('BusinessStore').getById(props.businessId),
-    hairfies: context.getStore('HairfieStore').getByBusiness(props.hairfieId)
+    hairfie: context.getStore('HairfieStore').getById(props.hairfieId),
+    tag: context.getStore('TagStore').getAll()
 }));
 
 export default HairfiePage;

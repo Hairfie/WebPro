@@ -9,7 +9,8 @@ export default class HairfieStore extends BaseStore {
     static storeName = 'HairfieStore';
 
     static handlers =  {
-        [Actions.RECEIVE_BUSINESS_HAIRFIE]: 'onReceiveBusinessHairfies'
+        [Actions.RECEIVE_BUSINESS_HAIRFIE]: 'onReceiveBusinessHairfies',
+        [Actions.RECEIVE_HAIRFIE]: 'onReceiveHairfie'
     }
 
     constructor(dispatcher) {
@@ -19,12 +20,23 @@ export default class HairfieStore extends BaseStore {
         this.businessHairfies = {};
     }
 
+    onReceiveHairfie(hairfies) {
+        if (_.isArray(hairfies)) {
+            _.map(hairfies, hairfie => this.hairfies[hairfie.id] = hairfie, this);
+        }
+        else {
+        this.hairfies[hairfies.id] = hairfies;
+        }
+
+        this.emitChange();
+    }
+
     onReceiveBusinessHairfies({ hairfies, businessId, page }) {
         if (_.isUndefined(this.businessHairfies[businessId])) {
             this.businessHairfies[businessId] = [];
         }
 
-        _.map(hairfies, function(hairfie) {
+        _.map(hairfies, hairfie => {
             this.hairfies[hairfie.id] = hairfie;
             this.businessHairfies[businessId].push(hairfie.id);
         }, this);
@@ -54,6 +66,10 @@ export default class HairfieStore extends BaseStore {
     }
 
     getById(id) {
+        if (_.isUndefined(this.hairfies[id])) {
+            this.getContext().executeAction(HairfieActions.loadHairfie, id);
+            return null;
+        }
         return this.hairfies[id];
     }
 }

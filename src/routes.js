@@ -21,6 +21,7 @@ import BookingsPage from './pages/BookingsPage';
 import BookingPage from './pages/BookingPage';
 import BusinessCategoriesPage from './pages/BusinessCategoriesPage';
 import BusinessHairfiesPage from './pages/BusinessHairfiesPage';
+import HairfiePage from './pages/HairfiePage';
 
 export default {
     home: {
@@ -86,6 +87,13 @@ export default {
         method: 'get',
         handler: BusinessHairfiesPage,
         title: 'Les hairfies de mon salon',
+        action: PageActions.business
+    },
+    business_hairfie: {
+        path: '/businesses/:businessId/hairfie/:hairfieId',
+        method: 'get',
+        handler: HairfiePage,
+        title: 'Information sur mon Hairfie',
         action: PageActions.business
     },
     business_infos: {

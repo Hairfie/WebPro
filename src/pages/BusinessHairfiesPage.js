@@ -20,13 +20,14 @@ class BusinessHairfiesPage extends React.Component {
     }
 
     render() {
+        const {business, hairfies} = this.props;
         console.log(this.props);
-        if (!this.props.business) return null;
+        if (!business) return null;
         return (
             <Layout {...this.props}>
                 {this.renderTitle()}
                 <div className="hairfies">
-                    {_.map(this.props.hairfies, function (hairfie) {
+                    {_.map(this.props.hairfies, hairfie => {
                         var hairdresser = <p></p>;
                         if (hairfie.hairdresser) {
                             hairdresser = <p>Coiffé par <span>{displayName(hairfie.hairdresser)}</span></p>;
@@ -38,17 +39,18 @@ class BusinessHairfiesPage extends React.Component {
                         }
                         return (
                             <div key={hairfie.id} className="single-hairfie">
-                                <figure style={{width: 250, height: 250}}>
-                                        <Picture image={_.last(hairfie.pictures)}
-                                                alt="" />
-                                                <figcaption>
-                                                    {hairdresser}
-                                                    <p><span>Le {moment(hairfie.createdAt).format('L')}</span></p>
-                                                    {price}
-                                                </figcaption>
-                                        </figure>
-                                    </div>
-                                );
+                                <Link route="business_hairfie" params={{businessId: business.id, hairfieId: hairfie.id}}>
+                                    <figure style={{width: 250, height: 250}}>
+                                        <Picture image={_.last(hairfie.pictures)} alt="" />
+                                        <figcaption>
+                                            {hairdresser}
+                                            <p><span>Le {moment(hairfie.createdAt).format('L')}</span></p>
+                                            {price}
+                                        </figcaption>
+                                    </figure>
+                                </Link>
+                            </div>
+                        );
                     }, this)}
                 </div>
                 {this.renderMoreButton()}
@@ -64,7 +66,7 @@ class BusinessHairfiesPage extends React.Component {
         return <a role="button" onClick={this.loadMore.bind(this)} className="btn btn-red">Voir plus de Hairfies</a>;
     }
 
-    loadMore(e) {
+    loadMore = (e) => {
         if (e) e.preventDefault();
         this.context.executeAction(HairfieActions.loadBusinessHairfies, {
             businessId: this.props.business.id,
