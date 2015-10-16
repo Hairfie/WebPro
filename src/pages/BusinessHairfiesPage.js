@@ -6,6 +6,7 @@ import HairfieActions from '../actions/HairfieActions';
 
 import { connectToStores } from 'fluxible-addons-react';
 import _ from 'lodash';
+import { FlatButton, CircularProgress } from '../components/UIKit';
 import moment from 'moment';
 import Picture from '../components/Image';
 moment.locale('fr');
@@ -20,16 +21,16 @@ class BusinessHairfiesPage extends React.Component {
     }
 
     render() {
-        const {business, hairfies} = this.props;
-        if (!business) return null;
+        const {business, hairfies, page} = this.props;
+        if (page < 0) return this.renderLoader();
         return (
             <Layout {...this.props}>
                 {this.renderTitle()}
                 <div className="hairfies">
                     {_.map(this.props.hairfies, hairfie => {
-                        var hairdresser = <p></p>;
+                        var hairdresser = <p style={{marginTop: '30%'}}></p>;
                         if (hairfie.hairdresser) {
-                            hairdresser = <p>Coiffé par <span>{displayName(hairfie.hairdresser)}</span></p>;
+                            hairdresser = <p style={{marginTop: '30%'}}>Coiffé par <span>{displayName(hairfie.hairdresser)}</span></p>;
                         }
 
                         var price = <div></div>;
@@ -42,10 +43,10 @@ class BusinessHairfiesPage extends React.Component {
                                     <figure>
                                         <Picture image={_.last(hairfie.pictures)} alt="" />
                                         <figcaption>
-                                            {hairfie.pictures.length > 1 ? <Picture image={_.first(hairfie.pictures)} alt="" style={{position: 'absolute', width:'40%', bottom: '0px', right: '0px'}}/> : null}
                                             {hairdresser}
                                             <p><span>Le {moment(hairfie.createdAt).format('L')}</span></p>
                                             {price}
+                                            {hairfie.pictures.length > 1 ? <Picture image={_.first(hairfie.pictures)} alt="" style={{position: 'absolute', width:'40%', bottom: '0px', right: '0px'}}/> : null}
                                         </figcaption>
                                     </figure>
                                 </Link>
@@ -63,7 +64,7 @@ class BusinessHairfiesPage extends React.Component {
     renderMoreButton() {
         if (this.props.page * PAGE_SIZE > this.props.hairfies.length) return null;
 
-        return <a role="button" onClick={this.loadMore.bind(this)} className="btn btn-red">Voir plus de Hairfies</a>;
+        return <FlatButton style={{color:'darkred'}} onClick={this.loadMore.bind(this)}>Voir plus de Hairfies</FlatButton>;
     }
 
     loadMore = (e) => {
@@ -80,7 +81,13 @@ class BusinessHairfiesPage extends React.Component {
             return <h3>{this.props.business.name} n'a pas d'Hairfie.</h3>
         return <h3>{this.props.business.name} a les Hairfies suivant:</h3>;
     }
-
+    renderLoader() {
+        return (
+            <Layout {...this.props}>
+                <CircularProgress mode="indeterminate" style={{position: 'fixed', top: '45%', 'left': '45%'}} />
+            </Layout>
+        );
+    }
 }
 
 BusinessHairfiesPage = connectToStores(BusinessHairfiesPage, [
