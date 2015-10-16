@@ -21,7 +21,6 @@ class BusinessHairfiesPage extends React.Component {
 
     render() {
         const {business, hairfies} = this.props;
-        console.log(this.props);
         if (!business) return null;
         return (
             <Layout {...this.props}>
@@ -38,11 +37,12 @@ class BusinessHairfiesPage extends React.Component {
                             price = <div className="pricetag">{hairfie.price.amount}€</div>;
                         }
                         return (
-                            <div key={hairfie.id} className="single-hairfie">
+                            <div key={hairfie.id} className="single-hairfie" style={{width: '33%', minWidth: '250px'}}>
                                 <Link route="business_hairfie" params={{businessId: business.id, hairfieId: hairfie.id}}>
-                                    <figure style={{width: 250, height: 250}}>
+                                    <figure>
                                         <Picture image={_.last(hairfie.pictures)} alt="" />
                                         <figcaption>
+                                            {hairfie.pictures.length > 1 ? <Picture image={_.first(hairfie.pictures)} alt="" style={{position: 'absolute', width:'40%', bottom: '0px', right: '0px'}}/> : null}
                                             {hairdresser}
                                             <p><span>Le {moment(hairfie.createdAt).format('L')}</span></p>
                                             {price}

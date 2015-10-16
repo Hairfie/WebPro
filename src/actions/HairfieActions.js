@@ -31,10 +31,24 @@ const HairfieActions = {
         const token = context.getStore('AuthStore').getToken();
         const user = context.getStore('UserStore').getById(token.userId);
 
-        console.log(token, user);
-
         return context.hairfieApi
             .delete('/hairfies/' + id, { token, user })
+            .then(() => {
+                context.dispatch(Actions.DELETE_HAIRFIE, id);
+
+                return context.executeAction(RouteActions.navigate, {
+                     route: 'business_hairfies',
+                     params: { businessId: businessId }
+                });
+            });
+    },
+
+    updateHairfie(context, { id, hairfie }) {
+        const token = context.getStore('AuthStore').getToken();
+        const user = context.getStore('UserStore').getById(token.userId);
+
+        return context.hairfieApi
+            .put('/hairfies/' + id, { hairfie }, { token, user })
             .then(() => {
                 context.dispatch(Actions.DELETE_HAIRFIE, id);
 

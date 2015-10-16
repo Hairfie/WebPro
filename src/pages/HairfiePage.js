@@ -4,7 +4,7 @@ import Layout from '../components/Layout';
 import Link from '../components/Link';
 import HairfieActions from '../actions/HairfieActions';
 
-import { TextField, DropDownMenu, Menu, MenuItem, RaisedButton } from '../components/UIKit';
+import { TextField, DropDownMenu, Menu, MenuItem, RaisedButton, Checkbox } from '../components/UIKit';
 import { connectToStores } from 'fluxible-addons-react';
 import _ from 'lodash';
 import moment from 'moment';
@@ -22,7 +22,6 @@ class HairfiePage extends React.Component {
 
     render() {
         const { hairfie, business, tags } = this.props;
-        console.log(this.props);
         if (!business || !hairfie) return (
             <Layout {...this.props}>
 
@@ -47,37 +46,50 @@ class HairfiePage extends React.Component {
 
         return (
             <Layout {...this.props}>
-                <div className="hairfies">
-                    <div key={hairfie.id} className="single-hairfie Grid">
-                        <figure className="Grid-cell">
-                            <Picture image={_.last(hairfie.pictures)} alt="" />
-                            <figcaption>
-                                {hairdresser}
-                                <p><span>Le {moment(hairfie.createdAt).format('L')}</span></p>
-                                {price}
-                            </figcaption>
-                        </figure>
-                        <div className="Grid-cell">
-                            <TextField
-                            ref="price"
-                            floatingLabelText="Prix de la coupe"
-                            defaultValue={hairfie.price ? hairfie.price.amount + '€' : ''}
-                            />
-                            <TextField
-                            ref="description"
-                            floatingLabelText="Description"
-                            defaultValue={hairfie.description || ''}
-                            />
-                            <select ref="hairdresser">
-                                <option value="">Sélectionnez un coiffeur</option>
-                                {_.map(business.activeHairdressers, hairdresser => {
-                                    return <option value={hairdresser.id}>{hairdresser.firstName + ' ' + hairdresser.lastName}</option>
-                                })}
-                            </select>
-                            <RaisedButton style={{marginTop: '45px'}} backgroundColor='skyblue' label="Valider les modifications"/>
-                            <RaisedButton style={{marginTop: '45px'}} backgroundColor='tomato' label="Supprimer le Hairfie" onClick={this.removeHairfie}/>
-                        </div>
+                <div className="hairfies" style={{width: '100%', overflow: 'auto'}}>
+                    {_.map(hairfie.pictures, picture => {
+                        return (
+                            <div className="single-hairfie" style={{maxWidth: '300px'}}>
+                                <figure>
+                                    <Picture image={picture} alt="" />
+                                    <figcaption>
+                                        {hairdresser}
+                                        <p><span>Le {moment(hairfie.createdAt).format('L')}</span></p>
+                                        {price}
+                                    </figcaption>
+                                </figure>
+                            </div>
+                        );
+                    })}
+                </div>
+                <div className="Grid">
+                    <div className="Grid-cell">
+                        <TextField
+                        ref="price"
+                        floatingLabelText="Prix de la coupe"
+                        defaultValue={hairfie.price ? hairfie.price.amount + '€' : ''}
+                        />
                     </div>
+                    <div className="Grid-cell">
+                        <TextField
+                        ref="description"
+                        floatingLabelText="Description"
+                        defaultValue={hairfie.description || ''}
+                        />
+                    </div>
+                </div>
+                <select ref="hairdresser">
+                    <option value="">Sélectionnez un coiffeur</option>
+                    {_.map(business.activeHairdressers, hairdresser => {
+                        return <option value={hairdresser.id}>{hairdresser.firstName + ' ' + hairdresser.lastName}</option>
+                    })}
+                </select>
+                <div style={{marginTop: '45px', width: '100%', overflow: 'auto'}}>
+                    {_.map(tags, tag => <Checkbox style={{float: 'left', width: '25%', minWidth: '75px', marginLeft: '15px'}} label={tag.name} ref={tag.name} defaultChecked={_.isEmpty(_.intersection([tag.id], _.map(hairfie.tags, 'id'))) ? false : true} />)}
+                </div>
+                <div className="Grid">
+                    <RaisedButton className="Grid-cell" style={{marginTop: '45px'}} backgroundColor='skyblue' label="Valider les modifications" onClick={this.updateHairfie}/>
+                    <RaisedButton className="Grid-cell" style={{marginTop: '45px', marginLeft: '20px'}} backgroundColor='tomato' label="Supprimer le Hairfie" onClick={this.removeHairfie}/>
                 </div>
             </Layout>
         );
@@ -86,6 +98,31 @@ class HairfiePage extends React.Component {
         e.preventDefault();
 
         this.context.executeAction(HairfieActions.deleteHairfie, this.props.hairfie.id);
+    }
+
+    updateHairfie = (e) => {
+        e.preventDefault();
+
+        const update = {
+            description: this.refs.description.getValue(),
+            businessMemberId: this.refs.hairdresser.getDOMNode().value,
+            tags: _.compact(_.map(this.props.tags, function(tag) {
+                if (this.refs[tag.name].isChecked())
+                    return tag.id;
+            }.bind(this)))
+        };
+
+        if ( parseFloat(this.refs.price.getValue())) {
+            update['price'] = {
+                amount: parseFloat(this.refs.price.getValue()),
+                currency: 'EUR'
+            };
+        }
+
+        this.context.executeAction(HairfieActions.updateHairfie, {
+            id: this.props.hairfie.id,
+            hairfie: update
+        });
     }
 }
 
@@ -96,7 +133,7 @@ HairfiePage = connectToStores(HairfiePage, [
 ], (context, props) => ({
     business: context.getStore('BusinessStore').getById(props.businessId),
     hairfie: context.getStore('HairfieStore').getById(props.hairfieId),
-    tag: context.getStore('TagStore').getAll()
+    tags: context.getStore('TagStore').getAll()
 }));
 
 export default HairfiePage;
