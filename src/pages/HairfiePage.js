@@ -23,7 +23,6 @@ class HairfiePage extends React.Component {
         const { hairfie, business, tags, tagCategories } = this.props;
         if (!hairfie || !tags) return this.renderLoader();
 
-        console.log(this.props);
         const businessMembers = _.map(business.activeHairdressers, hairdresser => {
             return {
                 payload: hairdresser.id, text: hairdresser.firstName + ' ' + hairdresser.lastName
