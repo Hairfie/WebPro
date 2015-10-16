@@ -10,7 +10,8 @@ export default class HairfieStore extends BaseStore {
 
     static handlers =  {
         [Actions.RECEIVE_BUSINESS_HAIRFIE]: 'onReceiveBusinessHairfies',
-        [Actions.RECEIVE_HAIRFIE]: 'onReceiveHairfie'
+        [Actions.RECEIVE_HAIRFIE]: 'onReceiveHairfie',
+        [Actions.DELETE_HAIRFIE]: 'onDeleteHairfie'
     }
 
     constructor(dispatcher) {
@@ -27,6 +28,14 @@ export default class HairfieStore extends BaseStore {
         else {
         this.hairfies[hairfies.id] = hairfies;
         }
+
+        this.emitChange();
+    }
+
+    onDeleteHairfie({ id, businessId }) {
+        delete this.hairfies[id];
+        this.businessHairfies[businessId] = _.difference(this.businessHairfies[businessId], [ id ])
+        this.hairfies = _.compact(this.hairfies);
 
         this.emitChange();
     }

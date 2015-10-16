@@ -13,7 +13,7 @@ moment.locale('fr');
 
 const PAGE_SIZE = 12;
 
-function displayName(u) { var u = u || {}; return u.firstName+' '+(u.lastName || '').substr(0, 1); }
+function displayName(u) { const n = u || {}; return n.firstName+' '+(n.lastName || '').substr(0, 1); }
 
 class BusinessHairfiesPage extends React.Component {
     static contextTypes = {
@@ -28,12 +28,12 @@ class BusinessHairfiesPage extends React.Component {
                 {this.renderTitle()}
                 <div className="hairfies">
                     {_.map(this.props.hairfies, hairfie => {
-                        var hairdresser = <p style={{marginTop: '30%'}}></p>;
+                        let hairdresser = <p style={{marginTop: '30%'}}></p>;
                         if (hairfie.hairdresser) {
                             hairdresser = <p style={{marginTop: '30%'}}>Coiffé par <span>{displayName(hairfie.hairdresser)}</span></p>;
                         }
 
-                        var price = <div></div>;
+                        let price = <div></div>;
                         if (hairfie.price) {
                             price = <div className="pricetag">{hairfie.price.amount}€</div>;
                         }

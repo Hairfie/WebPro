@@ -16,10 +16,16 @@ export default class TagStore extends BaseStore {
         super(dispatcher);
 
         this.tags = {};
+        this.tagCategory = {};
     }
 
     onReceiveTags(tags) {
         this.tags = _.sortByAll(tags, ['category.position', 'position']);
+
+        this.tagCategory = _.uniq(_.sortBy(_.map(tags, tag => {
+            return tag.category;
+        }), 'position'), 'id');
+
         this.emitChange();
     }
 
@@ -29,5 +35,11 @@ export default class TagStore extends BaseStore {
             return null;
         }
         return this.tags;
+    }
+
+    getTagCategories() {
+        if (!this.tagCategory || _.isEmpty(this.tagCategory))
+            this.getContext().executeAction(TagActions.loadAll);
+        return this.tagCategory;
     }
 }

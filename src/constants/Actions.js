@@ -61,8 +61,11 @@ const Actions = keyMirror({
     RECEIVE_HAIRFIE: null,
     RECEIVE_BUSINESS_HAIRFIE: null,
 
+    DELETE_HAIRFIE: null,
+
     RECEIVE_CATEGORIES: null,
-    RECEIVE_TAGS: null
+    RECEIVE_TAGS: null,
+    RECEIVE_TAG_CATEGORIES: null
 });
 
 export default Actions;

@@ -4,7 +4,7 @@ import Layout from '../components/Layout';
 import Link from '../components/Link';
 import HairfieActions from '../actions/HairfieActions';
 
-import { TextField, DropDownMenu, Menu, MenuItem, RaisedButton, Checkbox } from '../components/UIKit';
+import { TextField, DropDownMenu, Menu, MenuItem, RaisedButton, Checkbox, CircularProgress } from '../components/UIKit';
 import { connectToStores } from 'fluxible-addons-react';
 import _ from 'lodash';
 import moment from 'moment';
@@ -13,33 +13,29 @@ moment.locale('fr');
 
 const PAGE_SIZE = 12;
 
-function displayName(u) { var u = u || {}; return u.firstName+' '+(u.lastName || '').substr(0, 1); }
+function displayName(u) { const n = u || {}; return n.firstName+' '+(n.lastName || '').substr(0, 1); }
 
 class HairfiePage extends React.Component {
     static contextTypes = {
         executeAction: PropTypes.func.isRequired
     }
-
     render() {
-        const { hairfie, business, tags } = this.props;
-        if (!business || !hairfie) return (
-            <Layout {...this.props}>
+        const { hairfie, business, tags, tagCategories } = this.props;
+        if (!hairfie || !tags) return this.renderLoader();
 
-            </Layout>
-        );
-
+        console.log(this.props);
         const businessMembers = _.map(business.activeHairdressers, hairdresser => {
             return {
                 payload: hairdresser.id, text: hairdresser.firstName + ' ' + hairdresser.lastName
             };
         });
 
-        var hairdresser = <p></p>;
+        let hairdresser = <p></p>;
         if (hairfie.businessMember) {
             hairdresser = <p>Coiffé par <span>{displayName(hairfie.businessMember)}</span></p>;
         }
 
-        var price = <div></div>;
+        let price = <div></div>;
         if (hairfie.price) {
             price = <div className="pricetag">{hairfie.price.amount}€</div>;
         }
@@ -85,7 +81,18 @@ class HairfiePage extends React.Component {
                     })}
                 </select>
                 <div style={{marginTop: '45px', width: '100%', overflow: 'auto'}}>
-                    {_.map(tags, tag => <Checkbox style={{float: 'left', width: '25%', minWidth: '75px', marginLeft: '15px'}} label={tag.name} ref={tag.name} defaultChecked={_.isEmpty(_.intersection([tag.id], _.map(hairfie.tags, 'id'))) ? false : true} />)}
+                    {_.map(tagCategories, category => {
+                        return (
+                            <div style={{width: '100%', overflow: 'auto'}}>
+                                <h4>{category.name}</h4>
+                                {_.map(_.where(tags, {category: {id: category.id}}), tag => <Checkbox
+                                    style={{float: 'left', width: '25%', minWidth: '75px', marginLeft: '15px'}}
+                                    label={tag.name} ref={tag.name}
+                                    defaultChecked={_.isEmpty(_.intersection([tag.id], _.map(hairfie.tags, 'id'))) ? false : true} />
+                                )}
+                            </div>
+                        );
+                    })}
                 </div>
                 <div className="Grid">
                     <RaisedButton className="Grid-cell" style={{marginTop: '45px'}} backgroundColor='skyblue' label="Valider les modifications" onClick={this.updateHairfie}/>
@@ -94,10 +101,22 @@ class HairfiePage extends React.Component {
             </Layout>
         );
     }
+
+    renderLoader() {
+        return (
+            <Layout {...this.props}>
+                <CircularProgress mode="indeterminate" style={{position: 'fixed', top: '45%', 'left': '45%'}} />
+            </Layout>
+        );
+    }
+
     removeHairfie = (e) => {
         e.preventDefault();
 
-        this.context.executeAction(HairfieActions.deleteHairfie, this.props.hairfie.id);
+        this.context.executeAction(HairfieActions.deleteHairfie, {
+            id: this.props.hairfie.id,
+            businessId: this.props.business.id
+        });
     }
 
     updateHairfie = (e) => {
@@ -121,7 +140,8 @@ class HairfiePage extends React.Component {
 
         this.context.executeAction(HairfieActions.updateHairfie, {
             id: this.props.hairfie.id,
-            hairfie: update
+            hairfie: update,
+            businessId: this.props.business.id
         });
     }
 }
@@ -133,7 +153,8 @@ HairfiePage = connectToStores(HairfiePage, [
 ], (context, props) => ({
     business: context.getStore('BusinessStore').getById(props.businessId),
     hairfie: context.getStore('HairfieStore').getById(props.hairfieId),
-    tags: context.getStore('TagStore').getAll()
+    tags: context.getStore('TagStore').getAll(),
+    tagCategories: context.getStore('TagStore').getTagCategories()
 }));
 
 export default HairfiePage;

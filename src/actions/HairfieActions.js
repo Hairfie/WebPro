@@ -1,6 +1,7 @@
 'use strict';
 
 import Actions from '../constants/Actions';
+import RouteActions from './RouteActions';
 
 const HairfieActions = {
     loadBusinessHairfies (context, {page, pageSize, businessId, add}) {
@@ -27,15 +28,14 @@ const HairfieActions = {
             .then(hairfie => context.dispatch(Actions.RECEIVE_HAIRFIE, hairfie));
     },
 
-    deleteHairfie(context, id) {
+    deleteHairfie(context, { id, businessId }) {
         const token = context.getStore('AuthStore').getToken();
         const user = context.getStore('UserStore').getById(token.userId);
 
         return context.hairfieApi
             .delete('/hairfies/' + id, { token, user })
             .then(() => {
-                context.dispatch(Actions.DELETE_HAIRFIE, id);
-
+                //context.dispatch(Actions.DELETE_HAIRFIE, { id, businessId });
                 return context.executeAction(RouteActions.navigate, {
                      route: 'business_hairfies',
                      params: { businessId: businessId }
@@ -43,15 +43,14 @@ const HairfieActions = {
             });
     },
 
-    updateHairfie(context, { id, hairfie }) {
+    updateHairfie(context, { id, hairfie, businessId }) {
         const token = context.getStore('AuthStore').getToken();
         const user = context.getStore('UserStore').getById(token.userId);
 
         return context.hairfieApi
             .put('/hairfies/' + id, { hairfie }, { token, user })
-            .then(() => {
-                context.dispatch(Actions.DELETE_HAIRFIE, id);
-
+            .then((hairfie) => {
+                context.dispatch(Actions.RECEIVE_HAIRFIE, hairfie);
                 return context.executeAction(RouteActions.navigate, {
                      route: 'business_hairfies',
                      params: { businessId: businessId }
