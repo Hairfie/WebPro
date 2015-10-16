@@ -5,14 +5,28 @@ import Link from '../components/Link';
 
 import { connectToStores } from 'fluxible-addons-react';
 
+import Permissions from '../constants/Permissions';
+
 class BusinessPage extends React.Component {
 
   render() {
+    let adminNode;
+    if (this.props.isAdmin) {
+        adminNode = (
+            <li>
+                <Link route="business_admin" params={{businessId: this.props.businessId}}>
+                    Admin
+                </Link>
+            </li>
+        );
+    }
+
     return (
         <Layout {...this.props}>
             <h1>{this.props.business.name}</h1>
             <nav>
                 <ul>
+                    {adminNode}
                     <li>
                         <Link route="business_pictures" params={{businessId: this.props.businessId}}>
                             Photos
@@ -57,8 +71,10 @@ class BusinessPage extends React.Component {
 }
 
 BusinessPage = connectToStores(BusinessPage, [
-    'BusinessStore'
+    'BusinessStore',
+    'AuthStore'
 ], (context, props) => ({
+    isAdmin : context.getStore('AuthStore').hasPermission(Permissions.IMPERSONATE_TOKEN),
     business: context.getStore('BusinessStore').getById(props.businessId)
 }));
 

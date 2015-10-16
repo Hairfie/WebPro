@@ -9,6 +9,7 @@ import DashboardPage from './pages/DashboardPage';
 import BusinessPage from './pages/BusinessPage';
 import BusinessPicturesPage from './pages/BusinessPicturesPage';
 import BusinessInfosPage from './pages/BusinessInfosPage';
+import BusinessAdminPage from './pages/BusinessAdminPage';
 import BusinessTimetablePage from './pages/BusinessTimetablePage';
 import BusinessServicesPage from './pages/BusinessServicesPage';
 import BusinessServicePage from './pages/BusinessServicePage';
@@ -85,6 +86,13 @@ export default {
         method: 'get',
         handler: BusinessInfosPage,
         title: 'Les infos de mon salons',
+        action: PageActions.business
+    },
+    business_admin: {
+        path: '/businesses/:businessId/admin',
+        method: 'get',
+        handler: BusinessAdminPage,
+        title: 'Gestion admin du salon',
         action: PageActions.business
     },
     business_map: {

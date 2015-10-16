@@ -78,7 +78,7 @@ class BusinessMemberPage extends React.Component {
                 <mui.Checkbox
                     ref="isHairdresser"
                     label="Afficher en tant que coiffeur"
-                    defaultSwitched={!businessMember.hidden}
+                    defaultChecked={!businessMember.hidden}
                     />
                 <br />
                 <mui.FlatButton label={businessMember.id ? 'Sauver les modifications' : 'Ajouter à l\'équipe'} onClick={this.save} />

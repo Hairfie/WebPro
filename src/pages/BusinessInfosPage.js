@@ -2,9 +2,9 @@
 
 import React from 'react';
 import Layout from '../components/Layout';
-import { FlatButton, TextField, Checkbox, RadioButton, RadioButtonGroup, Paper } from '../components/UIKit';
+import { FlatButton, TextField, Checkbox, RadioButton, RadioButtonGroup, Paper, RaisedButton } from '../components/UIKit';
 import { connectToStores } from 'fluxible-addons-react';
-import Link, {FlatLink} from '../components/Link';
+import Link, {FlatLink, RaisedLink} from '../components/Link';
 import BusinessActions from '../actions/BusinessActions';
 import _ from 'lodash';
 
@@ -86,17 +86,17 @@ class BusinessInfosPage extends React.Component {
                 <Checkbox
                     ref="men"
                     label="Homme"
-                    defaultSwitched={business.men}
+                    defaultChecked={business.men}
                     />
                 <Checkbox
                     ref="women"
                     label="Femme"
-                    defaultSwitched={business.women}
+                    defaultChecked={business.women}
                     />
                 <Checkbox
                     ref="children"
                     label="Enfant"
-                    defaultSwitched={business.children}
+                    defaultChecked={business.children}
                     />
                 <br />
                 <RadioButtonGroup ref="kind" name="kind" defaultSelected={business.kind} valueSelected={business && business.kind}>
@@ -111,9 +111,9 @@ class BusinessInfosPage extends React.Component {
                 <div className="clearfix" />
                 <DescriptionInputGroup description={business.description} defaultDescription={business.description} ref="description"/>
                 <br />
-                <FlatButton label='Sauver les modifications' onClick={this.save} />
-                {' ou '}
-                <FlatLink route="business" params={{ businessId: business.id }} label='Annuler' />
+                <RaisedButton label='Sauver les modifications' onClick={this.save} fullWidth={true} primary={true} />
+                <br /><br />
+                <RaisedLink route="business" params={{ businessId: business.id }} label='Annuler' fullWidth={true} />
                 </Paper>
             </Layout>
         );
