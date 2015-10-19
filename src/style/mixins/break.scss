@@ -1,5 +1,12 @@
 @import '../constants/breaks';
 
+@mixin transition($transition)
+{
+  -webkit-transition: $transition;
+  -moz-transition:    $transition;
+  -ms-transition:     $transition;
+  -o-transition:      $transition;
+}
 @mixin break($device: 'tablet') {
 
   $width: $break-tablet;

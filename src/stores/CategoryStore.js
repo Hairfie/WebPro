@@ -23,7 +23,7 @@ export default class CategoryStore extends BaseStore {
         this.emitChange();
     }
 
-    getAllCategories() {
+    getAll() {
         if (!this.categories || _.isEmpty(this.categories))
             this.getContext().executeAction(CategoryActions.loadAll);
         return this.categories;

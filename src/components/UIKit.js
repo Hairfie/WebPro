@@ -12,6 +12,7 @@ const UIKit = {
     DatePicker: mui.DatePicker,
     MenuItem: mui.MenuItem,
     Menu: mui.Menu,
+    DropDownMenu: mui.DropDownMenu,
     ListItem: mui.ListItem,
     List: mui.List,
     Dialog: mui.Dialog,

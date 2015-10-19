@@ -62,6 +62,11 @@ class BusinessPage extends React.Component {
                             Tarifs
                         </Link>
                     </li>
+                    <li>
+                        <Link route="business_hairfies" params={{businessId: this.props.businessId}}>
+                            Hairfies
+                        </Link>
+                    </li>
                 </ul>
             </nav>
         </Layout>

@@ -118,7 +118,8 @@ class AppLeftNav extends React.Component {
             { route: 'business_category', text: '-> Spécialités & Catégories', params: {businessId: business.id} },
             { route: 'business_members', text: '-> Équipe', params: {businessId: business.id} },
             { route: 'business_timetable', text: '-> Horaires & Promos', params: {businessId: business.id} },
-            { route: 'business_services', text: '-> Tarifs', params: {businessId: business.id} }
+            { route: 'business_services', text: '-> Tarifs', params: {businessId: business.id} },
+            { route: 'business_hairfies', text: '-> Hairfies', params: {businessId: business.id} }
         ]);
     }
 

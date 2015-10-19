@@ -49,7 +49,7 @@ class BusinessCategoriesPage extends React.Component {
 BusinessCategoriesPage = connectToStores(BusinessCategoriesPage, [
     'CategoryStore'
 ], (context, props) => ({
-    categories: context.getStore('CategoryStore').getAllCategories(),
+    categories: context.getStore('CategoryStore').getAll(),
     business : context.getStore('BusinessStore').getById(props.businessId)
 }));
 
