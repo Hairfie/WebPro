@@ -21,6 +21,7 @@ class BusinessHairfiesPage extends React.Component {
     }
 
     render() {
+        console.log(this.props);
         const {business, hairfies, page} = this.props;
         if (page < 0) return this.renderLoader();
         return (

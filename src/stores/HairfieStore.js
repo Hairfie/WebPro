@@ -34,8 +34,12 @@ export default class HairfieStore extends BaseStore {
 
     onDeleteHairfie({ id, businessId }) {
         delete this.hairfies[id];
-        this.businessHairfies[businessId] = _.difference(this.businessHairfies[businessId], [ id ])
-        this.hairfies = _.compact(this.hairfies);
+
+        if (businessId && this.businessHairfies[businessId]) {
+            var page = this.businessHairfies[businessId].page;
+            this.businessHairfies[businessId] = _.difference(this.businessHairfies[businessId], [ id ]);
+            this.businessHairfies[businessId].page = page;
+        }
 
         this.emitChange();
     }

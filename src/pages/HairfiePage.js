@@ -67,9 +67,9 @@ class HairfiePage extends React.Component {
                     </div>
                     <div className="Grid-cell">
                         <TextField
-                        ref="description"
-                        floatingLabelText="Description"
-                        defaultValue={hairfie.description || ''}
+                        ref="email"
+                        floatingLabelText="Email du client"
+                        defaultValue={hairfie.customerEmail || ''}
                         />
                     </div>
                 </div>
@@ -94,7 +94,10 @@ class HairfiePage extends React.Component {
                     })}
                 </div>
                 <div className="Grid">
-                    <RaisedButton className="Grid-cell" style={{marginTop: '45px'}} backgroundColor='skyblue' label="Valider les modifications" onClick={this.updateHairfie}/>
+                    <Link route="business_hairfies" params={{businessId: business.id}}>
+                        <RaisedButton className="Grid-cell" style={{marginTop: '45px'}} backgroundColor='lightgreen' label="Retour"/>
+                    </Link>
+                    <RaisedButton className="Grid-cell" style={{marginTop: '45px', marginLeft: '20px'}} backgroundColor='skyblue' label="Valider les modifications" onClick={this.updateHairfie}/>
                     <RaisedButton className="Grid-cell" style={{marginTop: '45px', marginLeft: '20px'}} backgroundColor='tomato' label="Supprimer le Hairfie" onClick={this.removeHairfie}/>
                 </div>
             </Layout>
@@ -122,7 +125,7 @@ class HairfiePage extends React.Component {
         e.preventDefault();
 
         const update = {
-            description: this.refs.description.getValue(),
+            customerEmail: this.refs.email.getValue(),
             businessMemberId: this.refs.hairdresser.getDOMNode().value,
             tags: _.compact(_.map(this.props.tags, function(tag) {
                 if (this.refs[tag.name].isChecked())

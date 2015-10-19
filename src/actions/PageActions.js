@@ -5,6 +5,8 @@ import BookingActions from './BookingActions';
 import Actions from '../constants/Actions';
 import _ from 'lodash';
 import AuthActions from './AuthActions';
+import q from 'q';
+import HairfieActions from './HairfieActions';
 
 const PageActions = {
 

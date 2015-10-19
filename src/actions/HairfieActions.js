@@ -35,11 +35,11 @@ const HairfieActions = {
         return context.hairfieApi
             .delete('/hairfies/' + id, { token, user })
             .then(() => {
-                //context.dispatch(Actions.DELETE_HAIRFIE, { id, businessId });
                 return context.executeAction(RouteActions.navigate, {
-                     route: 'business_hairfies',
-                     params: { businessId: businessId }
-                });
+                         route: 'business_hairfies',
+                         params: { businessId: businessId }
+                    })
+                .then(context.dispatch(Actions.DELETE_HAIRFIE, { id, businessId }));
             });
     },
 
