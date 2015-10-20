@@ -1,15 +1,16 @@
 import React, { PropTypes } from "react";
-import Layout from '../components/Layout';
-
-import Link from '../components/Link';
-import HairfieActions from '../actions/HairfieActions';
-
-import { TextField, DropDownMenu, Menu, MenuItem, RaisedButton, Checkbox, CircularProgress } from '../components/UIKit';
-import { connectToStores } from 'fluxible-addons-react';
 import _ from 'lodash';
 import moment from 'moment';
-import Picture from '../components/Image';
 moment.locale('fr');
+
+import HairfieActions from '../actions/HairfieActions';
+import { connectToStores } from 'fluxible-addons-react';
+
+import Layout from '../components/Layout';
+import Link from '../components/Link';
+import { TextField, DropDownMenu, Menu, MenuItem, RaisedButton, Checkbox, CircularProgress } from '../components/UIKit';
+import Picture from '../components/Image';
+import ImageField from '../components/ImageField';
 
 const PAGE_SIZE = 12;
 
@@ -42,17 +43,13 @@ class HairfiePage extends React.Component {
         return (
             <Layout {...this.props}>
                 <div className="hairfies" style={{width: '100%', overflow: 'auto'}}>
-                    {_.map(hairfie.pictures, picture => {
+                    {_.map(hairfie.pictures, (picture, index) => {
                         return (
                             <div className="single-hairfie" style={{maxWidth: '300px'}}>
-                                <figure>
-                                    <Picture image={picture} alt="" />
-                                    <figcaption>
-                                        {hairdresser}
-                                        <p><span>Le {moment(hairfie.createdAt).format('L')}</span></p>
-                                        {price}
-                                    </figcaption>
-                                </figure>
+                                <ImageField
+                                    ref={'picture-'+index}
+                                    container="hairfies"
+                                    defaultImage={picture} />
                             </div>
                         );
                     })}
@@ -128,9 +125,15 @@ class HairfiePage extends React.Component {
     updateHairfie = (e) => {
         e.preventDefault();
 
+
+
         const update = {
             customerEmail: this.refs.email.getValue(),
             businessMemberId: this.refs.hairdresser.getDOMNode().value,
+            pictures: _.map([0, 1], (index) => {
+                const picture = this.refs["picture-"+index];
+                if(picture) return picture.getImage();
+            }),
             tags: _.compact(_.map(this.props.tags, function(tag) {
                 if (this.refs[tag.name].isChecked())
                     return tag.id;

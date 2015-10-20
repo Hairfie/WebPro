@@ -16,6 +16,15 @@ export default class AuthStore extends BaseStore {
 
     static storeName = 'UploadStore';
 
+    static EMPTY_UPLOAD = {
+        finished: false,
+        success: false,
+        failure: false,
+        percent: 0,
+        error: null,
+        image: null
+    };
+
     static handlers = {
         [Actions.UPLOAD_START]: 'onUploadStart',
         [Actions.UPLOAD_PROGRESS]: 'onUploadProgress',
@@ -30,35 +39,43 @@ export default class AuthStore extends BaseStore {
     }
 
     onUploadStart({ uploadId }) {
-        this.uploads[uploadId] = EMPTY_UPLOAD;
+        this.uploads[uploadId] = _.cloneDeep(EMPTY_UPLOAD);
+
         this.emitChange();
     }
 
     onUploadProgress({ uploadId, percent }) {
-        this.uploads[uploadId] = _.assign(this.uploads[uploadId] || EMPTY_UPLOAD, { percent });
+        this.uploads[uploadId] = _.assign(this.uploads[uploadId] || _.cloneDeep(EMPTY_UPLOAD), { percent });
+
+
         this.emitChange();
     }
 
     onUploadSuccess({ uploadId, image }) {
-        this.uploads[uploadId] = _.assign(this.uploads[uploadId] || EMPTY_UPLOAD, {
+        this.uploads[uploadId] = _.assign(this.uploads[uploadId] || _.cloneDeep(EMPTY_UPLOAD), {
             percent: 100,
             finished: true,
             success: true,
             image
         });
+
         this.emitChange();
     }
 
     onUploadFailure({ uploadId, error }) {
-        this.uploads[uploadId] = _.assign(this.uploads[uploadId] || EMPTY_UPLOAD, {
+        console.log("onUploadFailure uploadId", uploadId)
+        this.uploads[uploadId] = _.assign(this.uploads[uploadId] || _.cloneDeep(EMPTY_UPLOAD), {
             finished: true,
             failure: true,
             error
         });
+
         this.emitChange();
     }
 
     getById(id) {
+        if(this.uploads[id]) console.log("finished :", this.uploads[id].finished);
+
         return this.uploads[id];
     }
 

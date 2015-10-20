@@ -5,6 +5,7 @@ import _ from 'lodash';
 import UploadActions from '../actions/UploadActions';
 import Uuid from 'uuid';
 import Image from './Image';
+import { FlatButton, RaisedButton } from './UIKit';
 
 class UploadProgress extends React.Component {
     static defaultProps = {
@@ -77,7 +78,8 @@ class ImageField extends React.Component {
         super(props);
 
         this.state = {
-            image: this.props.defaultImage
+            image: this.props.defaultImage,
+            uploadId: null
         };
     }
 
@@ -104,7 +106,7 @@ class ImageField extends React.Component {
                     {this.renderInfos()}
                 </div>
                 <div style={{ clear: 'both' }}>&nbsp;</div>
-                <input ref="input" type="file" accept="image/jpeg" style={{ display: 'none' }} onChange={this.upload} />
+                <input ref="input" type="file" accept="image/gif, image/jpeg, image/jpg, image/png" style={{ display: 'none' }} onChange={this.upload.bind(this)} />
             </div>
         );
     }
@@ -120,7 +122,7 @@ class ImageField extends React.Component {
 
     renderInfos() {
         if (this.state.uploadId) {
-            return <UploadProgress ref="upload" uploadId={this.state.uploadId} onEnd={this.onUploadEnd} />;
+            return <UploadProgress ref="upload" uploadId={this.state.uploadId} onEnd={this.onUploadEnd.bind(this)} />;
         } else if (this.state.image) {
             return <a href="#" onClick={this.chooseFile}>Remplacer la photo</a>;
         } else {
@@ -136,8 +138,14 @@ class ImageField extends React.Component {
         this.setState({ image }, () => this.props.onChange());
     }
 
+    clearImage() {
+        this.setImage(null);
+    }
+
     chooseFile = (e) => {
         e.preventDefault();
+        React.findDOMNode(this.refs.input).value = null;
+
         React.findDOMNode(this.refs.input).click();
     }
 
@@ -145,8 +153,9 @@ class ImageField extends React.Component {
         const uploadId = Uuid.v4();
         const { container } = this.props;
         const file = e.target.files[0];
-
         this.context.executeAction(UploadActions.uploadImage, { uploadId, container, file });
+        this.clearImage();
+
         this.setState({ uploadId });
     }
 
