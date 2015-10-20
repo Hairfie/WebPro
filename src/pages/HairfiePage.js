@@ -76,7 +76,11 @@ class HairfiePage extends React.Component {
                 <select ref="hairdresser">
                     <option value="">Sélectionnez un coiffeur</option>
                     {_.map(business.activeHairdressers, hairdresser => {
-                        return <option value={hairdresser.id}>{hairdresser.firstName + ' ' + hairdresser.lastName}</option>
+                        if(hairfie.hairdresser.id == hairdresser.id) {
+                            return <option value={hairdresser.id} selected>{hairdresser.firstName + ' ' + hairdresser.lastName}</option>
+                        } else {
+                            return <option value={hairdresser.id}>{hairdresser.firstName + ' ' + hairdresser.lastName}</option>
+                        }
                     })}
                 </select>
                 <div style={{marginTop: '45px', width: '100%', overflow: 'auto'}}>
@@ -85,7 +89,7 @@ class HairfiePage extends React.Component {
                             <div style={{width: '100%', overflow: 'auto'}}>
                                 <h4>{category.name}</h4>
                                 {_.map(_.where(tags, {category: {id: category.id}}), tag => <Checkbox
-                                    style={{float: 'left', width: '25%', minWidth: '75px', marginLeft: '15px'}}
+                                    style={{float: 'left', width: '25%', minWidth: '200px', marginLeft: '15px'}}
                                     label={tag.name} ref={tag.name}
                                     defaultChecked={_.isEmpty(_.intersection([tag.id], _.map(hairfie.tags, 'id'))) ? false : true} />
                                 )}

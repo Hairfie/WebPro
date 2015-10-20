@@ -46,7 +46,7 @@ class BusinessHairfiesPage extends React.Component {
                                             {hairdresser}
                                             <p><span>Le {moment(hairfie.createdAt).format('L')}</span></p>
                                             {price}
-                                            {hairfie.pictures.length > 1 ? <Picture image={_.first(hairfie.pictures)} alt="" style={{position: 'absolute', width:'40%', bottom: '0px', right: '0px'}}/> : null}
+                                            { hairfie.pictures.length > 1 ? <Picture image={_.first(hairfie.pictures)} alt="" style={{position: 'absolute', width:'40%', top: '0px', right: '0px'}}/> : null}
                                         </figcaption>
                                     </figure>
                                 </Link>
