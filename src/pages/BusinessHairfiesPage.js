@@ -1,7 +1,7 @@
 import React, { PropTypes } from "react";
 import Layout from '../components/Layout';
 
-import Link from '../components/Link';
+import Link, {RaisedLink} from '../components/Link';
 import HairfieActions from '../actions/HairfieActions';
 
 import { connectToStores } from 'fluxible-addons-react';
@@ -26,6 +26,8 @@ class BusinessHairfiesPage extends React.Component {
         return (
             <Layout {...this.props}>
                 {this.renderTitle()}
+                <RaisedLink route="new_business_hairfie" params={{ businessId: this.props.businessId }} label='Ajouter un Hairfie' fullWidth={true} />
+
                 <div className="hairfies">
                     {_.map(this.props.hairfies, hairfie => {
                         let hairdresser = <p style={{marginTop: '30%'}}></p>;
@@ -93,10 +95,12 @@ class BusinessHairfiesPage extends React.Component {
 BusinessHairfiesPage = connectToStores(BusinessHairfiesPage, [
     'BusinessStore',
     'HairfieStore'
-], (context, props) => ({
-    business: context.getStore('BusinessStore').getById(props.businessId),
-    hairfies: context.getStore('HairfieStore').getByBusiness(props.businessId),
-    page: context.getStore('HairfieStore').getBusinessPage(props.businessId)
-}));
+], (context, props) => {
+    return {
+        business: context.getStore('BusinessStore').getById(props.businessId),
+        hairfies: context.getStore('HairfieStore').getByBusiness(props.businessId),
+        page: context.getStore('HairfieStore').getBusinessPage(props.businessId)
+    }
+});
 
 export default BusinessHairfiesPage;

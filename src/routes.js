@@ -97,6 +97,12 @@ export default {
         title: 'Information sur mon Hairfie',
         action: PageActions.business
     },
+    new_business_hairfie: {
+        path: '/businesses/:businessId/hairfie',
+        method: 'get',
+        handler: HairfiePage,
+        title: 'Ajouter un Hairfie'
+    },
     business_infos: {
         path: '/businesses/:businessId/infos',
         method: 'get',

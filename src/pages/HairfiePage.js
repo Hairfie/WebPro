@@ -8,7 +8,7 @@ import { connectToStores } from 'fluxible-addons-react';
 
 import Layout from '../components/Layout';
 import Link from '../components/Link';
-import { TextField, DropDownMenu, Menu, MenuItem, RaisedButton, Checkbox, CircularProgress } from '../components/UIKit';
+import { TextField, DropDownMenu, Menu, MenuItem, RaisedButton, Checkbox, CircularProgress, Paper } from '../components/UIKit';
 import Picture from '../components/Image';
 import ImageField from '../components/ImageField';
 
@@ -20,8 +20,11 @@ class HairfiePage extends React.Component {
     static contextTypes = {
         executeAction: PropTypes.func.isRequired
     }
+
     render() {
-        const { hairfie, business, tags, tagCategories } = this.props;
+        const { business, tags, tagCategories } = this.props;
+        const hairfie = this.props.hairfie || {};
+
         if (!hairfie || !tags) return this.renderLoader();
 
         const businessMembers = _.map(business.activeHairdressers, hairdresser => {
@@ -30,29 +33,27 @@ class HairfiePage extends React.Component {
             };
         });
 
-        let hairdresser = <p></p>;
-        if (hairfie.businessMember) {
-            hairdresser = <p>Coiffé par <span>{displayName(hairfie.businessMember)}</span></p>;
-        }
+        const firstPicture = hairfie.pictures && hairfie.pictures.length > 0 ? _.first(hairfie.pictures) : null;
+        const lastPicture = hairfie.pictures && hairfie.pictures.length > 1 ? _.last(hairfie.pictures) : null;
 
-        let price = <div></div>;
-        if (hairfie.price) {
-            price = <div className="pricetag">{hairfie.price.amount}€</div>;
-        }
 
         return (
             <Layout {...this.props}>
                 <div className="hairfies" style={{width: '100%', overflow: 'auto'}}>
-                    {_.map(hairfie.pictures, (picture, index) => {
-                        return (
-                            <div className="single-hairfie" style={{maxWidth: '300px'}}>
-                                <ImageField
-                                    ref={'picture-'+index}
-                                    container="hairfies"
-                                    defaultImage={picture} />
-                            </div>
-                        );
-                    })}
+                    <div className="single-hairfie" style={{maxWidth: '300px'}}>
+                        1ère Photo (ou Avant) :
+                        <ImageField
+                            ref="picture-0"
+                            container="hairfies"
+                            defaultImage={firstPicture} />
+                    </div>
+                    <div className="single-hairfie" style={{maxWidth: '300px'}}>
+                        2nde Photo (ou Après) :
+                        <ImageField
+                            ref="picture-1"
+                            container="hairfies"
+                            defaultImage={lastPicture} />
+                    </div>
                 </div>
                 <div className="Grid">
                     <div className="Grid-cell">
@@ -70,14 +71,10 @@ class HairfiePage extends React.Component {
                         />
                     </div>
                 </div>
-                <select ref="hairdresser">
+                <select ref="hairdresser" defaultValue={hairfie.hairdresser && hairfie.hairdresser.id}>
                     <option value="">Sélectionnez un coiffeur</option>
                     {_.map(business.activeHairdressers, hairdresser => {
-                        if(hairfie.hairdresser.id == hairdresser.id) {
-                            return <option value={hairdresser.id} selected>{hairdresser.firstName + ' ' + hairdresser.lastName}</option>
-                        } else {
                             return <option value={hairdresser.id}>{hairdresser.firstName + ' ' + hairdresser.lastName}</option>
-                        }
                     })}
                 </select>
                 <div style={{marginTop: '45px', width: '100%', overflow: 'auto'}}>
@@ -98,7 +95,7 @@ class HairfiePage extends React.Component {
                     <Link route="business_hairfies" params={{businessId: business.id}}>
                         <RaisedButton className="Grid-cell" style={{marginTop: '45px'}} backgroundColor='lightgreen' label="Retour"/>
                     </Link>
-                    <RaisedButton className="Grid-cell" style={{marginTop: '45px', marginLeft: '20px'}} backgroundColor='skyblue' label="Valider les modifications" onClick={this.updateHairfie}/>
+                    <RaisedButton className="Grid-cell" style={{marginTop: '45px', marginLeft: '20px'}} backgroundColor='skyblue' label="Sauver les modifications" onClick={this.createOrUpdate}/>
                     <RaisedButton className="Grid-cell" style={{marginTop: '45px', marginLeft: '20px'}} backgroundColor='tomato' label="Supprimer le Hairfie" onClick={this.removeHairfie}/>
                 </div>
             </Layout>
@@ -122,12 +119,12 @@ class HairfiePage extends React.Component {
         });
     }
 
-    updateHairfie = (e) => {
+    createOrUpdate = (e) => {
         e.preventDefault();
 
 
 
-        const update = {
+        const hairfie = {
             customerEmail: this.refs.email.getValue(),
             businessMemberId: this.refs.hairdresser.getDOMNode().value,
             pictures: _.map([0, 1], (index) => {
@@ -141,17 +138,24 @@ class HairfiePage extends React.Component {
         };
 
         if ( parseFloat(this.refs.price.getValue())) {
-            update['price'] = {
+            hairfie['price'] = {
                 amount: parseFloat(this.refs.price.getValue()),
                 currency: 'EUR'
             };
         }
 
-        this.context.executeAction(HairfieActions.updateHairfie, {
-            id: this.props.hairfie.id,
-            hairfie: update,
-            businessId: this.props.business.id
-        });
+        if(this.props.hairfie && this.props.hairfie.id) {
+            this.context.executeAction(HairfieActions.updateHairfie, {
+                id: this.props.hairfie.id,
+                hairfie: hairfie,
+                businessId: this.props.business.id
+            });
+        } else {
+            this.context.executeAction(HairfieActions.createHairfie, {
+                hairfie: hairfie,
+                businessId: this.props.business.id
+            }); 
+        }
     }
 }
 
@@ -161,7 +165,7 @@ HairfiePage = connectToStores(HairfiePage, [
     'TagStore'
 ], (context, props) => ({
     business: context.getStore('BusinessStore').getById(props.businessId),
-    hairfie: context.getStore('HairfieStore').getById(props.hairfieId),
+    hairfie: props.hairfieId && context.getStore('HairfieStore').getById(props.hairfieId),
     tags: context.getStore('TagStore').getAll(),
     tagCategories: context.getStore('TagStore').getTagCategories()
 }));

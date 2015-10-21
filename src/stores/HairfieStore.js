@@ -21,13 +21,9 @@ export default class HairfieStore extends BaseStore {
         this.businessHairfies = {};
     }
 
-    onReceiveHairfie(hairfies) {
-        if (_.isArray(hairfies)) {
-            _.map(hairfies, hairfie => this.hairfies[hairfie.id] = hairfie, this);
-        }
-        else {
-        this.hairfies[hairfies.id] = hairfies;
-        }
+    onReceiveHairfie(hairfie) {
+        this.hairfies[hairfie.id] = hairfie;
+        if(hairfie.business && hairfie.business.id) this.updateBusinessHairfies(hairfie.business.id);
 
         this.emitChange();
     }
@@ -35,11 +31,7 @@ export default class HairfieStore extends BaseStore {
     onDeleteHairfie({ id, businessId }) {
         delete this.hairfies[id];
 
-        if (businessId && this.businessHairfies[businessId]) {
-            var page = this.businessHairfies[businessId].page;
-            this.businessHairfies[businessId] = _.difference(this.businessHairfies[businessId], [ id ]);
-            this.businessHairfies[businessId].page = page;
-        }
+        this.updateBusinessHairfies(businessId);
 
         this.emitChange();
     }
@@ -48,14 +40,19 @@ export default class HairfieStore extends BaseStore {
         if (_.isUndefined(this.businessHairfies[businessId])) {
             this.businessHairfies[businessId] = [];
         }
-
-        _.map(hairfies, hairfie => {
-            this.hairfies[hairfie.id] = hairfie;
-            this.businessHairfies[businessId].push(hairfie.id);
-        }, this);
-        this.businessHairfies[businessId] = _.uniq(this.businessHairfies[businessId]);
+        _.map(hairfies, hairfie => this.hairfies[hairfie.id] = hairfie, this);
         this.businessHairfies[businessId].page = page;
+
+        this.updateBusinessHairfies(businessId);
+
         this.emitChange();
+    }
+
+    updateBusinessHairfies(businessId) {
+        const page = this.businessHairfies[businessId].page;
+
+        this.businessHairfies[businessId] = _.map(_.sortByOrder(_.filter(this.hairfies, hairfie => {return hairfie.business.id == businessId}), ['createdAt'],['desc']), 'id');
+        this.businessHairfies[businessId].page = page;
     }
 
     getByBusiness(id) {
@@ -72,8 +69,7 @@ export default class HairfieStore extends BaseStore {
                 pageSize: 12
             });
             return -1;
-        }
-        else {
+        } else {
             return this.businessHairfies[id].page;
         }
     }

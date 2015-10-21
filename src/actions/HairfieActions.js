@@ -56,6 +56,21 @@ const HairfieActions = {
                      params: { businessId: businessId }
                 });
             });
+    },
+
+    createHairfie(context, { hairfie, businessId }) {
+        const token = context.getStore('AuthStore').getToken();
+        const user = context.getStore('UserStore').getById(token.userId);
+
+        return context.hairfieApi
+            .post('/hairfies', _.assign({ businessId }, hairfie), { token, user })
+            .then((hairfie) => {
+                context.dispatch(Actions.RECEIVE_HAIRFIE, hairfie);
+                return context.executeAction(RouteActions.navigate, {
+                     route: 'business_hairfies',
+                     params: { businessId: businessId }
+                });
+            });
     }
 }
 
