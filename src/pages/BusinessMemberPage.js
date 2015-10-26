@@ -80,6 +80,11 @@ class BusinessMemberPage extends React.Component {
                     label="Afficher en tant que coiffeur"
                     defaultChecked={!businessMember.hidden}
                     />
+                <mui.Checkbox
+                    ref="isOwner"
+                    label="Est un gérant du salon"
+                    defaultChecked={businessMember.isOwner}
+                    />
                 <br />
                 <mui.FlatButton label={businessMember.id ? 'Sauver les modifications' : 'Ajouter à l\'équipe'} onClick={this.save} />
                 {' ou '}
@@ -93,6 +98,7 @@ class BusinessMemberPage extends React.Component {
     save = () => {
         const businessId = this.props.businessId;
         const businessMemberId = this.props.businessMember.id;
+        console.log(this);
         const values = {
             userId      : this.refs.user.getUserId(),
             picture     : this.refs.picture.getImage(),
@@ -101,6 +107,7 @@ class BusinessMemberPage extends React.Component {
             lastName    : this.refs.lastName.getValue(),
             email       : this.refs.email.getValue(),
             phoneNumber : this.refs.phoneNumber.getValue(),
+            isOwner     : this.refs.isOwner.isChecked(),
             hidden      : !this.refs.isHairdresser.isChecked()
         };
 
