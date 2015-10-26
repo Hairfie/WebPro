@@ -98,7 +98,6 @@ class BusinessMemberPage extends React.Component {
     save = () => {
         const businessId = this.props.businessId;
         const businessMemberId = this.props.businessMember.id;
-        console.log(this);
         const values = {
             userId      : this.refs.user.getUserId(),
             picture     : this.refs.picture.getImage(),
