@@ -21,7 +21,6 @@ if (process.env.BROWSER) {
     require('./style/Application.scss');
 }
 
-// TODO: remove me as soon as react v1.0.0
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 

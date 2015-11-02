@@ -6,6 +6,7 @@ import { connectToStores } from 'fluxible-addons-react';
 import _ from 'lodash';
 import Link from '../components/Link';
 import mui from 'material-ui';
+import { TextField, DropDownMenu, Menu, MenuItem, FlatButton, RaisedButton, Checkbox, CircularProgress, Paper } from '../components/UIKit';
 import BusinessMemberActions from '../actions/BusinessMemberActions';
 import UserPicker from '../components/UserPicker';
 import ImageField from '../components/ImageField';
@@ -85,6 +86,11 @@ class BusinessMemberPage extends React.Component {
                     label="Est un gérant du salon"
                     defaultChecked={businessMember.isOwner}
                     />
+                <mui.Checkbox
+                    ref="willBeNotified"
+                    label="Activer les SMS & Emails de rappel"
+                    defaultChecked={businessMember.willBeNotified}
+                    />
                 <br />
                 <mui.FlatButton label={businessMember.id ? 'Sauver les modifications' : 'Ajouter à l\'équipe'} onClick={this.save} />
                 {' ou '}
@@ -99,15 +105,16 @@ class BusinessMemberPage extends React.Component {
         const businessId = this.props.businessId;
         const businessMemberId = this.props.businessMember.id;
         const values = {
-            userId      : this.refs.user.getUserId(),
-            picture     : this.refs.picture.getImage(),
-            gender      : this.refs.gender.getSelectedValue(),
-            firstName   : this.refs.firstName.getValue(),
-            lastName    : this.refs.lastName.getValue(),
-            email       : this.refs.email.getValue(),
-            phoneNumber : this.refs.phoneNumber.getValue(),
-            isOwner     : this.refs.isOwner.isChecked(),
-            hidden      : !this.refs.isHairdresser.isChecked()
+            userId          : this.refs.user.getUserId(),
+            picture         : this.refs.picture.getImage(),
+            gender          : this.refs.gender.getSelectedValue(),
+            firstName       : this.refs.firstName.getValue(),
+            lastName        : this.refs.lastName.getValue(),
+            email           : this.refs.email.getValue(),
+            phoneNumber     : this.refs.phoneNumber.getValue(),
+            isOwner         : this.refs.isOwner.isChecked(),
+            willBeNotified  : this.refs.willBeNotified.isChecked(),
+            hidden          : !this.refs.isHairdresser.isChecked()
         };
 
         if (businessMemberId) {
