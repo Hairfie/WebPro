@@ -131,6 +131,13 @@ class Table extends React.Component {
 }
 
 class DaySelectModal extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            otherDiscount: ""
+        };
+    }
     render() {
         const customActions = [
             <FlatButton
@@ -144,7 +151,7 @@ class DaySelectModal extends React.Component {
         ];
 
         return (
-            <Dialog ref="dialog" actions={customActions}>
+            <Dialog ref="dialog" actions={customActions} style={{maxHeigth: '100vw', overflow: 'scroll'}}>
                 <h4>Ajout d'une plage horaire</h4>
                 <dl>
                     <dd>
@@ -153,17 +160,39 @@ class DaySelectModal extends React.Component {
                     </dd>
                     <dt>Promotions :</dt>
                     <RadioButtonGroup ref="discount" name="discount" defaultSelected="0" >
-                        <RadioButton value="0" label="Pas de promotion"  />
-                        <RadioButton value="30" label="30%" />
-                        <RadioButton value="40" label="40%" />
-                        <RadioButton value="50" label="50%" />
+                        <RadioButton value="0" label="Pas de promotion" onClick={this.noOtherPromo.bind(this)} />
+                        <RadioButton value="30" label="30%" onClick={this.noOtherPromo.bind(this)} />
+                        <RadioButton value="40" label="40%" onClick={this.noOtherPromo.bind(this)} />
+                        <RadioButton value="50" label="50%" onClick={this.noOtherPromo.bind(this)} />
                     </RadioButtonGroup>
+                    <TextField
+                        ref="otherDiscount"
+                        floatingLabelText="Autre promotion"
+                        value={this.state.otherDiscount}
+                        onChange={this.handleOtherPromoChanged.bind(this)}
+                        />
                     <dt>Jours :</dt>
 
                     {this.renderDaysCheckboxes()}
                 </dl>
             </Dialog>
         );
+    }
+
+    noOtherPromo(e) {
+        this.setState({
+            otherDiscount: ""
+        });
+    }
+
+    handleOtherPromoChanged(e) {
+        this.refs.discount.clearValue();
+        this.setState({
+            otherDiscount: e.currentTarget.value
+        });
+        if (e.currentTarget.value == "") {
+            this.refs.discount.setSelectedValue("0");
+        }
     }
 
     show() {
@@ -198,7 +227,15 @@ class DaySelectModal extends React.Component {
     _handleSave = () => {
         const startTime = this.refs.startTime.getValue();
         const endTime = this.refs.endTime.getValue();
-        const discount = this.refs.discount.getSelectedValue() != "0" ?  this.refs.discount.getSelectedValue() : null;
+
+        let discount = null;
+
+        if (this.state.otherDiscount != "") {
+            discount = parseFloat(this.state.otherDiscount).toString() != "0" ? parseFloat(this.state.otherDiscount).toString() : null;
+        }
+        else {
+            discount = this.refs.discount.getSelectedValue() != "0" ?  this.refs.discount.getSelectedValue() : null;
+        }
 
         const newTimetable = _.reduce(this._getSelectedWeekdays(), (result, day) => {
             result[day] = [{
