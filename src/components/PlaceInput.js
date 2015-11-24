@@ -41,7 +41,8 @@ export default class PlaceInput extends React.Component {
                     ref="input"
                     type="search"
                     className="mui-text-field-input"
-                    onChange={this.onInputChange} />
+                    onChange={this.onInputChange}
+                    {...this.props} />
                 <hr className="mui-text-field-underline" />
                 <hr className="mui-text-field-focus-underline" />
             </div>

@@ -29,14 +29,21 @@ class BusinessSearchPage extends React.Component {
             <Layout>
                 <div>
                     <br />
-                    <PlaceInput ref="place" {...this.props} fullWidth={true} />
-                    <TextField ref="q" type="text" fullWidth={true}
+                    <PlaceInput ref="place" {...this.props} onKeyPress={this.handleKey.bind(this)} fullWidth={true} />
+                    <TextField ref="q" type="text" onKeyPress={this.handleKey.bind(this)} fullWidth={true}
                         placeholder="Nom du salon" />
                     <RaisedButton label="Recherche" fullWidth={true} onClick={this.search}/>
                     {this.renderResults()}
                 </div>
             </Layout>
         );
+    }
+
+    handleKey(e) {
+        if(event.keyCode == 13) {
+            e.preventDefault();
+            this.search();
+        }
     }
 
     renderResults() {
