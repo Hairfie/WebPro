@@ -136,7 +136,8 @@ class BookingModal extends React.Component {
         const bookingId = this.props.booking.id
         const values = {
             dateTime: moment(`${this.refs.date.getValue()} ${this.refs.time.getValue()}`, "YYYY-MM-DD HH:mm").toDate(),
-            status: 'REQUEST'
+            status: 'REQUEST',
+            confirmationSentAt: null
         };
         this.context.executeAction(BookingActions.updateBooking, { bookingId,  values });
         this.refs.dialog.dismiss();
