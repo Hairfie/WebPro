@@ -135,7 +135,8 @@ class BookingModal extends React.Component {
     _handleSave = () => {
         const bookingId = this.props.booking.id
         const values = {
-            dateTime: moment(`${this.refs.date.getValue()} ${this.refs.time.getValue()}`, "YYYY-MM-DD HH:mm").toDate()
+            dateTime: moment(`${this.refs.date.getValue()} ${this.refs.time.getValue()}`, "YYYY-MM-DD HH:mm").toDate(),
+            status: 'REQUEST'
         };
         this.context.executeAction(BookingActions.updateBooking, { bookingId,  values });
         this.refs.dialog.dismiss();
