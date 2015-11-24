@@ -8,6 +8,7 @@ import Link from '../components/Link';
 import { FlatButton, Table, Paper, RaisedButton, Dialog, TextField, CircularProgress, Center } from '../components/UIKit';
 import BookingActions from '../actions/BookingActions';
 import moment from 'moment-timezone';
+import BookingStatus from '../constants/BookingStatus';
 
 class BookingPage extends React.Component {
     constructor(props) {
@@ -136,7 +137,7 @@ class BookingModal extends React.Component {
         const bookingId = this.props.booking.id
         const values = {
             dateTime: moment(`${this.refs.date.getValue()} ${this.refs.time.getValue()}`, "YYYY-MM-DD HH:mm").toDate(),
-            status: 'REQUEST',
+            status: BookingStatus.REQUEST,
             confirmationSentAt: null
         };
         this.context.executeAction(BookingActions.updateBooking, { bookingId,  values });
