@@ -5,7 +5,7 @@ import Layout from '../components/Layout';
 import { connectToStores } from 'fluxible-addons-react';
 import _ from 'lodash';
 import Link, {FlatLink} from '../components/Link';
-import { FlatButton, TextField, Checkbox, RadioButton, RadioButtonGroup, Paper, Menu, Dialog, TimePicker } from '../components/UIKit';
+import { FlatButton, TextField, Checkbox, RadioButton, RadioButtonGroup, Paper, Menu, Dialog, TimePicker, RaisedButton } from '../components/UIKit';
 import BusinessServiceActions from '../actions/BusinessServiceActions';
 
 class Service extends React.Component {
@@ -18,16 +18,51 @@ class Service extends React.Component {
 
         return (
             <div style={{ margin: '10px', padding: '10px' }}>
-                {`${label} - ${price.amount}€ - ${durationMinutes} min`}
-                <FlatButton label="Supprimer" onClick={this.delete} />
-                <FlatLink route="edit_business_service" params={{ businessServiceId: id }}>
-                    Modifier
-                </FlatLink>
+                <p style={{ marginTop: '15px', float: 'left' }}>{`${label} - ${price.amount}€ - ${durationMinutes} min`}</p>
+                <div style={{display: 'inline-block', marginLeft: '10px', position: 'absolute'}}>
+                    <RaisedButton label="UP" backgroundColor='tomato' onClick={this.up}/>
+                    <RaisedButton label="DOWN" backgroundColor='dodgerblue' style={{marginTop: '5px', marginLeft: '5px'}} onClick={this.down}/>
+                    <FlatButton label="Supprimer" onClick={this.delete} />
+                    <FlatLink route="edit_business_service" params={{ businessServiceId: id }}>
+                        Modifier
+                    </FlatLink>
+                </div>
+                {/*<div style={{width: '10px', display: 'inline-block', marginLeft: '10px', position: 'absolute'}}>
+                    <FlatButton label="Supprimer" onClick={this.delete} />
+                    <FlatLink route="edit_business_service" params={{ businessServiceId: id }}>
+                        Modifier
+                    </FlatLink>
+                </div>*/}
                 <div style={{ clear: 'both' }}>&nbsp;</div>
             </div>
         );
     }
+    up = () => {
+        /*const { business, picture } = this.props;
+        var pictures = business.pictures;
+        const index = _.findIndex(pictures, {id: picture.id});
+        if (index <= 0)
+            return;
 
+        pictures.splice((index - 1), 0, pictures.splice(index, 1)[0]);
+        this.context.executeAction(BusinessActions.orderPictures, {
+            businessId: business.id,
+            pictures: pictures
+        });*/
+    }
+    down = () => {
+        /*const { business, picture } = this.props;
+        var pictures = business.pictures;
+        const index = _.findIndex(pictures, {id: picture.id});
+        if (index >= pictures.length)
+            return;
+
+        pictures.splice((index + 1), 0, pictures.splice(index, 1)[0]);
+        this.context.executeAction(BusinessActions.orderPictures, {
+            businessId: business.id,
+            pictures: pictures
+        });*/
+    }
     delete = () => {
         const { service: { id }, businessId } = this.props;
         const businessServiceId = id;
