@@ -45,7 +45,7 @@ class BookingPage extends React.Component {
                     {this.renderField('Date', moment(booking.dateTime).format("dddd D MMMM YYYY"))}
                     {this.renderField('Heure', moment(booking.dateTime).format("HH:mm"))}
                     {this.renderField('Longueur des cheveux du client', HairLengthConstant[booking.hairLength])}
-                    {this.renderField('Prestation demandé', booking.service)}
+                    {booking.service ? this.renderField('Prestation demandée', booking.service) : ''}
                     {booking.comment ? this.renderField('Demande particulière', booking.comment) : ''}
                     <br />
                     <h4>Salon</h4>
