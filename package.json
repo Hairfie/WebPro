@@ -14,7 +14,8 @@
     "coverage": "babel-node node_modules/.bin/isparta cover --report text node_modules/.bin/_mocha --reporter spec"
   },
   "engines": {
-    "node": "0.12.x"
+    "node": "5.1.x",
+    "npm": "3.3.x"
   },
   "dependencies": {
     "autoprefixer-loader": "^2.0.0",

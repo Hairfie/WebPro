@@ -9,6 +9,7 @@ import { FlatButton, Table, Paper, RaisedButton, Dialog, TextField, CircularProg
 import BookingActions from '../actions/BookingActions';
 import moment from 'moment-timezone';
 import BookingStatus from '../constants/BookingStatus';
+import HairLengthConstant from '../constants/HairLength';
 
 class BookingPage extends React.Component {
     constructor(props) {
@@ -43,7 +44,9 @@ class BookingPage extends React.Component {
                     {this.renderField('Statut', booking.status)}
                     {this.renderField('Date', moment(booking.dateTime).format("dddd D MMMM YYYY"))}
                     {this.renderField('Heure', moment(booking.dateTime).format("HH:mm"))}
-                    {this.renderField('Demande', booking.comment)}
+                    {this.renderField('Longueur des cheveux du client', HairLengthConstant[booking.hairLength])}
+                    {this.renderField('Prestation demandé', booking.service)}
+                    {booking.comment ? this.renderField('Demande particulière', booking.comment) : ''}
                     <br />
                     <h4>Salon</h4>
                     {this.renderField('Nom', booking.business.name)}
