@@ -47,6 +47,7 @@ class BookingPage extends React.Component {
                     {this.renderField('Longueur des cheveux du client', HairLengthConstant[booking.hairLength])}
                     {booking.service ? this.renderField('Prestation demandée', booking.service) : ''}
                     {booking.comment ? this.renderField('Demande particulière', booking.comment) : ''}
+                    {booking.discount ? this.renderField('Promotion', booking.discount) : ''}
                     <br />
                     <h4>Salon</h4>
                     {this.renderField('Nom', booking.business.name)}
