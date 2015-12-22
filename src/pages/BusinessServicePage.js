@@ -35,9 +35,9 @@ class BusinessServicePage extends React.Component {
                     defaultValue={businessService.label}
                     />
                 <br />
-                <Checkbox name="gender" ref="isWomanClassicPrice" label="Shampoing Coupe Brushing Femme"/>
+                <Checkbox name="gender" ref="isWomanClassicPrice" defaultChecked={isWomanClassicPrice} label="Shampoing Coupe Brushing Femme"/>
                 <br />
-                <Checkbox name="gender" ref="isManClassicPrice" label="Shampoing Coupe Brushing Homme"/>
+                <Checkbox name="gender" ref="isManClassicPrice" defaultChecked={isManClassicPrice} label="Shampoing Coupe Brushing Homme"/>
                 <br />
                 <TextField
                     ref="durationMinutes"
