@@ -7,6 +7,7 @@ import { connectToStores } from 'fluxible-addons-react';
 import Link, {FlatLink, RaisedLink} from '../components/Link';
 import BusinessActions from '../actions/BusinessActions';
 import _ from 'lodash';
+import ImageField from '../components/ImageField';
 
 class DescriptionInputGroup extends React.Component {
     render() {
@@ -70,6 +71,12 @@ class BusinessInfosPage extends React.Component {
             <Layout ref="layout" {...this.props}>
                 <Paper>
                 <h1>Infos</h1>
+                <p style={{opacity: '0.5'}}>Photo de profil</p>
+                <ImageField
+                    ref="profilePicture"
+                    floatingLabelText="Photo de profil"
+                    container="business-profiles"
+                    defaultImage={business.profilePicture} />
                 <TextField
                     ref="name"
                     floatingLabelText="Nom du Salon"
@@ -123,6 +130,7 @@ class BusinessInfosPage extends React.Component {
         const businessId = this.props.businessId;
 
         const values = {
+            profilePicture: this.refs.profilePicture.getImage() || null,
             name:           this.refs.name.getValue(),
             men:            this.refs.men.isChecked(),
             women:          this.refs.women.isChecked(),
