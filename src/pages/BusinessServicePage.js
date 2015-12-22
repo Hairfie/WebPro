@@ -35,9 +35,9 @@ class BusinessServicePage extends React.Component {
                     defaultValue={businessService.label}
                     />
                 <br />
-                <Checkbox name="gender" ref="FEMALE" label="Shampoing Coupe Brushing Femme"/>
+                <Checkbox name="gender" ref="isWomanClassicPrice" label="Shampoing Coupe Brushing Femme"/>
                 <br />
-                <Checkbox name="gender" ref="MALE" label="Shampoing Coupe Brushing Homme"/>
+                <Checkbox name="gender" ref="isManClassicPrice" label="Shampoing Coupe Brushing Homme"/>
                 <br />
                 <TextField
                     ref="durationMinutes"
@@ -53,18 +53,15 @@ class BusinessServicePage extends React.Component {
                     defaultValue={businessService.price.amount}
                     />
                 <br />
+                <RadioButtonGroup ref="gender" name="discount" defaultSelected={businessService.gender || ""} >
+                    <RadioButton value="FEMALE" label="Prix Femme" />
+                    <RadioButton value="MALE" label="Prix Homme" />
+                    <RadioButton value="" label="Non défini" />
+                </RadioButtonGroup>
+                <br />
                 {this.renderActionButtons()}
             </Layout>
         );
-    }
-
-    handleGenderChange = (gender, e) => {
-        if (gender.value == "MALE") {
-            this.setState({isManPrice: gender.checked});
-        }
-        else if (gender.value == "FEMALE") {
-            this.setState({isWomanPrice: gender.checked})
-        }
     }
 
     renderActionButtons = () => {
@@ -103,8 +100,10 @@ class BusinessServicePage extends React.Component {
             }
         };
 
-        values['isManClassicPrice'] = this.refs.MALE.isChecked();
-        values['isWomanClassicPrice'] = this.refs.FEMALE.isChecked();
+        values['isManClassicPrice'] = this.refs.isManClassicPrice.isChecked();
+        values['isWomanClassicPrice'] = this.refs.isWomanClassicPrice.isChecked();
+
+        values['gender'] = this.refs.gender.getSelectedValue();
 
         if (businessServiceId) {
             this.context.executeAction(BusinessServiceActions.updateService, { businessServiceId, values });
