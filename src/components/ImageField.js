@@ -124,12 +124,22 @@ class ImageField extends React.Component {
         if (this.state.uploadId) {
             return <UploadProgress ref="upload" uploadId={this.state.uploadId} onEnd={this.onUploadEnd.bind(this)} />;
         } else if (this.state.image) {
-            return <a href="#" onClick={this.chooseFile}>Remplacer la photo</a>;
+            return (
+                <div>
+                    <a href="#" onClick={this.chooseFile}>Remplacer la photo</a>
+                    <br />
+                    <a href="#" onClick={this.removeImage.bind(this)}>Supprimer la photo</a>
+                </div>
+                );
         } else {
             return <a href="#" onClick={this.chooseFile}>Sélectionner une photo</a>;
         }
     }
 
+    removeImage = (e) => {
+        e.preventDefault();
+        this.setState({image: null});
+    }
     getImage() {
         return this.state.image;
     }
