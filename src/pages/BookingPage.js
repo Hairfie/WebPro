@@ -45,19 +45,38 @@ class BookingPage extends React.Component {
                     {this.renderField('Date', moment(booking.dateTime).format("dddd D MMMM YYYY"))}
                     {this.renderField('Heure', moment(booking.dateTime).format("HH:mm"))}
                     {this.renderField('Longueur des cheveux du client', HairLengthConstant[booking.hairLength])}
-                    {booking.service ? this.renderField('Prestation demandée', booking.service) : ''}
-                    {booking.comment ? this.renderField('Demande particulière', booking.comment) : ''}
-                    {booking.discount ? this.renderField('Promotion', booking.discount) : ''}
+                    {this.renderField('Prestation demandée', booking.service)}
+                    {this.renderField('Demande particulière', booking.comment)}
+                    {this.renderField('Promotion', booking.discount)}
                     <br />
+
                     <h4>Salon</h4>
                     {this.renderField('Nom', booking.business.name)}
                     {this.renderField('Adresse',`${booking.business.address.street} ${booking.business.address.zipCode} ${booking.business.address.city}`)}
-                    {this.renderField('Téléphone', booking.business.phoneNumber)}
+                    <span>
+                        <strong>{'Téléphone' + ' : '}</strong>
+                            <a href={'tel:'+booking.business.phoneNumber}>{ booking.business.phoneNumber }</a>
+                        <br />
+                    </span>
+                    <span>
+                        <strong>{'Page Hairfie' + ' : '}</strong>
+                            <a href={'http://www.hairfie.com/fr/coiffeur/' + booking.business.id + '/' + booking.business.slug} target="_blank">{'http://www.hairfie.com/fr/coiffeur/' + booking.business.id + '/' + booking.business.slug}</a>
+                        <br />
+                    </span>
                     <br />
+
                     <h4>Client</h4>
                     {this.renderField('Nom',`${booking.firstName} ${booking.lastName}`)}
-                    {this.renderField('Téléphone', booking.phoneNumber)}
-                    {this.renderField('Email', booking.email)}
+                    <span>
+                        <strong>{'Téléphone' + ' : '}</strong>
+                            <a href={'sms:'+booking.phoneNumber}>{ booking.phoneNumber }</a>
+                        <br />
+                    </span>
+                    <span>
+                        <strong>{'Email' + ' : '}</strong>
+                            <a href={'mailto:'+booking.email}>{ booking.email }</a>
+                        <br />
+                    </span>
                 </Paper>
                 <br />
                 <div>
