@@ -52,7 +52,7 @@ server.use((err, req, res, next) => {
 
 // Finally, start the express server
 
-server.set("port", process.env.PORT || 3000);
+server.set("port", process.env.PORT || 3002);
 
 server.listen(server.get("port"), () => {
   console.log(`Express ${server.get("env")} server listening on ${server.get("port")}`);

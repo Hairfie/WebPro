@@ -76,9 +76,29 @@ const BookingActions = {
         context.dispatch(Actions.UPDATE_BOOKING_START, { bookingId });
 
         return context.hairfieApi
-            .delete(`/bookings/${bookingId}`, {}, { token })
+            .post(`/bookings/${bookingId}/cancel`, {}, { token })
             .then(function (booking) {
                 context.dispatch(Actions.RECEIVE_BOOKING, { booking });
+            });
+    },
+
+    deleteBooking(context, { bookingId }) {
+        const token = context.getStore('AuthStore').getToken();
+        if (!token) {
+            var error = new Error('Not authorized');
+            error.status = 403;
+            throw error;
+        }
+
+        context.dispatch(Actions.UPDATE_BOOKING_START, { bookingId });
+
+        return context.hairfieApi
+            .delete(`/bookings/${bookingId}`, { token })
+            .then(function () {
+                context.dispatch(Actions.DELETE_BOOKING_SUCCESS, { bookingId });
+                return context.executeAction(RouteActions.navigate, {
+                    route: 'bookings'
+                });
             });
     },
 
@@ -112,6 +132,23 @@ const BookingActions = {
 
         return context.hairfieApi
             .put(`/bookings/${bookingId}`, values, { token })
+            .then(function (booking) {
+                context.dispatch(Actions.RECEIVE_BOOKING, { booking });
+            });
+    },
+
+    processBooking(context, { bookingId }) {
+        const token = context.getStore('AuthStore').getToken();
+        if (!token) {
+            var error = new Error('Not authorized');
+            error.status = 403;
+            throw error;
+        }
+
+        context.dispatch(Actions.UPDATE_BOOKING_START, { bookingId });
+
+        return context.hairfieApi
+            .post(`/bookings/${bookingId}/processing`, {}, { token })
             .then(function (booking) {
                 context.dispatch(Actions.RECEIVE_BOOKING, { booking });
             });

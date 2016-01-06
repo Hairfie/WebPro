@@ -12,7 +12,8 @@ export default class BookingStore extends BaseStore {
     static handlers = {
         [Actions.RECEIVE_BOOKINGS]: 'onReceiveBookings',
         [Actions.RECEIVE_BOOKING]:  'onReceiveBooking',
-        [Actions.UPDATE_BOOKING_START]: 'onUpdateBookingStart'
+        [Actions.UPDATE_BOOKING_START]: 'onUpdateBookingStart',
+        [Actions.DELETE_BOOKING_SUCCESS]:  'onDeleteBooking'
     }
 
     static isomorphicProps = ['bookings'];
@@ -35,6 +36,12 @@ export default class BookingStore extends BaseStore {
         this.bookings[booking.id] = booking;
         this.bookings[booking.id].loading = false;
         this.bookings = _.indexBy(_.sortByOrder(this.bookings, 'createdAt', 'desc'), 'id');
+
+        this.emitChange();
+    }
+
+    onDeleteBooking({ bookingId }) {
+        delete this.bookings[bookingId];
 
         this.emitChange();
     }

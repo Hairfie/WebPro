@@ -58,6 +58,8 @@ const Actions = keyMirror({
     RECEIVE_BOOKING: null,
     UPDATE_BOOKING_START: null,
 
+    DELETE_BOOKING_SUCCESS: null,
+
     RECEIVE_HAIRFIE: null,
     RECEIVE_BUSINESS_HAIRFIE: null,
 

@@ -3,6 +3,9 @@
 import React, { PropTypes } from 'react';
 import _ from 'lodash';
 
+import mui from 'material-ui';
+let Colors = mui.Styles.Colors;
+
 import Layout from '../components/Layout';
 
 import BookingActions from '../actions/BookingActions';
@@ -53,13 +56,17 @@ class BookingsPage extends React.Component {
     styleFromStatus(status) {
         switch (status) {
             case 'HONORED':
-                return { backgroundColor:'blue' };
+                return { backgroundColor: Colors.lightBlue600 };
             case 'CONFIRMED':
-                return { backgroundColor:'green' };
+                return { backgroundColor: Colors.lightGreen600 };
             case 'NOT_CONFIRMED':
                 return { backgroundColor:'orange' };
             case 'REQUEST':
-                return { backgroundColor:'' };
+                return { backgroundColor: '' };
+            case 'IN_PROCESS':
+                return { backgroundColor: Colors.lightGreen200 };
+            case 'CANCELLED':
+                return { backgroundColor: Colors.red200 };
             default:
                 return {};
         }
