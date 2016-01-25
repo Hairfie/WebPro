@@ -9,7 +9,7 @@ import notifyStats from './utils/notify-stats';
 const assetsPath = path.resolve(__dirname, '../public/assets');
 
 const WEBPACK_HOST = 'localhost';
-const WEBPACK_PORT = parseInt(process.env.PORT) + 1 || 3001;
+const WEBPACK_PORT = parseInt(process.env.PORT) + 1 || 3003;
 
 export default {
     devtool: 'eval',
