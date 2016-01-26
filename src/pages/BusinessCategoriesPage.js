@@ -28,6 +28,30 @@ class BusinessCategoriesPage extends React.Component {
                 <Link route="business" params={{ businessId: businessId }}>
                     <FlatButton label='Annuler' />
                 </Link>
+                <hr />
+
+                <h5>
+                    Catégories issues des Hairfies (si rien n'est renseigné au dessus)
+                </h5>
+                <ul>
+                    {_.map(business.hairfiesCategories, (catId)=> {
+                            var cat = _.find(categories, {id: catId});
+                            if(cat) return (<li>{cat.name}</li>);
+                        }
+                    , this)}
+                </ul>
+
+                <hr />
+                <h5>
+                    Catégories prises en compte pour le moteur de recherche
+                </h5>
+                <ul>
+                    {_.map(business.categories, (catId)=> {
+                            var cat = _.find(categories, {id: catId});
+                            if(cat) return (<li>{cat.name}</li>);
+                        }
+                    , this)}
+                </ul>
             </Layout>
         );
     }
