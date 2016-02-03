@@ -10,6 +10,7 @@ import BusinessPage from './pages/BusinessPage';
 import BusinessPicturesPage from './pages/BusinessPicturesPage';
 import BusinessInfosPage from './pages/BusinessInfosPage';
 import BusinessAdminPage from './pages/BusinessAdminPage';
+import BusinessYelpPage from './pages/BusinessYelpPage';
 import BusinessTimetablePage from './pages/BusinessTimetablePage';
 import BusinessServicesPage from './pages/BusinessServicesPage';
 import BusinessServicePage from './pages/BusinessServicePage';
@@ -115,6 +116,13 @@ export default {
         method: 'get',
         handler: BusinessAdminPage,
         title: 'Gestion admin du salon',
+        action: PageActions.business
+    },
+    business_yelp: {
+        path: '/businesses/:businessId/yelp',
+        method: 'get',
+        handler: BusinessYelpPage,
+        title: 'Lien Yelp du Salon',
         action: PageActions.business
     },
     business_map: {

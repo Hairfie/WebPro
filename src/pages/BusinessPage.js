@@ -21,12 +21,25 @@ class BusinessPage extends React.Component {
         );
     }
 
+    let yelpNode;
+    if (this.props.isAdmin) {
+        yelpNode = (
+            <li>
+                <Link route="business_yelp" params={{businessId: this.props.businessId}}>
+                    Infos Yelp
+                </Link>
+            </li>
+        );
+    }
+
     return (
         <Layout {...this.props}>
             <h1>{this.props.business.name}</h1>
             <nav>
                 <ul>
                     {adminNode}
+                    {yelpNode}
+
                     <li>
                         <Link route="business_pictures" params={{businessId: this.props.businessId}}>
                             Photos
