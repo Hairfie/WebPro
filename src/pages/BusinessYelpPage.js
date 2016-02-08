@@ -23,10 +23,8 @@ class BusinessYelpPage extends React.Component {
                 {this.renderYelp()}
                 <TextField
                     ref="yelpId"
-                    floatingLabelText="yelpId"
-                    defaultValue={business.yelpId}
+                    floatingLabelText="Nouveau Yelp ID"
                     />
-                <p>La modification du compte Yelp n'est pas encore affichée en direct</p>
                 <RadioButtonGroup ref="displayYelp" name="displayYelp" defaultSelected={business.displayYelp} valueSelected={business && business.displayYelp}>
                     <RadioButton value={true} label="Afficher les reviews Yelp"  />
                     <RadioButton value={false} label="Ne pas afficher" />
@@ -42,15 +40,47 @@ class BusinessYelpPage extends React.Component {
     renderYelp() {
         const { yelpObject } = this.props;
         if(_.isEmpty(yelpObject)) return (<p>Not found on Yelp</p>);
+        const yelpId = this.props.yelpId || yelpObject.id;
+
+        let multipleNode;
+        let yelpNode;
+
+        if(yelpObject.multipleIds) {
+            multipleNode = (
+                <div>
+                    <h3>Ce salon correspond à plusieurs pages sur Yelp :</h3>
+                    <ul>
+                        {_.map(yelpObject.multipleIds, (yelpId) => {
+                            return (
+                                <li>
+                                    <a href={`http://www.yelp.fr/biz/${yelpId}`} target="_blank">{`Yelp Id : ${yelpId}`}</a>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </div>
+            )
+        }
+
+        if(!_.isUndefined(yelpObject.review_count)) {
+            yelpNode = (
+                <div>
+                    <h3>Données Yelp utilisées en ce moment :</h3>
+                    <ul>
+                        <li>{`yelpId : ${yelpId}`}</li>
+                        <li>{`Note : ${yelpObject.rating}/5`}</li>
+                        <li>{`Nombre de reviews : ${yelpObject.review_count}`}</li>
+                        <li><img src={yelpObject.rating_img_url} /> </li>
+                        <li><a href={yelpObject.url} target="_blank">Lien vers la page Yelp</a></li>
+                    </ul>
+                </div>
+            );
+        }
 
         return (
             <div>
-                <ul>
-                    <li>{`Note : ${yelpObject.rating}/5`}</li>
-                    <li>{`Nombre de reviews : ${yelpObject.review_count}`}</li>
-                    <li><img src={yelpObject.rating_img_url} /> </li>
-                    <li><a href={yelpObject.url} target="_blank">Lien vers la page Yelp</a></li>
-                </ul>
+                {multipleNode}
+                {yelpNode}
             </div>
         )
     }
@@ -63,7 +93,7 @@ class BusinessYelpPage extends React.Component {
             displayYelp:      this.refs.displayYelp.getSelectedValue()
         };
 
-        this.context.executeAction(BusinessActions.updateInfos, { businessId, values });
+        this.context.executeAction(BusinessActions.updateYelp, { businessId, values });
     }
 }
 

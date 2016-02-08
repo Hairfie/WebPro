@@ -44,13 +44,29 @@ const BusinessActions = {
             .put(`/businesses/${businessId}`, { pictures }, { token })
             .then(business => context.dispatch(Actions.RECEIVE_BUSINESS, business));
     },
-
     updateInfos(context, { businessId, values }) {
         const token = context.getStore('AuthStore').getToken();
         const business = context.getStore('BusinessStore').getById(businessId);
 
         return context.hairfieApi
             .put(`/businesses/${businessId}`, values, { token })
+            .then(
+                business => {
+                    context.dispatch(Actions.UPDATE_BUSINESS_INFOS_END, business);
+                    context.executeAction(RouteActions.navigate, {
+                        route: 'business',
+                        params: { businessId: business.id }
+                    })
+                },
+                error    => console.log(error)
+            );
+    },
+    updateYelp(context, { businessId, values }) {
+        const token = context.getStore('AuthStore').getToken();
+        const business = context.getStore('BusinessStore').getById(businessId);
+
+        return context.hairfieApi
+            .post(`/businesses/${businessId}/update-yelp`, values, { token })
             .then(
                 business => {
                     context.dispatch(Actions.UPDATE_BUSINESS_INFOS_END, business);
