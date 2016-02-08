@@ -30,7 +30,7 @@ class BusinessYelpPage extends React.Component {
                     <RadioButton value={false} label="Ne pas afficher" />
                 </RadioButtonGroup>
                 <br />
-                <RaisedButton label='Sauver les modifications' onClick={this.save} fullWidth={true} primary={true} />
+                <RaisedButton label='Sauver et mettre à jour les données Yelp' onClick={this.save} fullWidth={true} primary={true} />
                 <br /><br />
                 <RaisedLink route="business" params={{ businessId: business.id }} label='Annuler' fullWidth={true} />
             </Layout>
