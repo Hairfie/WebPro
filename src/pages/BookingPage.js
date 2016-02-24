@@ -5,7 +5,7 @@ import Layout from '../components/Layout';
 import { connectToStores } from 'fluxible-addons-react';
 import _ from 'lodash';
 import Link from '../components/Link';
-import { FlatButton, Table, Paper, RaisedButton, Dialog, TextField, CircularProgress, Center } from '../components/UIKit';
+import { FlatButton, Table, Paper, RaisedButton, Dialog, TextField, CircularProgress, Center, Checkbox } from '../components/UIKit';
 import BookingActions from '../actions/BookingActions';
 import moment from 'moment-timezone';
 import BookingStatus from '../constants/BookingStatus';
@@ -34,10 +34,10 @@ class BookingPage extends React.Component {
                 </Layout>
             );
         }
-
         return (
             <Layout {...this.props}>
                 <BookingModal ref="modal" booking={booking} />
+                <CancelModal ref="cancelModal" booking={booking} />
                 <div>
                     <div>
                         <h4>Réservation</h4>
@@ -48,8 +48,8 @@ class BookingPage extends React.Component {
                         {this.renderField('Longueur des cheveux du client', HairLengthConstant[booking.hairLength])}
                         {this.renderField('Prestation demandée', booking.service)}
                         {this.renderField('Demande particulière', booking.comment)}
+                        {this.renderField('Nouveau client dans ce salon', booking.firstTimeCustomer ? 'OUI' : 'NON')}
                         {this.renderField('Promotion', booking.discount)}
-                        {this.renderField('Note (Hairfie admin only)', booking.adminNote)}
                     </div>
                     <div>
                         <h4>Salon</h4>
@@ -69,6 +69,7 @@ class BookingPage extends React.Component {
                     <div>
                         <h4>Client</h4>
                         {this.renderField('Nom',`${booking.firstName} ${booking.lastName}`)}
+                        {this.renderField('Sexe',booking.gender)}
                         <span>
                             <strong>{'Téléphone' + ' : '}</strong>
                                 <a href={'sms:'+booking.phoneNumber}>{ booking.phoneNumber }</a>
@@ -80,7 +81,20 @@ class BookingPage extends React.Component {
                             <br />
                         </span>
                     </div>
-
+                    <div>
+                        <h4>Admin</h4>
+                        {this.renderField('Note concernant la réservation', booking.adminNote)}
+                        <span>
+                            <strong>{'Motif annulation : '}</strong>
+                               {booking.cancellation.note}
+                            <br />
+                        </span>
+                        <span>
+                            <strong>{'Annulation à la demande du client : '}</strong>
+                               {booking.cancellation.fromUser ? 'OUI' : ''}
+                            <br />
+                        </span>
+                    </div>
                 </div>
                 <br />
                 <div>
@@ -123,8 +137,7 @@ class BookingPage extends React.Component {
     }
 
     cancelBooking = () => {
-        const bookingId = this.props.bookingId;
-        this.context.executeAction(BookingActions.cancelBooking, { bookingId });
+        this.refs.cancelModal.show();
     }
 
     processBooking = () => {
@@ -135,6 +148,66 @@ class BookingPage extends React.Component {
     deleteBooking = () => {
         const bookingId = this.props.bookingId;
         this.context.executeAction(BookingActions.deleteBooking, { bookingId });
+    }
+}
+
+class CancelModal extends React.Component {
+    static contextTypes = {
+        executeAction: React.PropTypes.func.isRequired
+    }
+
+    render() {
+        const {booking} = this.props;
+        booking.cancellation = booking.cancellation || {};
+
+        const customActions = [
+            <FlatButton
+                label="Retour"
+                secondary={true}
+                onTouchTap={this._handleCancel} />,
+            <FlatButton
+                label="Confirmer l'annulation"
+                primary={true}
+                onTouchTap={this._handleSave} />
+        ];
+
+        return (
+            <Dialog ref="dialog" actions={customActions}>
+                <h4>Annuler la réservation</h4>
+                <p>
+                    <TextField ref="note" floatingLabelText="Commentaire" 
+                        multiLine={true}
+                        rows={2}
+                        fullWidth={true}
+                        defaultValue={booking.cancellation.note} />          
+                    <Checkbox
+                        ref="fromUser"
+                        label="A la demande de l'utilisateur"
+                        defaultChecked={booking.cancellation.fromUser}
+                    />
+                </p>
+            </Dialog>
+        );
+    }
+
+    _handleCancel = () => {
+        this.refs.dialog.dismiss();
+    }
+
+    _handleSave = () => {
+        const bookingId = this.props.booking.id
+        const values = {
+            cancellation: {
+                note: this.refs.note.getValue(),
+                fromUser: this.refs.fromUser.isChecked()
+            }
+        };
+        this.context.executeAction(BookingActions.cancelBooking, { bookingId,  values });
+        this.refs.dialog.dismiss();
+    }
+
+    show() {
+        this.refs.dialog.show();
     }
 }
 
@@ -163,7 +236,11 @@ class BookingModal extends React.Component {
                 <p>
                     <TextField ref="date" type="date" floatingLabelText="Date" defaultValue={moment(booking.dateTime).tz('Europe/Paris').format("YYYY-MM-DD")} />
                     <TextField ref="time" type="time" floatingLabelText="Horaire" defaultValue={moment(booking.dateTime).tz('Europe/Paris').format("HH:mm")} />
-                    <TextField ref="adminNote" type="text" floatingLabelText="Note (Hairfie admin only)" defaultValue={booking.adminNote} />
+                    <TextField ref="adminNote" type="text" floatingLabelText="Note (Hairfie admin only)" 
+                        multiLine={true}
+                        rows={2}
+                        fullWidth={true}
+                        defaultValue={booking.adminNote} />
                 </p>
             </Dialog>
         );

@@ -95,7 +95,7 @@ class BookingsPage extends React.Component {
 
     loadMore() {
         const { currentPage } = this.props;
-
+        console.log("currentPage", currentPage);
         this.context.executeAction(BookingActions.getBookings, {page: currentPage + 1});
     }
 

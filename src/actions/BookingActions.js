@@ -65,7 +65,7 @@ const BookingActions = {
             });
     },
 
-    cancelBooking(context, { bookingId }) {
+    cancelBooking(context, { bookingId, values }) {
         const token = context.getStore('AuthStore').getToken();
         if (!token) {
             var error = new Error('Not authorized');
@@ -76,7 +76,7 @@ const BookingActions = {
         context.dispatch(Actions.UPDATE_BOOKING_START, { bookingId });
 
         return context.hairfieApi
-            .post(`/bookings/${bookingId}/cancel`, {}, { token })
+            .post(`/bookings/${bookingId}/adminCancel`, values, { token })
             .then(function (booking) {
                 context.dispatch(Actions.RECEIVE_BOOKING, { booking });
             });

@@ -29,6 +29,8 @@ export default class BookingStore extends BaseStore {
         this.bookings = _.merge({}, this.bookings, _.indexBy(bookings, 'id'));
         this.bookings = _.indexBy(_.sortByOrder(this.bookings, 'createdAt', 'desc'), 'id');
         this.currentPage = page;
+        console.log("onReceiveBookings", _.keys(this.bookings).length);
+        this.currentPage = Math.floor(_.keys(this.bookings).length / 10);
         this.emitChange();
     }
 
