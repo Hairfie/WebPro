@@ -67,7 +67,9 @@ const Actions = keyMirror({
 
     RECEIVE_CATEGORIES: null,
     RECEIVE_TAGS: null,
-    RECEIVE_TAG_CATEGORIES: null
+    RECEIVE_TAG_CATEGORIES: null,
+
+    RECEIVE_SELECTIONS: null
 });
 
 export default Actions;

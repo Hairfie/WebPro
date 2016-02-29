@@ -22,6 +22,7 @@ import BusinessSearchPage from './pages/BusinessSearchPage';
 import BookingsPage from './pages/BookingsPage';
 import BookingPage from './pages/BookingPage';
 import BusinessCategoriesPage from './pages/BusinessCategoriesPage';
+import BusinessSelectionsPage from './pages/BusinessSelectionsPage';
 import BusinessHairfiesPage from './pages/BusinessHairfiesPage';
 import HairfiePage from './pages/HairfiePage';
 
@@ -165,6 +166,12 @@ export default {
         method: 'get',
         handler: BusinessCategoriesPage,
         title: 'Spécialités & Catégories'
+    },
+    business_selections: {
+        path: '/businesses/:businessId/selections',
+        method: 'get',
+        handler: BusinessSelectionsPage,
+        title: 'Sélections'
     },
     new_business_service: {
         path: '/businesses/:businessId/services/new',

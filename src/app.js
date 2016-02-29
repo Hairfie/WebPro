@@ -21,6 +21,7 @@ import UserBusinessStore from './stores/UserBusinessStore';
 import UploadStore from './stores/UploadStore';
 import BookingStore from './stores/BookingStore';
 import CategoryStore from './stores/CategoryStore';
+import SelectionStore from './stores/SelectionStore';
 import TagStore from './stores/TagStore';
 import HairfieStore from './stores/HairfieStore';
 
@@ -91,6 +92,7 @@ app.registerStore(UserBusinessStore);
 app.registerStore(UploadStore);
 app.registerStore(BookingStore);
 app.registerStore(CategoryStore);
+app.registerStore(SelectionStore);
 app.registerStore(HairfieStore);
 app.registerStore(TagStore);
 

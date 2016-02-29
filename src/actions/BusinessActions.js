@@ -6,6 +6,13 @@ import RouteActions from './RouteActions';
 import Uuid from 'uuid';
 
 const BusinessActions = {
+    getBusinessById(context, {businessId}) {
+        return context.hairfieApi
+            .get(`/businesses/${businessId}`)
+            .then(function (business) {
+                context.dispatch(Actions.RECEIVE_BUSINESS, business);
+            });
+    },
     addPicture(context, { businessId, file }) {
         const token = context.getStore('AuthStore').getToken();
         const uploadId = Uuid.v4();

@@ -2,6 +2,7 @@
 
 import BaseStore from './BaseStore';
 import Actions from '../constants/Actions';
+import BusinessActions from '../actions/BusinessActions';
 import _ from 'lodash';
 
 export default class BusinessStore extends BaseStore {
@@ -74,7 +75,10 @@ export default class BusinessStore extends BaseStore {
     }
 
     getById(id) {
-        return this.businesses[id];
+        var business = this.businesses[id];
+        if(!business) this.getContext().executeAction(BusinessActions.getBusinessById, {businessId: id});
+
+        return business;
     }
 
     getByIds(ids) {

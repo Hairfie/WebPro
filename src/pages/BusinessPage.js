@@ -32,6 +32,17 @@ class BusinessPage extends React.Component {
         );
     }
 
+    let selectionNode;
+    if (this.props.isAdmin) {
+        selectionNode = (
+            <li>
+                <Link route="business_selections" params={{businessId: this.props.businessId}}>
+                    Sélections
+                </Link>
+            </li>
+        );
+    }
+
     return (
         <Layout {...this.props}>
             <h1>{this.props.business.name}</h1>
@@ -39,7 +50,7 @@ class BusinessPage extends React.Component {
                 <ul>
                     {adminNode}
                     {yelpNode}
-
+                    {selectionNode}
                     <li>
                         <Link route="business_pictures" params={{businessId: this.props.businessId}}>
                             Photos
