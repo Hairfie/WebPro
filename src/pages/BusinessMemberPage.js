@@ -10,11 +10,15 @@ import { TextField, DropDownMenu, Menu, MenuItem, FlatButton, RaisedButton, Chec
 import BusinessMemberActions from '../actions/BusinessMemberActions';
 import UserPicker from '../components/UserPicker';
 import ImageField from '../components/ImageField';
+import Picture from '../components/Image';
 
 class BusinessMemberPage extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { user: (this.props.businessMember || {}).user };
+        this.state = { 
+            user: (this.props.businessMember || {}).user,
+            displayRequiredMessage: false
+        };
     }
     static contextTypes = {
         executeAction: React.PropTypes.func.isRequired
@@ -26,7 +30,6 @@ class BusinessMemberPage extends React.Component {
         const businessId = this.props.businessId || this.props.businessMember.businessId;
         const businessMember = this.props.businessMember || {};
         const user = this.state.user;
-
         return (
             <Layout {...this.props}>
                 <UserPicker
@@ -36,6 +39,7 @@ class BusinessMemberPage extends React.Component {
                     onChange={this.onUserChange}
                     />
                 <br />
+                {this.renderUserInfos()}      
                 <ImageField
                     ref="picture"
                     container="business-members"
@@ -49,18 +53,14 @@ class BusinessMemberPage extends React.Component {
                 <br />
                 <mui.TextField
                     ref="firstName"
-                    floatingLabelText="Prénom"
+                    floatingLabelText="Prénom*"
                     defaultValue={businessMember.firstName}
-                    value={user && user.firstName}
-                    disabled={!!user}
                     />
                 <br />
                 <mui.TextField
                     ref="lastName"
-                    floatingLabelText="Nom"
+                    floatingLabelText="Nom*"
                     defaultValue={businessMember.lastName}
-                    value={user && user.lastName}
-                    disabled={!!user}
                     />
                 <br />
                 <mui.TextField
@@ -92,10 +92,58 @@ class BusinessMemberPage extends React.Component {
                     defaultChecked={businessMember.willBeNotified}
                     />
                 <br />
+                {this.displayRequiredMessage()}
                 <mui.FlatButton label={businessMember.id ? 'Sauver les modifications' : 'Ajouter à l\'équipe'} onClick={this.save} />
                 {' ou '}
                 <Link route="business_members" params={{ businessId }}>Annuler</Link>
+                {this.renderDetachUserButton()}
             </Layout>
+        );
+    }
+    renderUserInfos() {
+        const user = this.state.user;
+        if (_.isEmpty(user)) return null;
+        return (
+            <div>
+                <h4>Infos utilisateur</h4>
+                <div className="user-infos">
+                    <Picture image={user.picture} />
+                    <div className="text-bloc">
+                        {`Prénom : ${user.firstName}`}
+                        {`Nom : ${user.lastName}`}
+                        {`Email : ${user.email}`}
+                        {`Téléphone : ${user.phoneNumber}`}
+                    </div>
+                </div>
+                <FlatButton label='Utiliser ces données' secondary={true} onClick={this.transferUserData} />
+            </div>
+        );
+    }
+    renderDetachUserButton() {
+        if(!this.props.businessMember) return;
+        return (
+            <FlatButton label="Détacher l'utilisateur" secondary={true} onClick={this.detachUser} />
+        );
+    }
+    detachUser = () => {
+        const values = {userId: null};
+        const businessMemberId = this.props.businessMember.id;
+        this.context.executeAction(BusinessMemberActions.updateMember, { businessMemberId, values });
+    }
+    transferUserData = () => {
+        const user = this.state.user;
+        this.setState({user: this.refs.user.getUser()});
+        this.refs.firstName.setValue(user.firstName);
+        this.refs.lastName.setValue(user.lastName);
+        this.refs.email.setValue(user.email);
+        this.refs.phoneNumber.setValue(user.phoneNumber);
+    }
+    displayRequiredMessage = () => {
+        if (!this.state.displayRequiredMessage) return;
+        return (
+            <div className="error">
+                Vous devez enregistrer un nom et un prénom.
+            </div>
         );
     }
     onUserChange = () => {
@@ -116,11 +164,14 @@ class BusinessMemberPage extends React.Component {
             willBeNotified  : this.refs.willBeNotified.isChecked(),
             hidden          : !this.refs.isHairdresser.isChecked()
         };
-
-        if (businessMemberId) {
+        if (this.refs.firstName.getValue() == '' || this.refs.lastName.getValue() == '') {
+            this.setState({displayRequiredMessage: true});
+        }
+        else if (businessMemberId) {
             this.context.executeAction(BusinessMemberActions.updateMember, { businessMemberId, values });
         } else {
             this.context.executeAction(BusinessMemberActions.createMember, { businessId, values });
+            this.setState({displayRequiredMessage: false});
         }
     }
 }
