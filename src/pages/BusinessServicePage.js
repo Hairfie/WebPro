@@ -40,6 +40,13 @@ class BusinessServicePage extends React.Component {
                 <Checkbox name="gender" ref="isManClassicPrice" defaultChecked={businessService.isManClassicPrice} label="Shampoing Coupe Brushing Homme"/>
                 <br />
                 <TextField
+                    ref="position"
+                    floatingLabelText="Position"
+                    type="number"
+                    defaultValue={businessService.position}
+                    />
+                <br />
+                <TextField
                     ref="durationMinutes"
                     floatingLabelText="Durée (en minutes)"
                     type="number"
@@ -97,7 +104,8 @@ class BusinessServicePage extends React.Component {
             price       :  {
             	amount: this.refs.amount.getValue(),
             	currency: 'EUR'
-            }
+            },
+            position: this.refs.position.getValue()
         };
 
         values['isManClassicPrice'] = this.refs.isManClassicPrice.isChecked();

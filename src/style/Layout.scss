@@ -16,3 +16,13 @@ h1.mui-app-bar-title {
         text-align: left;
     }
 }
+
+.business-service {
+    // display: flex;
+    .bs-infos {
+        width: 100%;
+    } 
+    .bs-buttons {
+        display: flex;
+    }
+}
