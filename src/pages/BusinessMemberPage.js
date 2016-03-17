@@ -113,6 +113,7 @@ class BusinessMemberPage extends React.Component {
                         {`Nom : ${user.lastName}`}
                         {`Email : ${user.email}`}
                         {`Téléphone : ${user.phoneNumber}`}
+                        <a href={user.picture.url} target="_blank">Accès photo</a>
                     </div>
                 </div>
                 <FlatButton label='Utiliser ces données' secondary={true} onClick={this.transferUserData} />
