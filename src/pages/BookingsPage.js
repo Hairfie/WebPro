@@ -12,7 +12,7 @@ import BookingActions from '../actions/BookingActions';
 import { navigateAction } from 'fluxible-router';
 import { connectToStores } from 'fluxible-addons-react';
 
-import { FlatButton, Table, Paper, RaisedButton, Center } from '../components/UIKit';
+import { FlatButton, Table, Paper, RaisedButton, Center, Checkbox } from '../components/UIKit';
 import Link, {FlatLink} from '../components/Link';
 
 class BookingsPage extends React.Component {
@@ -24,7 +24,8 @@ class BookingsPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            rowData: this.rowDataFromBookings()
+            rowData: this.rowDataFromBookings(),
+            statusFilter: []
         };
     }
 
@@ -78,6 +79,20 @@ class BookingsPage extends React.Component {
             <Layout>
                 <h2>Réservations</h2>
                 <br />
+                <div>                    
+                    <h4>Filtrer</h4>
+                    {_.map(["HONORED", "CONFIRMED"], status => {
+                        <Checkbox
+                            ref={status}
+                            label={status}
+                            defaultChecked={_.include(this.state.statusFilter, status)}
+                            onClick={this._handleStatusFilterChange.bind(this, status)}
+                        />
+                    })}
+
+                    <hr />
+                </div>
+                <h4>RDVs</h4>
                 <Table
                     rowData={this.state.rowData}
                     columnOrder={colOrder}
@@ -97,6 +112,13 @@ class BookingsPage extends React.Component {
         const { currentPage } = this.props;
         console.log("currentPage", currentPage);
         this.context.executeAction(BookingActions.getBookings, {page: currentPage + 1});
+    }
+
+    toggleItemInArray(arr, item) {
+        return _.indexOf(arr,item) == -1 ? _.union(arr,[item]) : _.without(arr,item);
+    }
+    _handleStatusFilterChange(status) {
+        this.setState({statusFilter: toggleItemInArray(this.state.statusFilter, status)});
     }
 
     _onCellClick(rowNumber, cell) {

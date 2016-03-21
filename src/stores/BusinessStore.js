@@ -76,7 +76,7 @@ export default class BusinessStore extends BaseStore {
 
     getById(id) {
         var business = this.businesses[id];
-        if(!business) this.getContext().executeAction(BusinessActions.getBusinessById, {businessId: id});
+        if(!business && id) this.getContext().executeAction(BusinessActions.getBusinessById, {businessId: id});
 
         return business;
     }
