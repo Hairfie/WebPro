@@ -32,14 +32,7 @@ class BusinessMemberPage extends React.Component {
         const user = this.state.user;
         return (
             <Layout {...this.props}>
-                <UserPicker
-                    ref="user"
-                    floatingLabelText="Utilisateur"
-                    defaultUser={businessMember.user}
-                    onChange={this.onUserChange}
-                    />
-                <br />
-                {this.renderUserInfos()}      
+                {this.renderUserPickerBloc()}      
                 <ImageField
                     ref="picture"
                     container="business-members"
@@ -76,6 +69,12 @@ class BusinessMemberPage extends React.Component {
                     defaultValue={businessMember.phoneNumber}
                     />
                 <br />
+                <mui.TextField
+                    ref="jobTitle"
+                    floatingLabelText="Poste occupé"
+                    defaultValue={businessMember.title}
+                    />
+                <br />
                 <mui.Checkbox
                     ref="isHairdresser"
                     label="Afficher en tant que coiffeur"
@@ -96,12 +95,25 @@ class BusinessMemberPage extends React.Component {
                 <mui.FlatButton label={businessMember.id ? 'Sauver les modifications' : 'Ajouter à l\'équipe'} onClick={this.save} />
                 {' ou '}
                 <Link route="business_members" params={{ businessId }}>Annuler</Link>
-                {this.renderDetachUserButton()}
             </Layout>
         );
     }
+    renderUserPickerBloc() {
+        const businessMember = this.props.businessMember || {};
+        return (
+            <Paper style={{maxWidth: 400, padding: 10 }}>
+                <UserPicker
+                    ref="user"
+                    floatingLabelText="Utilisateur"
+                    defaultUser={businessMember.user}
+                    onChange={this.onUserChange}
+                    />
+                {this.renderUserInfos()}
+            </Paper>
+        );
+    }
     renderUserInfos() {
-        const user = this.state.user;
+        const user = this.props.linkedUser;
         if (_.isEmpty(user)) return null;
         return (
             <div>
@@ -111,12 +123,13 @@ class BusinessMemberPage extends React.Component {
                     <div className="text-bloc">
                         {`Prénom : ${user.firstName}`}
                         {`Nom : ${user.lastName}`}
-                        {`Email : ${user.email}`}
-                        {`Téléphone : ${user.phoneNumber}`}
+                        {user.email ? `Email : ${user.email}` : null}
+                        {user.phoneNumber ? `Téléphone : ${user.phoneNumber}`: null}
                         <a href={user.picture.url} target="_blank">Accès photo</a>
                     </div>
                 </div>
                 <FlatButton label='Utiliser ces données' secondary={true} onClick={this.transferUserData} />
+                {this.renderDetachUserButton()}
             </div>
         );
     }
@@ -163,7 +176,9 @@ class BusinessMemberPage extends React.Component {
             phoneNumber     : this.refs.phoneNumber.getValue(),
             isOwner         : this.refs.isOwner.isChecked(),
             willBeNotified  : this.refs.willBeNotified.isChecked(),
-            hidden          : !this.refs.isHairdresser.isChecked()
+            hidden          : !this.refs.isHairdresser.isChecked(),
+            title           : this.refs.jobTitle.getValue()
+
         };
         if (this.refs.firstName.getValue() == '' || this.refs.lastName.getValue() == '') {
             this.setState({displayRequiredMessage: true});
@@ -178,10 +193,14 @@ class BusinessMemberPage extends React.Component {
 }
 
 BusinessMemberPage = connectToStores(BusinessMemberPage, [
-    'BusinessMemberStore'
+    'BusinessMemberStore',
+    'UserStore'
 ], (context, props) => {
+    const businessMember = props.businessMemberId && context.getStore('BusinessMemberStore').getById(props.businessMemberId);
+    const linkedUser = context.getStore('UserStore').getById(businessMember.userId);
     return {
-        businessMember: props.businessMemberId && context.getStore('BusinessMemberStore').getById(props.businessMemberId)
+        businessMember: businessMember,
+        linkedUser: linkedUser
     };
 });
 
