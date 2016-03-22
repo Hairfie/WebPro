@@ -7,14 +7,20 @@ import _ from 'lodash';
 import BookingStore from '../stores/BookingStore';
 
 const BookingActions = {
-    getBookings(context, {page = 1, pageSize = 10}, done) {
+    getBookings(context, {page = 1, pageSize = 10, statusFilters = []}, done) {
         const bookingStore = context.getStore('BookingStore');
 
-        const query = {
+        let query = {
             'filter[order]': 'createdAt DESC',
             'filter[skip]': (page - 1) * pageSize,
             'filter[limit]': pageSize
         };
+
+        if(!_.isEmpty(statusFilters)) {
+            _.map(statusFilters, (statusFilter, i) => {
+                query[`filter[where][or][${i}][status]`] = statusFilter;
+            })
+        }
 
         if(_.size(bookingStore.getBookings()) > 0) {
             context.hairfieApi

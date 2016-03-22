@@ -25,7 +25,7 @@ class BookingsPage extends React.Component {
         super(props);
         this.state = {
             rowData: this.rowDataFromBookings(),
-            statusFilter: []
+            statusFilters: []
         };
     }
 
@@ -36,7 +36,8 @@ class BookingsPage extends React.Component {
     }
 
     rowDataFromBookings(nextProps) {
-        const bookings = nextProps ? nextProps.bookings : this.props.bookings;
+        let bookings = nextProps ? nextProps.bookings : this.props.bookings;
+        bookings = this.bookingsFromState(bookings);
 
         return _.map(bookings, booking => {
             // ['id', 'status', 'dateTime', 'businessName', 'businessAddress', 'clientName'];
@@ -52,6 +53,17 @@ class BookingsPage extends React.Component {
                 clientName: {content: `${booking.firstName} ${booking.lastName}`}
             }
         })
+    }
+
+    bookingsFromState = (bookings) => {
+        debugger;
+        if(!_.isEmpty(this.state.statusFilters)) {
+            return _.filter(bookings, booking => {
+                return _.include(this.state.statusFilters, booking.status);
+            }, this)
+        } else {
+            return bookings;
+        }
     }
 
     styleFromStatus(status) {
@@ -81,14 +93,15 @@ class BookingsPage extends React.Component {
                 <br />
                 <div>                    
                     <h4>Filtrer</h4>
-                    {_.map(["HONORED", "CONFIRMED"], status => {
-                        <Checkbox
+                    {_.map(["REQUEST", "CONFIRMED", "IN_PROCESS", "HONORED", "CANCEL_REQUEST", "CANCELLED"], status => {
+                        return <Checkbox
                             ref={status}
                             label={status}
-                            defaultChecked={_.include(this.state.statusFilter, status)}
+                            defaultChecked={_.include(this.state.statusFilters, status)}
                             onClick={this._handleStatusFilterChange.bind(this, status)}
                         />
                     })}
+                    <RaisedButton label={'Filtrer'} onClick={this.loadResults}/>
 
                     <hr />
                 </div>
@@ -108,17 +121,24 @@ class BookingsPage extends React.Component {
         );
     }
 
+    // loadResults = () => {
+    //     const { currentPage } = this.props;
+    //     console.log("currentPage", currentPage);
+    //     this.context.executeAction(BookingActions.getBookings, {page: currentPage + 1, statusFilters: this.state.statusFilters});
+    // }
+
     loadMore() {
         const { currentPage } = this.props;
         console.log("currentPage", currentPage);
-        this.context.executeAction(BookingActions.getBookings, {page: currentPage + 1});
+        this.context.executeAction(BookingActions.getBookings, {page: currentPage + 1, statusFilters: this.state.statusFilters});
     }
 
     toggleItemInArray(arr, item) {
         return _.indexOf(arr,item) == -1 ? _.union(arr,[item]) : _.without(arr,item);
     }
+
     _handleStatusFilterChange(status) {
-        this.setState({statusFilter: toggleItemInArray(this.state.statusFilter, status)});
+        this.setState({statusFilters: this.toggleItemInArray(this.state.statusFilters, status)});
     }
 
     _onCellClick(rowNumber, cell) {
