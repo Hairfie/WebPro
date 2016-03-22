@@ -15,7 +15,7 @@ import { connectToStores } from 'fluxible-addons-react';
 import { FlatButton, Table, Paper, RaisedButton, Center, Checkbox } from '../components/UIKit';
 import Link, {FlatLink} from '../components/Link';
 
-class BookingsPage extends React.Component {
+class BookingList extends React.Component {
     static contextTypes = {
         makePath: PropTypes.func.isRequired,
         executeAction: PropTypes.func.isRequired,
@@ -24,8 +24,7 @@ class BookingsPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            rowData: this.rowDataFromBookings(),
-            statusFilters: []
+            rowData: this.rowDataFromBookings()
         };
     }
 
@@ -37,7 +36,6 @@ class BookingsPage extends React.Component {
 
     rowDataFromBookings(nextProps) {
         let bookings = nextProps ? nextProps.bookings : this.props.bookings;
-        bookings = this.bookingsFromState(bookings);
 
         return _.map(bookings, booking => {
             // ['id', 'status', 'dateTime', 'businessName', 'businessAddress', 'clientName'];
@@ -55,15 +53,24 @@ class BookingsPage extends React.Component {
         })
     }
 
-    bookingsFromState = (bookings) => {
-        debugger;
-        if(!_.isEmpty(this.state.statusFilters)) {
-            return _.filter(bookings, booking => {
-                return _.include(this.state.statusFilters, booking.status);
-            }, this)
-        } else {
-            return bookings;
-        }
+    render() {
+        const colOrder = ['status', 'dateTime', 'businessName', 'businessAddress', 'clientName'];
+        return (
+            <div>
+                <h4>RDVs</h4>
+                <Table
+                    rowData={this.state.rowData}
+                    columnOrder={colOrder}
+                    displayRowCheckbox={false}
+                    showRowHover={false}
+                    onCellClick={this._onCellClick.bind(this)} />
+            </div>
+        );
+    }
+
+    _onCellClick(rowNumber, cell) {
+        const url = this.context.makePath('booking', {bookingId: this.state.rowData[rowNumber].id});
+        this.context.executeAction(navigateAction, {url: url});
     }
 
     styleFromStatus(status) {
@@ -78,11 +85,50 @@ class BookingsPage extends React.Component {
                 return { backgroundColor: '' };
             case 'IN_PROCESS':
                 return { backgroundColor: Colors.lightGreen200 };
+            case 'CANCEL_REQUEST':
+                return { backgroundColor: Colors.lightRed200 };
             case 'CANCELLED':
                 return { backgroundColor: Colors.red200 };
             default:
                 return {};
         }
+    }
+}
+
+class BookingsPage extends React.Component {
+    static contextTypes = {
+        makePath: PropTypes.func.isRequired,
+        executeAction: PropTypes.func.isRequired,
+    }
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            statusFilters: [],
+            bookings: this.bookingsFromState(props)
+        };
+    }
+
+    bookingsFromState = (props) => {
+        let bookings = (props && props.bookings) ? props.bookings : this.props.bookings;
+
+        if(bookings) {
+            if(this.state && !_.isEmpty(this.state.statusFilters)) {
+                return _.filter(bookings, booking => {
+                    return _.include(this.state.statusFilters, booking.status);
+                }, this)
+            } else {
+                return bookings;
+            }
+        } else {
+            return this.state.bookings;
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            bookings: this.bookingsFromState(nextProps)
+        });
     }
 
     render() {
@@ -101,35 +147,19 @@ class BookingsPage extends React.Component {
                             onClick={this._handleStatusFilterChange.bind(this, status)}
                         />
                     })}
-                    <RaisedButton label={'Filtrer'} onClick={this.loadResults}/>
-
                     <hr />
                 </div>
-                <h4>RDVs</h4>
-                <Table
-                    rowData={this.state.rowData}
-                    columnOrder={colOrder}
-                    displayRowCheckbox={false}
-                    showRowHover={false}
-                    onCellClick={this._onCellClick.bind(this)} />
+                <BookingList bookings={this.state.bookings} />
                 <br />
                 <Center>
                     <RaisedButton label={'Load More'} onClick={this.loadMore.bind(this)}/>
                 </Center>
-
             </Layout>
         );
     }
 
-    // loadResults = () => {
-    //     const { currentPage } = this.props;
-    //     console.log("currentPage", currentPage);
-    //     this.context.executeAction(BookingActions.getBookings, {page: currentPage + 1, statusFilters: this.state.statusFilters});
-    // }
-
     loadMore() {
-        const { currentPage } = this.props;
-        console.log("currentPage", currentPage);
+        const currentPage = Math.floor(_.size(this.state.bookings)/10);
         this.context.executeAction(BookingActions.getBookings, {page: currentPage + 1, statusFilters: this.state.statusFilters});
     }
 
@@ -138,12 +168,9 @@ class BookingsPage extends React.Component {
     }
 
     _handleStatusFilterChange(status) {
-        this.setState({statusFilters: this.toggleItemInArray(this.state.statusFilters, status)});
-    }
-
-    _onCellClick(rowNumber, cell) {
-        const url = this.context.makePath('booking', {bookingId: this.state.rowData[rowNumber].id});
-        this.context.executeAction(navigateAction, {url: url});
+        this.setState({statusFilters: this.toggleItemInArray(this.state.statusFilters, status)}, () => {
+            this.setState({bookings: this.bookingsFromState()});
+        });
     }
 }
 
