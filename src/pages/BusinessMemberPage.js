@@ -71,7 +71,7 @@ class BusinessMemberPage extends React.Component {
                 <br />
                 <mui.TextField
                     ref="jobTitle"
-                    floatingLabelText="Poste occupé"
+                    floatingLabelText="Titre"
                     defaultValue={businessMember.title}
                     />
                 <br />
