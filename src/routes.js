@@ -78,10 +78,10 @@ export default {
         handler: AddBusinessPage,
         title: 'Ajouter un salon'
     },
-    update_business_claim: {
+    edit_business_claim: {
         path: '/businessClaims/:businessClaimId',
         method: 'get',
-        handler: BusinessMapPage,
+        handler: AddBusinessPage,
         title: 'Ajouter un salon'
     },
     business: {

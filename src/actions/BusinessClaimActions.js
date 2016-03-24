@@ -13,7 +13,7 @@ const BusinessClaimActions = {
             .then(businessClaim => {
                 context.dispatch(Actions.RECEIVE_BUSINESS_CLAIM, businessClaim);
                 return context.executeAction(RouteActions.navigate, {
-                    route: 'update_business_claim',
+                    route: 'edit_business_claim',
                     params: { businessClaimId: businessClaim.id }
                 });
             });

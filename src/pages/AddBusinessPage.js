@@ -21,39 +21,46 @@ class AddBusinessPage extends React.Component {
     }
     render() {
         console.log('BUSINESSCLAIM', this.props.businessClaim);
+        if (!businessClaim) {
+            return (
+                <Layout {...this.props}>
+                    <mui.TextField
+                        ref="name"
+                        floatingLabelText="Nom du salon"
+                        />
+                    <br/>
+                    <br/>
+                    <mui.RadioButtonGroup ref="kind" name="kind" defaultSelected='SALON'>
+                        <mui.RadioButton value="SALON" label="Salon"  />
+                        <mui.RadioButton value="AT_HOME" label="À domicile" />
+                    </mui.RadioButtonGroup>
+                    <mui.TextField
+                        ref="phoneNumber"
+                        floatingLabelText="Téléphone"
+                        />
+                    <br/>
+                    <br/>
+                    <h5>Pour qui ?</h5>
+                    <mui.Checkbox
+                        ref="women"
+                        label="Femmes"
+                        />
+                    <mui.Checkbox
+                        ref="men"
+                        label="Hommes"
+                        />
+                    <mui.Checkbox
+                        ref="children"
+                        label="Enfants"
+                        />
+                    <br/>
+                    <mui.RaisedButton label='Suivant' secondary={true} onClick={this.save} />
+                </Layout>
+            );
+        }
         return (
             <Layout {...this.props}>
-                <mui.TextField
-                    ref="name"
-                    floatingLabelText="Nom du salon"
-                    />
-                <br/>
-                <br/>
-                <mui.RadioButtonGroup ref="kind" name="kind" defaultSelected='SALON'>
-                    <mui.RadioButton value="SALON" label="Salon"  />
-                    <mui.RadioButton value="AT_HOME" label="À domicile" />
-                </mui.RadioButtonGroup>
-                <mui.TextField
-                    ref="phoneNumber"
-                    floatingLabelText="Téléphone"
-                    />
-                <br/>
-                <br/>
-                <h5>Pour qui ?</h5>
-                <mui.Checkbox
-                    ref="women"
-                    label="Femmes"
-                    />
-                <mui.Checkbox
-                    ref="men"
-                    label="Hommes"
-                    />
-                <mui.Checkbox
-                    ref="children"
-                    label="Enfants"
-                    />
-                <br/>
-                <mui.RaisedButton label='Suivant' secondary={true} onClick={this.save} />
+                HELLO
             </Layout>
         );
     }
