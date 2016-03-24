@@ -196,6 +196,12 @@ class AppLeftNav extends React.Component {
             });
         }
 
+        if (AuthStore.hasPermission(Permissions.IMPERSONATE_TOKEN)) {
+            items.push({
+                text: 'Créer un salon',
+                route: 'add_business_claim'
+            });
+        }
         return items;
     }
 

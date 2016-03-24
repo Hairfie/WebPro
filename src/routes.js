@@ -25,6 +25,7 @@ import BusinessCategoriesPage from './pages/BusinessCategoriesPage';
 import BusinessSelectionsPage from './pages/BusinessSelectionsPage';
 import BusinessHairfiesPage from './pages/BusinessHairfiesPage';
 import HairfiePage from './pages/HairfiePage';
+import AddBusinessPage from './pages/AddBusinessPage';
 
 export default {
     home: {
@@ -70,6 +71,18 @@ export default {
         handler: DashboardPage,
         title: 'Mes Salons',
         action: PageActions.dashboard
+    },
+    add_business_claim: {
+        path: '/businessClaims/add',
+        method: 'get',
+        handler: AddBusinessPage,
+        title: 'Ajouter un salon'
+    },
+    edit_business_claim: {
+        path: '/businessClaims/:businessClaimId',
+        method: 'get',
+        handler: AddBusinessPage,
+        title: 'Ajouter un salon'
     },
     business: {
         path: '/businesses/:businessId',

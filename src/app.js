@@ -24,6 +24,7 @@ import CategoryStore from './stores/CategoryStore';
 import SelectionStore from './stores/SelectionStore';
 import TagStore from './stores/TagStore';
 import HairfieStore from './stores/HairfieStore';
+import BusinessClaimStore from './stores/BusinessClaimStore';
 
 import config from './config';
 
@@ -95,5 +96,6 @@ app.registerStore(CategoryStore);
 app.registerStore(SelectionStore);
 app.registerStore(HairfieStore);
 app.registerStore(TagStore);
+app.registerStore(BusinessClaimStore);
 
 export default app;
