@@ -3,6 +3,7 @@
 import BaseStore from './BaseStore';
 import Actions from '../constants/Actions';
 import _ from 'lodash';
+import BusinessClaimActions from '../actions/BusinessClaimActions';
 
 export default class BusinessClaimStore extends BaseStore {
 
@@ -27,7 +28,9 @@ export default class BusinessClaimStore extends BaseStore {
 
 
     getById(id) {
-        return this.businessClaims[id];
+        const businessClaim = this.businessClaims[id];
+        if(!businessClaim) this.getContext().executeAction(BusinessClaimActions.getBusinessClaimById, {businessClaimId: id});
+        return businessClaim;
     }
 
 

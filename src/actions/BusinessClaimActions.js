@@ -23,8 +23,8 @@ const BusinessClaimActions = {
 
         return context.hairfieApi
             .put(`/businessClaims/${businessClaimId}`, values, { token })
-            .then(
-                () => {context.executeAction(BusinessClaimActions.submitBusinessClaim, {businessClaimId});
+            .then(businessClaim => {
+                context.dispatch(Actions.RECEIVE_BUSINESS_CLAIM, businessClaim);
             });
             
     },
@@ -39,6 +39,14 @@ const BusinessClaimActions = {
                     route: 'business',
                     params: { businessId: business.id }
                 });
+            });
+    },
+    getBusinessClaimById(context, {businessClaimId}) {
+        if(!businessClaimId) return;
+        return context.hairfieApi
+            .get(`/businessClaims/${businessClaimId}`)
+            .then(function (businessClaim) {
+                context.dispatch(Actions.RECEIVE_BUSINESS_CLAIM, businessClaim);
             });
     }
 }
