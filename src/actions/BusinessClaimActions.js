@@ -23,11 +23,21 @@ const BusinessClaimActions = {
 
         return context.hairfieApi
             .put(`/businessClaims/${businessClaimId}`, values, { token })
-            .then(businessClaim => {
-                context.dispatch(Actions.RECEIVE_BUSINESS_CLAIM, businessClaim);
+            .then(
+                () => {context.executeAction(BusinessClaimActions.submitBusinessClaim, {businessClaimId});
+            });
+            
+    },
+    submitBusinessClaim(context, {businessClaimId}) {
+        const token = context.getStore('AuthStore').getToken();
+
+        return context.hairfieApi
+            .post(`/businessClaims/${businessClaimId}/submit`, { token })
+            .then(business => {
+                context.dispatch(Actions.RECEIVE_BUSINESS, business);
                 return context.executeAction(RouteActions.navigate, {
                     route: 'business',
-                    params: { businessId: businessClaim.id }
+                    params: { businessId: business.id }
                 });
             });
     }

@@ -21,7 +21,7 @@ class AddBusinessPage extends React.Component {
     }
     render() {
         console.log('BUSINESSCLAIM', this.props.businessClaim);
-        if (!businessClaim) {
+        if (!this.props.businessClaim) {
             return (
                 <Layout {...this.props}>
                     <mui.TextField
@@ -61,20 +61,37 @@ class AddBusinessPage extends React.Component {
         return (
             <Layout {...this.props}>
                 HELLO
+                <mui.RaisedButton label='Suivant' secondary={true} onClick={this.save} />
             </Layout>
         );
     }
     save = () => {
+        const businessClaim = this.props.businessClaim ? this.props.businessClaim : null;
+        const businessClaimId = businessClaim ? businessClaim.id : null;
         const values = {
-            name        : this.refs.name.getValue(),
-            kind        : this.refs.kind.getSelectedValue(),
-            phoneNumber : this.refs.phoneNumber.getValue(),
-            men         : this.refs.men.isChecked(),
-            women       : this.refs.women.isChecked(),
-            children    : this.refs.children.isChecked()
+            name        : businessClaim ? businessClaim.name : this.refs.name.getValue(),
+            kind        : businessClaim ? businessClaim.kind : this.refs.kind.getSelectedValue(),
+            phoneNumber : businessClaim ? businessClaim.phoneNumber : this.refs.phoneNumber.getValue(),
+            men         : businessClaim ? businessClaim.men : this.refs.men.isChecked(),
+            women       : businessClaim ? businessClaim.women : this.refs.women.isChecked(),
+            children    : businessClaim ? businessClaim.children : this.refs.children.isChecked(),
+            address     : {
+                street  : businessClaim ? 'rue de la street' : null,
+                city    : businessClaim ? 'Paris' : null,
+                zipCode : businessClaim ? '75021' : null,
+                country : businessClaim ? 'FR' : null
+            },
+            gps         : {
+                lat:businessClaim ? 48.8686491 : null,
+                lng:businessClaim ? 2.334602700000005 : null}
         }
-        console.log(values);
-        this.context.executeAction(BusinessClaimActions.createBusinessClaim, { values });
+        console.log('values', values);
+        if (businessClaim) {            
+            this.context.executeAction(BusinessClaimActions.updateBusinessClaim, { businessClaimId, values });
+        }
+        else {
+            this.context.executeAction(BusinessClaimActions.createBusinessClaim, { values });
+        }
     }
 //     static defaultProps = {
 //         businessMember: {}
