@@ -10,17 +10,24 @@ import { TextField, DropDownMenu, Menu, MenuItem, FlatButton, RaisedButton, Chec
 import BusinessClaimActions from '../actions/BusinessClaimActions';
 import UserPicker from '../components/UserPicker';
 import ImageField from '../components/ImageField';
+import BusinessMapPage from './BusinessMapPage';
+import PlaceInput from '../components/PlaceInput';
+import MapForm from '../components/MapForm';
 
 class AddBusinessPage extends React.Component {
     constructor(props) {
         super(props);
-        // this.state = { user: (this.props.businessMember || {}).user };
+        this.state = {
+            address: {},
+            gps: null,
+            displayMap: false
+        };
     }
     static contextTypes = {
         executeAction: React.PropTypes.func.isRequired
     }
     render() {
-        console.log('BUSINESSCLAIM', this.props.businessClaim);
+
         if (!this.props.businessClaim) {
             return (
                 <Layout {...this.props}>
@@ -58,13 +65,29 @@ class AddBusinessPage extends React.Component {
                 </Layout>
             );
         }
+                
+        let map = this.state.displayMap ? <MapForm ref="gps" defaultLocation={this.state.gps} /> : null;
         return (
             <Layout {...this.props}>
-                HELLO
+                <PlaceInput ref="place" />
+                <br/>
+                <mui.RaisedButton label='Utiliser cette addresse' secondary={true} onClick={this.getPlace} />
+                <br/>
+                {map}
+                </br>
                 <mui.RaisedButton label='Suivant' secondary={true} onClick={this.save} />
             </Layout>
         );
     }
+    
+    getPlace = () => {
+        this.setState({
+            address: this.refs.place.getHairfieFormattedAddress(),
+            gps: this.refs.place.getLocation(),
+            displayMap: true
+        });
+    }
+
     save = () => {
         const businessClaim = this.props.businessClaim ? this.props.businessClaim : null;
         const businessClaimId = businessClaim ? businessClaim.id : null;
@@ -75,17 +98,9 @@ class AddBusinessPage extends React.Component {
             men         : businessClaim ? businessClaim.men : this.refs.men.isChecked(),
             women       : businessClaim ? businessClaim.women : this.refs.women.isChecked(),
             children    : businessClaim ? businessClaim.children : this.refs.children.isChecked(),
-            address     : {
-                street  : businessClaim ? 'rue de la street' : null,
-                city    : businessClaim ? 'Paris' : null,
-                zipCode : businessClaim ? '75021' : null,
-                country : businessClaim ? 'FR' : null
-            },
-            gps         : {
-                lat:businessClaim ? 48.8686491 : null,
-                lng:businessClaim ? 2.334602700000005 : null}
-        }
-        console.log('values', values);
+            address     : businessClaim ? this.state.address : null,
+            gps         : businessClaim ? this.state.gps : null
+        }   
         if (businessClaim) {            
             this.context.executeAction(BusinessClaimActions.updateBusinessClaim, { businessClaimId, values });
         }
@@ -93,32 +108,6 @@ class AddBusinessPage extends React.Component {
             this.context.executeAction(BusinessClaimActions.createBusinessClaim, { values });
         }
     }
-//     static defaultProps = {
-//         businessMember: {}
-//     }
-
-//     save = () => {
-//         const businessId = this.props.businessId;
-//         const businessMemberId = this.props.businessMember.id;
-//         const values = {
-//             userId          : this.refs.user.getUserId(),
-//             picture         : this.refs.picture.getImage(),
-//             gender          : this.refs.gender.getSelectedValue(),
-//             firstName       : this.refs.firstName.getValue(),
-//             lastName        : this.refs.lastName.getValue(),
-//             email           : this.refs.email.getValue(),
-//             phoneNumber     : this.refs.phoneNumber.getValue(),
-//             isOwner         : this.refs.isOwner.isChecked(),
-//             willBeNotified  : this.refs.willBeNotified.isChecked(),
-//             hidden          : !this.refs.isHairdresser.isChecked()
-//         };
-
-//         if (businessMemberId) {
-//             this.context.executeAction(BusinessMemberActions.updateMember, { businessMemberId, values });
-//         } else {
-//             this.context.executeAction(BusinessMemberActions.createMember, { businessId, values });
-//         }
-//     }
 }
 
 AddBusinessPage = connectToStores(AddBusinessPage, [
