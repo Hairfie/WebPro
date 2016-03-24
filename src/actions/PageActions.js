@@ -5,6 +5,7 @@ import BookingActions from './BookingActions';
 import Actions from '../constants/Actions';
 import _ from 'lodash';
 import AuthActions from './AuthActions';
+import UserActions from './UserActions';
 
 const PageActions = {
 
@@ -36,7 +37,16 @@ const PageActions = {
         const businessMemberId = route.getIn(["params", "businessMemberId"]);
         return context.hairfieApi
             .get(`/businessMembers/${businessMemberId}`, { token })
-            .then(member => context.dispatch(Actions.RECEIVE_BUSINESS_MEMBER, member));
+            .then(member =>  {
+                context.dispatch(Actions.RECEIVE_BUSINESS_MEMBER, member);
+                return member;
+            })
+            .then(member => {
+                if(member && member.userId) {
+                    context.executeAction(UserActions.loadUser(context, { userId: member.userId}));
+                }
+                else return;
+            });
     }),
 
     businessServices: authenticated((context, route, token) => {

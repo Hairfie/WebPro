@@ -25,7 +25,7 @@ const UserActions = {
         const token = context.getStore('AuthStore').getToken();
 
         return context.hairfieApi
-            .get('/users', { query: { q } })
+            .get('/users', { query: { q }, token: token})
             .then(users => context.dispatch(Actions.RECEIVE_USER_SUGGESTIONS, { q, users }));
     }
 }
