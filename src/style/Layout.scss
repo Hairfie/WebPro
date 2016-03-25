@@ -1,5 +1,6 @@
 @import "./node_modules/material-ui-sass/material-ui/main";
 @import "./node_modules/material-ui-sass/material-ui/html";
+@import 'mixins/_flexbox';
 
 h1.mui-app-bar-title {
     margin-top: 0;
@@ -25,4 +26,26 @@ h1.mui-app-bar-title {
     .bs-buttons {
         display: flex;
     }
+}
+
+.user-infos {
+    @include flexbox;
+    
+    img {
+        max-width: 100px;
+        height: 100px;
+    }
+    .text-bloc {
+        @include flexbox;
+        @include flex-direction(column);
+        padding-left: 15px;
+    }
+}
+
+.error {
+    padding: 20px;
+    max-width: 500px;
+    background-color: MistyRose;
+    color: red;
+    border: 1px solid red;
 }

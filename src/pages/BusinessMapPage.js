@@ -40,7 +40,7 @@ class BusinessMapPage extends React.Component {
         super(props);
 
         this.state = {
-            address: props.business.address,
+            address: props.business.address || {},
             gps: props.business.gps
         };
     }

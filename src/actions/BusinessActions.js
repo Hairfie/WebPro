@@ -7,6 +7,7 @@ import Uuid from 'uuid';
 
 const BusinessActions = {
     getBusinessById(context, {businessId}) {
+        if(!businessId) return;
         return context.hairfieApi
             .get(`/businesses/${businessId}`)
             .then(function (business) {
