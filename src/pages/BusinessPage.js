@@ -52,6 +52,11 @@ class BusinessPage extends React.Component {
                     {yelpNode}
                     {selectionNode}
                     <li>
+                        <Link route="business_bookings" params={{businessId: this.props.businessId}}>
+                            RDVs du salon
+                        </Link>
+                    </li>
+                    <li>
                         <Link route="business_pictures" params={{businessId: this.props.businessId}}>
                             Photos
                         </Link>

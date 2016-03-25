@@ -7,12 +7,13 @@ import mui from 'material-ui';
 let Colors = mui.Styles.Colors;
 
 import Layout from '../components/Layout';
+import BookingList from '../components/BookingList'
 
 import BookingActions from '../actions/BookingActions';
 import { navigateAction } from 'fluxible-router';
 import { connectToStores } from 'fluxible-addons-react';
 
-import { FlatButton, Table, Paper, RaisedButton, Center } from '../components/UIKit';
+import { FlatButton, Table, Paper, RaisedButton, Center, Checkbox } from '../components/UIKit';
 import Link, {FlatLink} from '../components/Link';
 
 class BookingsPage extends React.Component {
@@ -24,84 +25,70 @@ class BookingsPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            rowData: this.rowDataFromBookings()
+            statusFilters: [],
+            bookings: this.bookingsFromState(props)
         };
+    }
+
+    bookingsFromState = (props) => {
+        let bookings = (props && props.bookings) ? props.bookings : this.props.bookings;
+
+        if(bookings) {
+            if(this.state && !_.isEmpty(this.state.statusFilters)) {
+                return _.filter(bookings, booking => {
+                    return _.include(this.state.statusFilters, booking.status);
+                }, this)
+            } else {
+                return bookings;
+            }
+        } else {
+            return this.state.bookings;
+        }
     }
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            rowData: this.rowDataFromBookings(nextProps)
+            bookings: this.bookingsFromState(nextProps)
         });
     }
 
-    rowDataFromBookings(nextProps) {
-        const bookings = nextProps ? nextProps.bookings : this.props.bookings;
-
-        return _.map(bookings, booking => {
-            // ['id', 'status', 'dateTime', 'businessName', 'businessAddress', 'clientName'];
-            return  {
-                id: booking.id,
-                status: {
-                    content: booking.status,
-                    style: this.styleFromStatus(booking.status)
-                },
-                dateTime: {content: booking.displayDateTime},
-                businessName: {content: booking.business.name},
-                businessAddress: {content: `${booking.business.address.city} ${booking.business.address.zipCode}`},
-                clientName: {content: `${booking.firstName} ${booking.lastName}`}
-            }
-        })
-    }
-
-    styleFromStatus(status) {
-        switch (status) {
-            case 'HONORED':
-                return { backgroundColor: Colors.lightBlue600 };
-            case 'CONFIRMED':
-                return { backgroundColor: Colors.lightGreen600 };
-            case 'NOT_CONFIRMED':
-                return { backgroundColor:'orange' };
-            case 'REQUEST':
-                return { backgroundColor: '' };
-            case 'IN_PROCESS':
-                return { backgroundColor: Colors.lightGreen200 };
-            case 'CANCELLED':
-                return { backgroundColor: Colors.red200 };
-            default:
-                return {};
-        }
-    }
-
     render() {
-        const colOrder = ['status', 'dateTime', 'businessName', 'businessAddress', 'clientName'];
+//        <div>                    
+//            <h4>Filtrer</h4>
+//            {_.map(["REQUEST", "CONFIRMED", "IN_PROCESS", "HONORED", "CANCEL_REQUEST", "//CANCELLED"], status => {
+//                return <Checkbox
+//                    ref={status}
+//                    label={status}
+//                    defaultChecked={_.include(this.state.statusFilters, status)}
+//                    onClick={this._handleStatusFilterChange.bind(this, status)}
+//                />
+//            })}
+//            <hr />
+//        </div>
         return (
             <Layout>
-                <h2>Réservations</h2>
-                <br />
-                <Table
-                    rowData={this.state.rowData}
-                    columnOrder={colOrder}
-                    displayRowCheckbox={false}
-                    showRowHover={false}
-                    onCellClick={this._onCellClick.bind(this)} />
+                <BookingList bookings={this.state.bookings} />
                 <br />
                 <Center>
                     <RaisedButton label={'Load More'} onClick={this.loadMore.bind(this)}/>
                 </Center>
-
             </Layout>
         );
     }
 
     loadMore() {
-        const { currentPage } = this.props;
-        console.log("currentPage", currentPage);
-        this.context.executeAction(BookingActions.getBookings, {page: currentPage + 1});
+        const currentPage = Math.floor(_.size(this.state.bookings)/10);
+        this.context.executeAction(BookingActions.getBookings, {page: currentPage + 1, statusFilters: this.state.statusFilters});
     }
 
-    _onCellClick(rowNumber, cell) {
-        const url = this.context.makePath('booking', {bookingId: this.state.rowData[rowNumber].id});
-        this.context.executeAction(navigateAction, {url: url});
+    toggleItemInArray(arr, item) {
+        return _.indexOf(arr,item) == -1 ? _.union(arr,[item]) : _.without(arr,item);
+    }
+
+    _handleStatusFilterChange(status) {
+        this.setState({statusFilters: this.toggleItemInArray(this.state.statusFilters, status)}, () => {
+            this.setState({bookings: this.bookingsFromState()});
+        });
     }
 }
 

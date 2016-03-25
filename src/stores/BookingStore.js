@@ -23,6 +23,7 @@ export default class BookingStore extends BaseStore {
 
         this.bookings = {};
         this.currentPage = 1;
+        this.currentPageByBusiness = {};
     }
 
     onReceiveBookings({bookings, page}) {
@@ -58,6 +59,12 @@ export default class BookingStore extends BaseStore {
             this.getContext().executeAction(BookingActions.getBookingById, { bookingId: id });
         }
         return this.bookings[id];
+    }
+
+    getBookingsByBusinessId(businessId) {
+        return _.filter(this.bookings, booking => {
+            return booking.business.id == businessId
+        });
     }
 
     getBookings() {

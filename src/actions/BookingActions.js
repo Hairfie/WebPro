@@ -7,14 +7,20 @@ import _ from 'lodash';
 import BookingStore from '../stores/BookingStore';
 
 const BookingActions = {
-    getBookings(context, {page = 1, pageSize = 10}, done) {
+    getBookings(context, {page = 1, pageSize = 10, statusFilters = []}, done) {
         const bookingStore = context.getStore('BookingStore');
 
-        const query = {
+        let query = {
             'filter[order]': 'createdAt DESC',
             'filter[skip]': (page - 1) * pageSize,
             'filter[limit]': pageSize
         };
+
+        if(!_.isEmpty(statusFilters)) {
+            _.map(statusFilters, (statusFilter, i) => {
+                query[`filter[where][or][${i}][status]`] = statusFilter;
+            })
+        }
 
         if(_.size(bookingStore.getBookings()) > 0) {
             context.hairfieApi
@@ -31,6 +37,24 @@ const BookingActions = {
                     done();
                 });
         }
+    },
+
+    getBookingsByBusinessId(context, {page = 1, pageSize = 10, businessId}, done) {
+        const bookingStore = context.getStore('BookingStore');
+
+        let query = {
+            'filter[order]': 'createdAt DESC',
+            'filter[skip]': (page - 1) * pageSize,
+            'filter[limit]': pageSize,
+            'filter[where][businessId]': businessId
+        };
+
+        context.hairfieApi
+            .get(`/bookings`, { query })
+            .then(function (bookings) {
+                context.dispatch(Actions.RECEIVE_BOOKINGS, { bookings, page });
+                done();
+            });
     },
 
     getBookingById(context, { bookingId }) {

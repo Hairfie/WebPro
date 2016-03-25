@@ -17,6 +17,7 @@ import BusinessServicePage from './pages/BusinessServicePage';
 import BusinessMapPage from './pages/BusinessMapPage';
 import BusinessMembersPage from './pages/BusinessMembersPage';
 import BusinessMemberPage from './pages/BusinessMemberPage';
+import BusinessBookingsPage from './pages/BusinessBookingsPage';
 import ImpersonateTokenPage from './pages/ImpersonateTokenPage';
 import BusinessSearchPage from './pages/BusinessSearchPage';
 import BookingsPage from './pages/BookingsPage';
@@ -196,6 +197,13 @@ export default {
         method: 'get',
         action: PageActions.businessService,
         handler: BusinessServicePage
+    },
+    business_bookings: {
+        path: '/businesses/:businessId/bookings',
+        method: 'get',
+        handler: BusinessBookingsPage,
+        title: 'Mes RDV',
+        action: PageActions.businessBookings
     },
     bookings: {
         path: '/bookings',

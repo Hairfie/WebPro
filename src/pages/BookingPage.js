@@ -4,7 +4,7 @@ import React from 'react';
 import Layout from '../components/Layout';
 import { connectToStores } from 'fluxible-addons-react';
 import _ from 'lodash';
-import Link from '../components/Link';
+import Link, {FlatLink, RaisedLink} from '../components/Link';
 import { FlatButton, Table, Paper, RaisedButton, Dialog, TextField, CircularProgress, Center, Checkbox } from '../components/UIKit';
 import BookingActions from '../actions/BookingActions';
 import moment from 'moment-timezone';
@@ -50,6 +50,8 @@ class BookingPage extends React.Component {
                         {this.renderField('Demande particulière', booking.comment)}
                         {this.renderField('Nouveau client dans ce salon', booking.firstTimeCustomer ? 'OUI' : 'NON')}
                         {this.renderField('Promotion', booking.discount)}
+                        {this.renderField('Demandé le', moment(booking.createdAt).format("DD/MM/YY [à] HH:mm"))}
+
                     </div>
                     <div>
                         <h4>Salon</h4>
@@ -65,6 +67,7 @@ class BookingPage extends React.Component {
                                 <a href={'http://www.hairfie.com/fr/coiffeur/' + booking.business.id + '/' + booking.business.slug} target="_blank">{'http://www.hairfie.com/fr/coiffeur/' + booking.business.id + '/' + booking.business.slug}</a>
                             <br />
                         </span>
+                        <RaisedLink route="business" params={{ businessId: booking.business.id }} label='Voir la Page sur Pro.Hairfie.com' />
                     </div>
                     <div>
                         <h4>Client</h4>
