@@ -39,6 +39,24 @@ const BookingActions = {
         }
     },
 
+    getBookingsByBusinessId(context, {page = 1, pageSize = 10, businessId}, done) {
+        const bookingStore = context.getStore('BookingStore');
+
+        let query = {
+            'filter[order]': 'createdAt DESC',
+            'filter[skip]': (page - 1) * pageSize,
+            'filter[limit]': pageSize,
+            'filter[where][businessId]': businessId
+        };
+
+        context.hairfieApi
+            .get(`/bookings`, { query })
+            .then(function (bookings) {
+                context.dispatch(Actions.RECEIVE_BOOKINGS, { bookings, page });
+                done();
+            });
+    },
+
     getBookingById(context, { bookingId }) {
         const token = context.getStore('AuthStore').getToken();
         if (!token) {
