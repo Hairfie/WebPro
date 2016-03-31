@@ -197,7 +197,7 @@ BusinessMemberPage = connectToStores(BusinessMemberPage, [
     'UserStore'
 ], (context, props) => {
     const businessMember = props.businessMemberId && context.getStore('BusinessMemberStore').getById(props.businessMemberId);
-    const linkedUser = context.getStore('UserStore').getById(businessMember.userId);
+    const linkedUser = businessMember && context.getStore('UserStore').getById(businessMember.userId);
     return {
         businessMember: businessMember,
         linkedUser: linkedUser
