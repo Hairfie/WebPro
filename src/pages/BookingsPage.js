@@ -67,6 +67,7 @@ class BookingsPage extends React.Component {
 //        </div>
         return (
             <Layout>
+                <Link route="new_booking" >Créer un RDV</Link>
                 <BookingList bookings={this.state.bookings} />
                 <br />
                 <Center>
