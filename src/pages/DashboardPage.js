@@ -32,6 +32,7 @@ class DashboardPage extends React.Component {
 
         return (
             <ListItem
+                key={business.id}
                 leftAvatar={avatar}
                 primaryText={business.name}
                 secondaryText={
