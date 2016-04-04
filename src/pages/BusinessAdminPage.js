@@ -27,7 +27,7 @@ class BusinessAdminPage extends React.Component {
                 </RadioButtonGroup>
                 <br/>
                 Prise de RDV:
-                <RadioButtonGroup ref="isBookable" name="isBookable" label="" defaultSelected={business.isBookable} valueSelected={business && business.isBookable}>
+                <RadioButtonGroup ref="isBookable" name="isBookable" label="" defaultSelected={business.bookable} valueSelected={business && business.bookable}>
                     <RadioButton value={true} label="Oui"  />
                     <RadioButton value={false} label="Non" />
                 </RadioButtonGroup>
