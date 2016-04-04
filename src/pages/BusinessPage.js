@@ -10,6 +10,7 @@ import Permissions from '../constants/Permissions';
 class BusinessPage extends React.Component {
 
   render() {
+    console.log('business', this.props.business);
     let adminNode;
     if (this.props.isAdmin) {
         adminNode = (
