@@ -12,12 +12,12 @@ import BookingStatus from '../constants/BookingStatus';
 import HairLengthConstant from '../constants/HairLength';
 import BusinessInfos from './Booking/BusinessInfos';
 
-class NewBookingFormPage extends React.Component {
+class BookingFormPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = { 
-            businessId: null,
-            hairLength: 'SHORT'
+            businessId: this.props.booking ? this.props.booking.business.id : null,
+            hairLength: this.props.booking ? this.props.booking.hairLength : 'SHORT'
         }
     }
     static contextTypes = {
@@ -25,56 +25,70 @@ class NewBookingFormPage extends React.Component {
     }
 
     render() {
-        console.log('booking', this.state);
-        // debugger;
+        console.log('booking', this.props.booking);
+        console.log('STATE', this.state);
         const hairLengthItems = [
            { text: 'SHORT' },
            { text: 'MID_SHORT' },
            { text: 'LONG' },
            { text: 'VERY_LONG' },
         ];
+        const {booking} = this.props;
+        const businessId = booking ? booking.business.id : null;
+        const date = booking ? moment(booking.dateTime).tz('Europe/Paris').format("YYYY-MM-DD") : moment().tz('Europe/Paris').format("YYYY-MM-DD");
+        const time = booking ? moment(booking.dateTime).tz('Europe/Paris').format("HH:mm") : moment('09:00', 'HH:mm').tz('Europe/Paris').format("HH:mm");
+        const hairIndex = _.indexOf(_.map(hairLengthItems, (item) => { return item.text }), this.state.hairLength);
+        const service = booking ? booking.service : null;
+        const comment = booking ? booking.comment : null;
+        const firstTimeCustomer = booking ? booking.firstTimeCustomer : false;
+        const discount = booking ? booking.discount : null;
+        const gender = booking ? booking.gender : 'FEMALE';
+        const firstName = booking ? booking.firstName : null;
+        const lastName = booking ? booking.lastName : null;
+        const email = booking ? booking.email : null;
+        const phoneNumber = booking ? booking.phoneNumber : null;
         // debugger;
         return (
 
             <Layout {...this.props}>
-                <TextField ref="businessId" floatingLabelText="ID du salon" onChange={this.handleBusinessId}/>
+                <TextField ref="businessId" floatingLabelText="ID du salon" onChange={this.handleBusinessId} defaultValue={businessId}/>
                 <br/>
                 <BusinessInfos businessId={this.state.businessId}/>
                 <br/>
                 <Paper style={{padding: 10}}>
                     <h4>Infos RDV</h4>
-                    <TextField ref="date" type="date" floatingLabelText="Date" defaultValue={moment().tz('Europe/Paris').format("YYYY-MM-DD")}/>
+                    <TextField ref="date" type="date" floatingLabelText="Date" defaultValue={date}/>
                     <br/>
-                    <TextField ref="time" type="time" floatingLabelText="Horaire" defaultValue={moment('09:00', 'HH:mm').tz('Europe/Paris').format("HH:mm")}/>
+                    <TextField ref="time" type="time" floatingLabelText="Horaire" defaultValue={time}/>
                     <br/>
                     Longueur de cheveux:
-                    <DropDownMenu ref="hairLength" onChange={this.handleHairLength} menuItems={hairLengthItems} />
+                    <DropDownMenu ref="hairLength" onChange={this.handleHairLength} menuItems={hairLengthItems} selectedIndex={hairIndex}/>
                     <br/>
-                    <TextField ref="service" type="text" floatingLabelText="Prestation demandée" />
+                    <TextField ref="service" type="text" floatingLabelText="Prestation demandée" defaultValue={service}/>
                     <br/>
-                    <TextField ref="comment" type="text" floatingLabelText="Demande particulière" />
+                    <TextField ref="comment" type="text" floatingLabelText="Demande particulière" defaultValue={comment}/>
                     <br/>
-                    <Checkbox ref="firstTimeCustomer" label="Première fois dans ce salon ?" />
+                    <Checkbox ref="firstTimeCustomer" label="Première fois dans ce salon ?" defaultChecked={firstTimeCustomer}/>
                     <br/>
-                    <TextField ref="discount" type="number" floatingLabelText="Promotion (%)" />
+                    <TextField ref="discount" type="number" floatingLabelText="Promotion (%)" defaultValue={discount} />
                 </Paper>
                 <br/>
                 <br/>
                 <br/>
                 <Paper style={{padding: 10}}>
                     <h4>Infos client</h4>
-                    <RadioButtonGroup ref="gender" name="gender" defaultSelected="FEMALE" >
+                    <RadioButtonGroup ref="gender" name="gender" defaultSelected={gender} >
                         <RadioButton value="FEMALE" label="Femme" />
                         <RadioButton value="MALE" label="Homme" />
                     </RadioButtonGroup>
                     <br/>
-                    <TextField ref="firstName" type="text" floatingLabelText="Prénom" />
+                    <TextField ref="firstName" type="text" floatingLabelText="Prénom" defaultValue={firstName}/>
                     <br/>
-                    <TextField ref="lastName" type="text" floatingLabelText="Nom" />
+                    <TextField ref="lastName" type="text" floatingLabelText="Nom" defaultValue={lastName}/>
                     <br/>
-                    <TextField ref="email" type="email" floatingLabelText="Email" />
+                    <TextField ref="email" type="email" floatingLabelText="Email" defaultValue={email}/>
                     <br/>
-                    <TextField ref="phoneNumber" type="text" floatingLabelText="Téléphone" />
+                    <TextField ref="phoneNumber" type="text" floatingLabelText="Téléphone" defaultValue={phoneNumber}/>
                     <br/>
                     <br/>
                     <br/>
@@ -83,6 +97,7 @@ class NewBookingFormPage extends React.Component {
                 <br/>
                 <FlatButton label='Enregistrer' onClick={this.save} />
                 <br/>
+                <Link route="bookings" >Retour</Link>
             </Layout>
         );
     }
@@ -114,8 +129,23 @@ class NewBookingFormPage extends React.Component {
         // debugger;    
         console.log('getBookingInfo', this.getBookingInfo());
         const values = this.getBookingInfo();
-        this.context.executeAction(BookingActions.createBooking, {values});
+        if (this.props.booking) {
+            const bookingId = this.props.booking.id;
+            this.context.executeAction(BookingActions.updateBooking,{ bookingId, values});
+        } else {
+            this.context.executeAction(BookingActions.createBooking, {values});            
+        }
     }
 }
 
-export default NewBookingPage;
+BookingFormPage = connectToStores(BookingFormPage, [
+    'BookingStore'
+], (context, props) => {
+
+    const booking = props.bookingId && context.getStore('BookingStore').getById(props.bookingId);
+    return {
+        booking: booking
+    };
+});
+
+export default BookingFormPage;

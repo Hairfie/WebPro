@@ -16,18 +16,17 @@ class BusinessInfos extends React.Component {
     }
 
     render() {
-        console.log('PROPS.BUSINESS', this.props.business);
         const { business } = this.props;
 
         if (!this.props.businessId) return <span/>;
         else if (this.props.businessId.length < 36 || !this.props.business) 
             return (
-                <Paper>
+                <Paper style={{padding: 10}}>
                     ID de salon invalide
                 </Paper>
             );
         return (
-            <Paper {...this.props}>
+            <Paper style={{padding: 10}}>
                 <div>{`Salon: ${business.name}`}</div>
                 <div>{`Adresse: ${business.address.street}, ${business.address.zipCode}, ${business.address.city}`}</div>
             </Paper>
@@ -39,7 +38,6 @@ class BusinessInfos extends React.Component {
 BusinessInfos = connectToStores(BusinessInfos, [
     'BusinessStore'
 ], (context, props) => {
-    console.log('PROPS', props);
     const business = props.businessId && props.businessId.length == 36 ? context.getStore('BusinessStore').getById(props.businessId) : null;
     return {
         business: business

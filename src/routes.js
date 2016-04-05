@@ -27,7 +27,7 @@ import BusinessSelectionsPage from './pages/BusinessSelectionsPage';
 import BusinessHairfiesPage from './pages/BusinessHairfiesPage';
 import HairfiePage from './pages/HairfiePage';
 import AddBusinessPage from './pages/AddBusinessPage';
-import NewBookingPage from './pages/NewBookingPage';
+import BookingFormPage from './pages/BookingFormPage';
 
 export default {
     home: {
@@ -216,7 +216,7 @@ export default {
     new_booking: {
         path: '/bookings/new',
         method: 'get',
-        handler: NewBookingPage,
+        handler: BookingFormPage,
         title: 'Nouveau RDV'
     },
     booking: {
@@ -224,5 +224,12 @@ export default {
         method: 'get',
         handler: BookingPage,
         title: 'Réservation'
+    },
+    edit_booking: {
+        path: '/bookings/edit/:bookingId',
+        method:'get',
+        handler: BookingFormPage,
+        title: 'Edition de RDV',
+        action: PageActions.editBooking
     }
 };

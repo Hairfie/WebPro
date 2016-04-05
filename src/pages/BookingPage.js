@@ -108,6 +108,7 @@ class BookingPage extends React.Component {
                         <RaisedButton fullWidth={true} label="Modifier la réservation" onClick={this.showModal.bind(this)} {...this.props} />
                         <RaisedButton fullWidth={true} label="Annuler la réservation" onClick={this.cancelBooking.bind(this)} {...this.props} />
                         <RaisedButton fullWidth={true} label="Supprimer" onClick={this.deleteBooking.bind(this)} {...this.props} />
+                        <RaisedLink route="edit_booking" params={{bookingId: booking.id}} fullWidth={true} label="Modifier la réservation NEW" />
                 </div>
                 <br />
                 <Link route="bookings" >Retour</Link>

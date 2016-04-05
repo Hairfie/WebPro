@@ -72,6 +72,11 @@ const PageActions = {
         return context.executeAction(BookingActions.getBookingsByBusinessId, { businessId });
     }),
 
+    editBooking: authenticated((context, route, token) => {
+        const bookingId = route.getIn(["params", "bookingId"]);
+        return context.executeAction(BookingActions.getBookingById, { bookingId });
+    }),
+
     impersonateToken: hasPermissions(['IMPERSONATE_TOKEN']),
 
     repersonateToken: AuthActions.repersonateToken,
