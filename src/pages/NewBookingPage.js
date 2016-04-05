@@ -5,19 +5,19 @@ import Layout from '../components/Layout';
 import { connectToStores } from 'fluxible-addons-react';
 import _ from 'lodash';
 import Link, {FlatLink, RaisedLink} from '../components/Link';
-import { DropDownMenu, MenuItem, FlatButton, Table, Paper, RaisedButton, Dialog, TextField, CircularProgress, Center, Checkbox } from '../components/UIKit';
+import { RadioButtonGroup, RadioButton, DropDownMenu, MenuItem, FlatButton, Table, Paper, RaisedButton, Dialog, TextField, CircularProgress, Center, Checkbox } from '../components/UIKit';
 import BookingActions from '../actions/BookingActions';
 import moment from 'moment-timezone';
 import BookingStatus from '../constants/BookingStatus';
 import HairLengthConstant from '../constants/HairLength';
+import BusinessInfos from './Booking/BusinessInfos';
 
-class NewBookingPage extends React.Component {
+class NewBookingFormPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = { 
-            booking: {
-                status: 'REQUEST'
-            }
+            businessId: null,
+            hairLength: 'SHORT'
         }
     }
     static contextTypes = {
@@ -26,83 +26,95 @@ class NewBookingPage extends React.Component {
 
     render() {
         console.log('booking', this.state);
-                //Réservation
-
-        // ID : 2db545a5-f577-4d01-8d42-af03c5fed43a
-        // Statut : CONFIRMED, NOT_CONFIRMED, IN_PROCESS, REQUEST, CANCELLED
-        // Date : vendredi 25 mars 2016
-        // Heure : 14:00
-        // Longueur des cheveux du client : Courts
-        // Prestation demandée : Coupe Homme
-        // Demande particulière : 
-        // Nouveau client dans ce salon : OUI
-        // Promotion : 
-        // Demandé le : 25/03/16 à 14:08
-        // Salon
-
-        // Nom : Djelani Maachi
-        // Adresse : 40 Rue Coquillière 75001 Paris
-        // Téléphone : +33142335747
-        // Page Hairfie : http://www.hairfie.com/fr/coiffeur/3ccdf37f-5ffb-46a8-bc34-51fac71db4c2/djelani-maachi
-        // VOIR LA PAGE SUR PRO.HAIRFIE.COM
-        // Client
-
-        // Nom : Ghislain de Juvigny
-        // Sexe : MALE
-        // Téléphone : +33676844994
-        // Email : gdjuvigny@gmail.com
-                // <Menu value={this.state.value} onChange={this.handleChange}>
-                    // <MenuItem value="REQUEST" primaryText="REQUEST"/>
-                    // <MenuItem value="IN_PROCESS" primaryText="IN_PROCESS"/>
-                    // <MenuItem value="CONFIRMED" primaryText="CONFIRMED"/>
-                    // <MenuItem value="NOT_CONFIRMED" primaryText="NOT_CONFIRMED"/>
-                    // <MenuItem value="CANCELLED" primaryText="CANCELLED"/>
-                // </Menu>
-        const statusItems = [
-           { payload: '1', text: 'REQUEST' },
-           { payload: '2', text: 'IN_PROCESS' },
-           { payload: '3', text: 'CONFIRMED' },
-           { payload: '4', text: 'NOT_CONFIRMED' },
-           { payload: '5', text: 'CANCELLED' },
-        ];
+        // debugger;
         const hairLengthItems = [
-           { payload: '1', text: 'SHORT' },
-           { payload: '2', text: 'MID_SHORT' },
-           { payload: '3', text: 'LONG' },
-           { payload: '4', text: 'VERY_LONG' },
+           { text: 'SHORT' },
+           { text: 'MID_SHORT' },
+           { text: 'LONG' },
+           { text: 'VERY_LONG' },
         ];
         // debugger;
         return (
 
             <Layout {...this.props}>
-                <TextField
-                    ref="businessId"
-                    floatingLabelText="ID du salon" />
+                <TextField ref="businessId" floatingLabelText="ID du salon" onChange={this.handleBusinessId}/>
                 <br/>
-                Status: 
-                <DropDownMenu
-                    onChange={this.handleStatus} 
-                    menuItems={statusItems} />
+                <BusinessInfos businessId={this.state.businessId}/>
                 <br/>
-                <TextField ref="date" type="date" floatingLabelText="Date" defaultValue={moment().format()} />
+                <Paper style={{padding: 10}}>
+                    <h4>Infos RDV</h4>
+                    <TextField ref="date" type="date" floatingLabelText="Date" defaultValue={moment().tz('Europe/Paris').format("YYYY-MM-DD")}/>
+                    <br/>
+                    <TextField ref="time" type="time" floatingLabelText="Horaire" defaultValue={moment('09:00', 'HH:mm').tz('Europe/Paris').format("HH:mm")}/>
+                    <br/>
+                    Longueur de cheveux:
+                    <DropDownMenu ref="hairLength" onChange={this.handleHairLength} menuItems={hairLengthItems} />
+                    <br/>
+                    <TextField ref="service" type="text" floatingLabelText="Prestation demandée" />
+                    <br/>
+                    <TextField ref="comment" type="text" floatingLabelText="Demande particulière" />
+                    <br/>
+                    <Checkbox ref="firstTimeCustomer" label="Première fois dans ce salon ?" />
+                    <br/>
+                    <TextField ref="discount" type="number" floatingLabelText="Promotion (%)" />
+                </Paper>
                 <br/>
-                <TextField ref="time" type="time" floatingLabelText="Horaire" />
                 <br/>
-                Longueur de cheveux:
-                <DropDownMenu
-                    onChange={this.handleStatus} 
-                    menuItems={hairLengthItems} />
                 <br/>
-                <TextField ref="service" type="text" floatingLabelText="Prestation demandée" />
+                <Paper style={{padding: 10}}>
+                    <h4>Infos client</h4>
+                    <RadioButtonGroup ref="gender" name="gender" defaultSelected="FEMALE" >
+                        <RadioButton value="FEMALE" label="Femme" />
+                        <RadioButton value="MALE" label="Homme" />
+                    </RadioButtonGroup>
+                    <br/>
+                    <TextField ref="firstName" type="text" floatingLabelText="Prénom" />
+                    <br/>
+                    <TextField ref="lastName" type="text" floatingLabelText="Nom" />
+                    <br/>
+                    <TextField ref="email" type="email" floatingLabelText="Email" />
+                    <br/>
+                    <TextField ref="phoneNumber" type="text" floatingLabelText="Téléphone" />
+                    <br/>
+                    <br/>
+                    <br/>
+                </Paper>
+                <br/>
+                <br/>
+                <FlatButton label='Enregistrer' onClick={this.save} />
                 <br/>
             </Layout>
         );
     }
-    handleStatus = (event, index, menuItem) => {
-        this.setState({status: menuItem.text })
-    }
     handleHairLength = (event, index, menuItem) => {
         this.setState({hairLength: menuItem.text })
+    }
+    handleBusinessId = () => {
+        const businessId = this.refs.businessId.getValue();
+        this.setState({businessId: businessId})
+    }
+    getBookingInfo = () => {
+        // debugger;
+        return {
+            businessId          : this.refs.businessId.getValue(),
+            timeslot            : moment(`${this.refs.date.getValue()} ${this.refs.time.getValue()}`, "YYYY-MM-DD HH:mm").toDate(),
+            hairLength          : this.state.hairLength,
+            service             : this.refs.service.getValue(),
+            comment             : this.refs.comment.getValue(),
+            firstTimeCustomer   : this.refs.firstTimeCustomer.isChecked(),
+            discount            : this.refs.discount.getValue(),
+            gender              : this.refs.gender.getSelectedValue(),
+            firstName           : this.refs.firstName.getValue(),
+            lastName            : this.refs.lastName.getValue(),
+            email               : this.refs.email.getValue(),
+            phoneNumber         : this.refs.phoneNumber.getValue()
+        };
+    }
+    save = () => {
+        // debugger;    
+        console.log('getBookingInfo', this.getBookingInfo());
+        const values = this.getBookingInfo();
+        this.context.executeAction(BookingActions.createBooking, {values});
     }
 }
 

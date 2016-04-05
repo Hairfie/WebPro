@@ -176,6 +176,24 @@ const BookingActions = {
             .then(function (booking) {
                 context.dispatch(Actions.RECEIVE_BOOKING, { booking });
             });
+    },
+
+    createBooking(context, {values}) {
+        const token = context.getStore('AuthStore').getToken();
+        if (!token) {
+            var error = new Error('Not authorized');
+            error.status = 403;
+            throw error;
+        }
+
+        return context.hairfieApi
+            .post('/bookings', values, { token })
+            .then(booking => {
+                context.dispatch(Actions.RECEIVE_BOOKING, booking);
+                return context.executeAction(RouteActions.navigate, {
+                    route: 'bookings'
+                });
+            });
     }
 }
 
