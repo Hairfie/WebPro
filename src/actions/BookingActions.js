@@ -158,6 +158,10 @@ const BookingActions = {
             .put(`/bookings/${bookingId}`, values, { token })
             .then(function (booking) {
                 context.dispatch(Actions.RECEIVE_BOOKING, { booking });
+                return context.executeAction(RouteActions.navigate, {
+                    route: 'booking',
+                    params: {bookingId: booking.id}
+                });
             });
     },
 
@@ -189,7 +193,7 @@ const BookingActions = {
         return context.hairfieApi
             .post('/bookings', values, { token })
             .then(booking => {
-                context.dispatch(Actions.RECEIVE_BOOKING, booking);
+                context.dispatch(Actions.RECEIVE_BOOKING, { booking });
                 return context.executeAction(RouteActions.navigate, {
                     route: 'bookings'
                 });

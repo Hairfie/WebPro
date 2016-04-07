@@ -25,6 +25,10 @@ class BusinessBookingsPage extends React.Component {
                 <Center>
                     <RaisedButton label={'Load More'} onClick={this.loadMore.bind(this)}/>
                 </Center>
+                <br />
+                <Center>
+                    <RaisedLink href={`/bookings/new?businessId=${businessId}`} label='Créer un RDV' />
+                </Center>
                 <br /><br />
                 <RaisedLink route="business" params={{ businessId: businessId }} label='Retour' fullWidth={true} />
             </Layout>

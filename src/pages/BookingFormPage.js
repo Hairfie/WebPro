@@ -15,8 +15,12 @@ import BusinessInfos from './Booking/BusinessInfos';
 class BookingFormPage extends React.Component {
     constructor(props) {
         super(props);
+        let businessId;
+        if (this.props.booking) businessId = this.props.booking.business.id
+        else if (this.props.businessId) businessId = this.props.businessId
+        else businessId = null;
         this.state = { 
-            businessId: this.props.booking ? this.props.booking.business.id : null,
+            businessId: businessId,
             hairLength: this.props.booking ? this.props.booking.hairLength : 'SHORT'
         }
     }
@@ -25,29 +29,31 @@ class BookingFormPage extends React.Component {
     }
 
     render() {
-        console.log('booking', this.props.booking);
-        console.log('STATE', this.state);
         const hairLengthItems = [
            { text: 'SHORT' },
            { text: 'MID_SHORT' },
            { text: 'LONG' },
            { text: 'VERY_LONG' },
         ];
-        const {booking} = this.props;
-        const businessId = booking ? booking.business.id : null;
+        let {booking} = this.props;
+        if (!booking) booking = {};
+        const businessId = this.state.businessId;
+        const {
+            service,
+            comment,
+            discount,
+            firstName,
+            lastName,
+            email,
+            phoneNumber,
+            adminNote
+        } = booking;
+
         const date = booking ? moment(booking.dateTime).tz('Europe/Paris').format("YYYY-MM-DD") : moment().tz('Europe/Paris').format("YYYY-MM-DD");
         const time = booking ? moment(booking.dateTime).tz('Europe/Paris').format("HH:mm") : moment('09:00', 'HH:mm').tz('Europe/Paris').format("HH:mm");
         const hairIndex = _.indexOf(_.map(hairLengthItems, (item) => { return item.text }), this.state.hairLength);
-        const service = booking ? booking.service : null;
-        const comment = booking ? booking.comment : null;
-        const firstTimeCustomer = booking ? booking.firstTimeCustomer : false;
-        const discount = booking ? booking.discount : null;
+        const firstTimeCustomer = booking && booking.firstTimeCustomer;
         const gender = booking ? booking.gender : 'FEMALE';
-        const firstName = booking ? booking.firstName : null;
-        const lastName = booking ? booking.lastName : null;
-        const email = booking ? booking.email : null;
-        const phoneNumber = booking ? booking.phoneNumber : null;
-        // debugger;
         return (
 
             <Layout {...this.props}>
@@ -71,6 +77,12 @@ class BookingFormPage extends React.Component {
                     <Checkbox ref="firstTimeCustomer" label="Première fois dans ce salon ?" defaultChecked={firstTimeCustomer}/>
                     <br/>
                     <TextField ref="discount" type="number" floatingLabelText="Promotion (%)" defaultValue={discount} />
+                    <br/>
+                    <TextField ref="adminNote" type="text" floatingLabelText="Note (Hairfie admin only)" 
+                        multiLine={true}
+                        rows={2}
+                        fullWidth={true}
+                        defaultValue={adminNote} />
                 </Paper>
                 <br/>
                 <br/>
@@ -95,7 +107,7 @@ class BookingFormPage extends React.Component {
                 </Paper>
                 <br/>
                 <br/>
-                <FlatButton label='Enregistrer' onClick={this.save} />
+                <RaisedButton label={!_.isEmpty(booking) ? 'Mettre à jour' : 'Créer'} secondary={true} onClick={this.save} />
                 <br/>
                 <Link route="bookings" >Retour</Link>
             </Layout>
@@ -109,15 +121,15 @@ class BookingFormPage extends React.Component {
         this.setState({businessId: businessId})
     }
     getBookingInfo = () => {
-        // debugger;
         return {
             businessId          : this.refs.businessId.getValue(),
-            timeslot            : moment(`${this.refs.date.getValue()} ${this.refs.time.getValue()}`, "YYYY-MM-DD HH:mm").toDate(),
+            dateTime            : moment(`${this.refs.date.getValue()} ${this.refs.time.getValue()}`, "YYYY-MM-DD HH:mm").toDate(),
             hairLength          : this.state.hairLength,
             service             : this.refs.service.getValue(),
             comment             : this.refs.comment.getValue(),
             firstTimeCustomer   : this.refs.firstTimeCustomer.isChecked(),
             discount            : this.refs.discount.getValue(),
+            adminNote           : this.refs.adminNote.getValue(),
             gender              : this.refs.gender.getSelectedValue(),
             firstName           : this.refs.firstName.getValue(),
             lastName            : this.refs.lastName.getValue(),
@@ -125,9 +137,7 @@ class BookingFormPage extends React.Component {
             phoneNumber         : this.refs.phoneNumber.getValue()
         };
     }
-    save = () => {
-        // debugger;    
-        console.log('getBookingInfo', this.getBookingInfo());
+    save = () => {  
         const values = this.getBookingInfo();
         if (this.props.booking) {
             const bookingId = this.props.booking.id;
@@ -139,12 +149,14 @@ class BookingFormPage extends React.Component {
 }
 
 BookingFormPage = connectToStores(BookingFormPage, [
-    'BookingStore'
+    'BookingStore', 'RouteStore'
 ], (context, props) => {
-
+    const route = context.getStore('RouteStore').getCurrentRoute().toJS();
+    const businessId = route.query.businessId ? route.query.businessId : null;
     const booking = props.bookingId && context.getStore('BookingStore').getById(props.bookingId);
     return {
-        booking: booking
+        booking: booking,
+        businessId: businessId
     };
 });
 
