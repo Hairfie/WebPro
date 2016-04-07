@@ -49,11 +49,12 @@ class BookingFormPage extends React.Component {
             adminNote
         } = booking;
 
-        const date = booking ? moment(booking.dateTime).tz('Europe/Paris').format("YYYY-MM-DD") : moment().tz('Europe/Paris').format("YYYY-MM-DD");
-        const time = booking ? moment(booking.dateTime).tz('Europe/Paris').format("HH:mm") : moment('09:00', 'HH:mm').tz('Europe/Paris').format("HH:mm");
+        const date = !_.isEmpty(booking) ? moment(booking.dateTime).tz('Europe/Paris').format("YYYY-MM-DD") : moment().tz('Europe/Paris').format("YYYY-MM-DD");
+        const time = !_.isEmpty(booking) ? moment(booking.dateTime).tz('Europe/Paris').format("HH:mm") : moment('09:00', 'HH:mm').tz('Europe/Paris').format("HH:mm");
         const hairIndex = _.indexOf(_.map(hairLengthItems, (item) => { return item.text }), this.state.hairLength);
         const firstTimeCustomer = booking && booking.firstTimeCustomer;
-        const gender = booking ? booking.gender : 'FEMALE';
+        const gender = !_.isEmpty(booking) ? booking.gender : 'FEMALE';
+        
         return (
 
             <Layout {...this.props}>

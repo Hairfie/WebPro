@@ -195,7 +195,8 @@ const BookingActions = {
             .then(booking => {
                 context.dispatch(Actions.RECEIVE_BOOKING, { booking });
                 return context.executeAction(RouteActions.navigate, {
-                    route: 'bookings'
+                    route: 'booking',
+                    params: {bookingId: booking.id}
                 });
             });
     }
