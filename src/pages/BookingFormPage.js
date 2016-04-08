@@ -139,11 +139,12 @@ class BookingFormPage extends React.Component {
         };
     }
     save = () => {  
-        const values = this.getBookingInfo();
+        let values = this.getBookingInfo();
         if (this.props.booking) {
             const bookingId = this.props.booking.id;
             this.context.executeAction(BookingActions.updateBooking,{ bookingId, values});
         } else {
+            values.status = 'REQUEST';
             this.context.executeAction(BookingActions.createBooking, {values});            
         }
     }
