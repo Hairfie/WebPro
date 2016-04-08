@@ -25,6 +25,12 @@ class BusinessAdminPage extends React.Component {
                     <RadioButton value="BASIC" label="BASIC" />
                     <RadioButton value="PREMIUM" label="PREMIUM" />
                 </RadioButtonGroup>
+                <br/>
+                Prise de RDV:
+                <RadioButtonGroup ref="isBookable" name="isBookable" label="" defaultSelected={business.bookable} valueSelected={business && business.bookable}>
+                    <RadioButton value={true} label="Oui"  />
+                    <RadioButton value={false} label="Non" />
+                </RadioButtonGroup>
                 <RaisedButton label='Sauver les modifications' onClick={this.save} fullWidth={true} primary={true} />
                 <br /><br />
                 <RaisedLink route="business" params={{ businessId: business.id }} label='Annuler' fullWidth={true} />
@@ -36,7 +42,8 @@ class BusinessAdminPage extends React.Component {
         const businessId = this.props.businessId;
 
         const values = {
-            accountType:   this.refs.accountType.getSelectedValue(),
+            accountType : this.refs.accountType.getSelectedValue(),
+            bookable  : this.refs.isBookable.getSelectedValue()
         };
 
         this.context.executeAction(BusinessActions.updateInfos, { businessId, values });
