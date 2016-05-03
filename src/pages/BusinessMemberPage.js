@@ -115,6 +115,7 @@ class BusinessMemberPage extends React.Component {
     renderUserInfos() {
         const user = this.props.linkedUser;
         if (_.isEmpty(user)) return null;
+        var pictureUrl = user.picture ? user.picture.url : null;
         return (
             <div>
                 <h4>Infos utilisateur</h4>
@@ -125,7 +126,7 @@ class BusinessMemberPage extends React.Component {
                         {`Nom : ${user.lastName}`}
                         {user.email ? `Email : ${user.email}` : null}
                         {user.phoneNumber ? `Téléphone : ${user.phoneNumber}`: null}
-                        <a href={user.picture.url} target="_blank">Accès photo</a>
+                        <a href={pictureUrl} target="_blank">Accès photo</a>
                     </div>
                 </div>
                 <FlatButton label='Utiliser ces données' secondary={true} onClick={this.transferUserData} />

@@ -43,10 +43,11 @@ const PageActions = {
             })
             .then(member => {
                 if(member && member.userId) {
-                    context.executeAction(UserActions.loadUser(context, { userId: member.userId}));
+                    return context.executeAction(UserActions.loadUser, { userId: member.userId}); 
                 }
-                else return;
-            });
+            }, error => {
+                console.log("error", error);
+            })
     }),
 
     businessServices: authenticated((context, route, token) => {
